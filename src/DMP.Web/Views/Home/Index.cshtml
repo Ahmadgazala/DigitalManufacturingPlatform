@@ -1,0 +1,106 @@
+@{
+    ViewData["Title"] = "الرئيسية";
+    var latestManufacturers = ViewBag.LatestManufacturers as List<Manufacturer> ?? new List<Manufacturer>();
+    var activeCampaigns = ViewBag.ActiveCampaigns as List<GroupBuyingCampaign> ?? new List<GroupBuyingCampaign>();
+}
+
+<section class="hero">
+    <div class="container">
+        <h1 class="hero-title">منصة التصنيع الرقمي في الأردن</h1>
+        <p class="hero-sub">اربط مشاريعك بأفضل ورش التصنيع — طباعة ثلاثية الأبعاد، ليزر، CNC والمزيد</p>
+        <div class="hero-btns">
+            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">🔧 اطلب تصنيعاً</a>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)">تصفّح الورش</a>
+        </div>
+    </div>
+</section>
+
+<!-- شريط الخطوات -->
+<div class="steps-strip">
+    <div class="container">
+        <div class="grid grid-4">
+            @foreach (var (num, ico, title, desc) in new[]{
+                ("1","📁","ارفع ملفك","DXF, STL, PDF أو صف مشروعك"),
+                ("2","💬","استقبل عروضاً","ورش متخصصة ترسل لك أسعار"),
+                ("3","✅","اعتمد العرض","اختر المصنّع وابدأ الإنتاج"),
+                ("4","📦","استلم طلبك","توصيل أو استلام من الورشة")
+            })
+            {
+                <div class="step-item">
+                    <span class="step-icon">@ico</span>
+                    <span class="step-num">@num</span>
+                    <div class="step-title">@title</div>
+                    <div class="step-desc">@desc</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- آخر الورش -->
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <h2>ورش معتمدة</h2>
+        </div>
+        @if (latestManufacturers.Any())
+        {
+            <div class="grid grid-3">
+                @foreach (var m in latestManufacturers)
+                {
+                    <partial name="_ManufacturerCard" model="m" />
+                }
+            </div>
+            <div style="text-align:center;margin-top:28px">
+                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض كل الورش</a>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="ico">🏭</div>
+                <h3>لا توجد ورش بعد</h3>
+                <p>سجّل كمصنّع وكن أول من ينضم</p>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary">سجّل ورشتك</a>
+            </div>
+        }
+    </div>
+</section>
+
+@if (activeCampaigns.Any())
+{
+    <section class="section" style="background:var(--paper)">
+        <div class="container">
+            <div class="section-head">
+                <h2>حملات الشراء الجماعي النشطة</h2>
+                <p>انضم مع مصنّعين آخرين واحصل على سعر الجملة</p>
+            </div>
+            <div class="grid grid-3">
+                @foreach (var c in activeCampaigns)
+                {
+                    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+                        @if (!string.IsNullOrEmpty(c.ImagePath))
+                        {
+                            <div style="height:140px;overflow:hidden;border-radius:var(--r-sm)">
+                                <img src="@c.ImagePath" style="width:100%;height:100%;object-fit:cover" />
+                            </div>
+                        }
+                        <h3 style="font-size:1rem;font-weight:800">@c.Title</h3>
+                        <div class="progress-bar-wrap">
+                            <div class="progress-bar-fill" style="width:@(c.ProgressPercent)%"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--steel)">
+                            <span>@c.CurrentQuantity وحدة</span>
+                            <span>الهدف: @c.MinQuantity</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <span style="color:var(--amber);font-weight:800">@c.GroupPrice.ToString("N0") د.أ</span>
+                            <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id"
+                               class="btn btn-sm btn-primary">انضم</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

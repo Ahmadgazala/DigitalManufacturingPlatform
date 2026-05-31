@@ -1,0 +1,103 @@
+@model List<Manufacturer>
+@{
+    ViewData["Title"] = T["ManageManufacturers"];
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>@T["ManageManufacturers"]</h1>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">@T["BackToDashboard"]</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">@TempData["Error"]</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="search-bar" style="margin-bottom:1rem;">
+            <form asp-controller="Admin" asp-action="Manufacturers" method="get">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" name="searchTerm" class="form-control" value="@ViewBag.SearchTerm" placeholder="@T["Search"]..." />
+                    </div>
+                    <div class="form-group">
+                        <select name="filter" class="form-control">
+                            <option value="">@T["All"]</option>
+                            <option value="pending" selected="@(ViewBag.Filter == "pending")">@T["Pending"]</option>
+                            <option value="approved" selected="@(ViewBag.Filter == "approved")">@T["Approved"]</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">@T["Filter"]</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>@T["WorkshopName"]</th>
+                    <th>@T["Owner"]</th>
+                    <th>@T["City"]</th>
+                    <th>@T["Status"]</th>
+                    <th>@T["RegisteredAt"]</th>
+                    <th>@T["Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mfr in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@mfr.Id">@mfr.WorkshopName</a>
+                        </td>
+                        <td>@(mfr.User?.FullName ?? "-")</td>
+                        <td>@(mfr.City ?? "-")</td>
+                        <td>
+                            @if (mfr.IsApproved)
+                            {
+                                <span class="chip chip-green">@T["Approved"]</span>
+                            }
+                            else
+                            {
+                                <span class="chip chip-red">@T["Pending"]</span>
+                            }
+                        </td>
+                        <td>@mfr.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (!mfr.IsApproved)
+                            {
+                                <form asp-controller="Admin" asp-action="ApproveManufacturer" asp-route-id="@mfr.Id" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-primary btn-sm">@T["Approve"]</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Admin" asp-action="RejectManufacturer" asp-route-id="@mfr.Id" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('@T["ConfirmReject"]')">@T["Reject"]</button>
+                                </form>
+                            }
+                            <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@mfr.Id" class="btn btn-outline btn-sm">@T["View"]</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="empty-state">
+            <h3>@T["NoManufacturersFound"]</h3>
+        </div>
+    }
+</div>

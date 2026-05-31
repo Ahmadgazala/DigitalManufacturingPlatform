@@ -1,0 +1,208 @@
+@model GroupBuyingCampaign
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = Model.Title;
+    var alreadyJoined    = (bool)(ViewBag.AlreadyJoined    ?? false);
+    var canWithdraw      = (bool)(ViewBag.CanWithdraw      ?? false);
+    var withdrawDeadline = (DateTime?)(ViewBag.WithdrawDeadline);
+    var days             = (int)(Model.DeadlineDate - DateTime.UtcNow).TotalDays;
+    var isManufacturer   = User.IsInRole("Manufacturer");
+}
+
+<div class="container section">
+    <div class="detail-grid">
+        <div>
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <div style="border-radius:var(--r);overflow:hidden;margin-bottom:22px;height:260px;border:1.5px solid var(--line)">
+                    <img src="@Model.ImagePath" style="width:100%;height:100%;object-fit:cover" />
+                </div>
+            }
+
+            <div class="panel">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+                    <div>
+                        <h1 style="font-size:1.5rem;margin:0 0 6px">@Model.Title</h1>
+                        <div style="color:var(--steel);font-size:.9rem">📦 @Model.ItemName</div>
+                    </div>
+                    <span class="@Model.Status.StatusColor()">@Model.Status.ToArabic()</span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <p style="color:var(--ink-mid);line-height:1.8;margin-bottom:20px">@Model.Description</p>
+                }
+
+                <!-- شريط التقدم -->
+                <div style="margin-bottom:20px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem">
+                        <span style="font-weight:700">التقدم نحو الحد الأدنى</span>
+                        <span style="color:var(--amber);font-weight:800">@Model.ProgressPercent%</span>
+                    </div>
+                    <div style="background:var(--paper);border-radius:100px;height:16px;overflow:hidden;border:1px solid var(--line)">
+                        <div style="background:var(--amber);height:100%;border-radius:100px;width:@(Model.ProgressPercent)%;transition:width .5s"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.85rem;color:var(--steel)">
+                        <span>@Model.CurrentQuantity وحدة منضمة</span>
+                        <span>الهدف: @Model.MinQuantity وحدة</span>
+                    </div>
+                </div>
+
+                <!-- الأسعار -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;background:var(--paper);border-radius:12px;padding:18px;border:1.5px solid var(--line)">
+                    <div style="text-align:center">
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">السعر الفردي</div>
+                        <div style="font-size:1.2rem;font-weight:700;text-decoration:line-through;color:var(--muted)">@Model.IndividualPrice.ToString("N2") د.أ</div>
+                    </div>
+                    <div style="text-align:center;border-inline:1px solid var(--line)">
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">سعر المجموعة</div>
+                        <div style="font-size:1.5rem;font-weight:800;color:var(--amber)">@Model.GroupPrice.ToString("N2") د.أ</div>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">توفير</div>
+                        <div style="font-size:1.2rem;font-weight:700;color:var(--green)">@Model.SavingsPercent%</div>
+                    </div>
+                </div>
+
+                <!-- نموذج الانضمام -->
+                @if (Model.IsActive && !alreadyJoined && SignInManager.IsSignedIn(User) && isManufacturer)
+                {
+                    <form asp-action="Join" method="post" style="margin-top:20px;padding:20px;background:var(--paper);border-radius:12px;border:1.5px dashed var(--amber)">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="campaignId" value="@Model.Id" />
+                        <h3 style="margin:0 0 14px;font-size:1rem">انضم لهذه الحملة</h3>
+                        <div class="form-row">
+                            <div class="form-group" style="margin:0">
+                                <label style="font-size:.85rem">الكمية التي تريدها</label>
+                                <input type="number" name="quantity" min="1" value="1" class="form-control" required />
+                            </div>
+                            <div class="form-group" style="margin:0">
+                                <label style="font-size:.85rem">تفضيلات (لون، مواصفات...)</label>
+                                <input type="text" name="preferences" class="form-control" placeholder="اختياري" />
+                            </div>
+                        </div>
+                        <div class="consent-box">
+                            <label class="consent-label">
+                                <input type="checkbox" name="consent" value="true" id="consentCheck" required />
+                                <span>
+                                    أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً نهائياً بالشراء عند اكتمال النصاب.
+                                    يحق لي الانسحاب خلال <strong>48 ساعة</strong> فقط من الانضمام وقبل اكتمال الكمية المطلوبة.
+                                </span>
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" id="joinBtn" style="margin-top:12px;width:100%" type="submit" disabled>
+                            📦 انضم والتزم بالشراء
+                        </button>
+                    </form>
+                }
+                else if (!SignInManager.IsSignedIn(User) && Model.IsActive)
+                {
+                    <div style="margin-top:18px;text-align:center;padding:16px;background:var(--paper);border-radius:12px">
+                        <p style="color:var(--steel);font-size:.9rem;margin-bottom:10px">هذه الحملة مخصصة للمصنّعين المسجّلين</p>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary">سجّل الدخول للانضمام</a>
+                    </div>
+                }
+                else if (SignInManager.IsSignedIn(User) && !isManufacturer && Model.IsActive)
+                {
+                    <div style="margin-top:18px;padding:16px;background:#fffbeb;border-radius:12px;border:1.5px solid #fde68a">
+                        <p style="margin:0;color:#92400e;font-size:.9rem">⚠️ الشراء الجماعي مخصص للمصنّعين فقط.</p>
+                    </div>
+                }
+                else if (alreadyJoined)
+                {
+                    <div class="alert alert-success" style="margin-top:16px">✓ أنت منضم لهذه الحملة</div>
+
+                    @if (canWithdraw && withdrawDeadline.HasValue)
+                    {
+                        var hoursLeft = (int)(withdrawDeadline.Value - DateTime.UtcNow).TotalHours + 1;
+                        <div class="withdraw-box">
+                            <div class="wb-info">
+                                <span class="wb-icon">⏰</span>
+                                <div>
+                                    <div class="wb-title">نافذة الانسحاب مفتوحة</div>
+                                    <div class="wb-sub">يمكنك الانسحاب خلال <strong>@hoursLeft ساعة</strong></div>
+                                </div>
+                            </div>
+                            <form asp-action="Leave" method="post"
+                                  onsubmit="return confirm('هل أنت متأكد من الانسحاب؟')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="campaignId" value="@Model.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">انسحب الآن</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="withdraw-box wb-locked">
+                            <span class="wb-icon">🔒</span>
+                            <div>
+                                <div class="wb-title">@(Model.Status != CampaignStatus.Active ? "اكتمل النصاب — الطلب مؤكد" : "انتهت نافذة الانسحاب")</div>
+                                <div class="wb-sub">التزامك بالشراء نهائي</div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
+                        <form asp-action="UpdateStatus" method="post" style="display:flex;gap:8px;flex-wrap:wrap">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            @foreach (CampaignStatus s in Enum.GetValues<CampaignStatus>())
+                            {
+                                <button type="submit" name="status" value="@((int)s)"
+                                        class="btn btn-sm @(Model.Status == s ? "btn-dark" : "btn-outline")">
+                                    @s.ToArabic()
+                                </button>
+                            }
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <aside>
+            <div class="panel">
+                <h2>معلومات الحملة</h2>
+                <ul class="info-list">
+                    <li><span class="k">المشاركون</span><span class="v fw-bold">@Model.Participants.Count شخص</span></li>
+                    <li><span class="k">الكمية الكلية</span><span class="v fw-bold">@Model.CurrentQuantity وحدة</span></li>
+                    <li><span class="k">الحد الأدنى</span><span class="v">@Model.MinQuantity وحدة</span></li>
+                    @if (Model.IsActive)
+                    {
+                        <li><span class="k">ينتهي خلال</span><span class="v" style="color:@(days <= 3 ? "var(--red)" : "inherit")">@(days > 0 ? $"{days} يوم" : "اليوم")</span></li>
+                    }
+                    <li><span class="k">الحالة</span><span class="v">@Model.Status.ToArabic()</span></li>
+                </ul>
+            </div>
+
+            @if (Model.Participants.Any())
+            {
+                <div class="panel">
+                    <h2>المشاركون (@Model.Participants.Count)</h2>
+                    @foreach (var p in Model.Participants.OrderByDescending(x => x.JoinedAt).Take(10))
+                    {
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--paper);font-size:.88rem">
+                            <span>@(p.User?.FullName ?? "مشارك")</span>
+                            <span style="font-weight:700">×@p.Quantity</span>
+                        </div>
+                    }
+                </div>
+            }
+
+            <a class="btn btn-outline btn-block" asp-action="Index">← كل الحملات</a>
+        </aside>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    var cb = document.getElementById('consentCheck');
+    var btn = document.getElementById('joinBtn');
+    if (cb && btn) {
+        cb.addEventListener('change', function () { btn.disabled = !this.checked; });
+    }
+</script>
+}

@@ -1,0 +1,95 @@
+@{
+    ViewData["Title"] = T["CreateCampaign"];
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>@T["CreateCampaign"]</h1>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-error">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="panel">
+        <form asp-controller="GroupBuying" asp-action="Create" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="Title">@T["CampaignTitle"]</label>
+                <input type="text" name="Title" id="Title" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">@T["Description"]</label>
+                <textarea name="Description" id="Description" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ItemName">اسم المنتج / المادة</label>
+                <input type="text" name="ItemName" id="ItemName" class="form-control" required placeholder="مثال: خيط PLA للطباعة الثلاثية الأبعاد" />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="IndividualPrice">السعر الفردي (د.أ)</label>
+                    <input type="number" name="IndividualPrice" id="IndividualPrice" class="form-control" step="0.01" min="0.01" required />
+                </div>
+                <div class="form-group">
+                    <label for="GroupPrice">سعر المجموعة (د.أ)</label>
+                    <input type="number" name="GroupPrice" id="GroupPrice" class="form-control" step="0.01" min="0.01" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="MinQuantity">الحد الأدنى للكمية</label>
+                    <input type="number" name="MinQuantity" id="MinQuantity" class="form-control" min="2" required />
+                </div>
+                <div class="form-group">
+                    <label for="DeadlineDate">تاريخ انتهاء الحملة</label>
+                    <input type="date" name="DeadlineDate" id="DeadlineDate" class="form-control"
+                           value="@DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="image">صورة الحملة</label>
+                <div class="upload-zone">
+                    <input type="file" name="image" id="image" accept="image/*" class="upload-input" />
+                    <span>@T["ClickToUpload"]</span>
+                </div>
+                <img id="imgPreview" class="preview-img" style="display:none;margin-top:0.5rem;" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">@T["CreateCampaign"]</button>
+                <a asp-controller="GroupBuying" asp-action="Index" class="btn btn-outline">@T["Cancel"]</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('image').addEventListener('change', function () {
+            var preview = document.getElementById('imgPreview');
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+}

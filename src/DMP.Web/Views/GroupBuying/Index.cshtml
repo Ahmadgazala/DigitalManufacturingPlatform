@@ -1,0 +1,116 @@
+@model List<GroupBuyingCampaign>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = T["GB_Title"];
+    var active = Model.Where(c => c.Status == CampaignStatus.Active).ToList();
+    var other  = Model.Where(c => c.Status != CampaignStatus.Active).ToList();
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>@T["GB_Title"]</h1>
+                <p>@T["GB_Sub"]</p>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn btn-primary" asp-action="Create">@T["Btn_CreateCampaign"]</a>
+            }
+        </div>
+    </div>
+</div>
+
+<div style="background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);padding:28px 0">
+    <div class="container">
+        <div class="grid grid-4" style="gap:16px">
+            @foreach (var (ico, titleKey, descKey) in new[]{
+                ("1️⃣", "How_Join",   "How_JoinDesc"),
+                ("2️⃣", "How_Quorum", "How_QuorumDesc"),
+                ("3️⃣", "How_Import", "How_ImportDesc"),
+                ("4️⃣", "How_Deliver","How_DeliverDesc")
+            })
+            {
+                <div style="text-align:center;padding:8px">
+                    <div style="font-size:1.4rem;margin-bottom:8px">@ico</div>
+                    <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:4px">@T[titleKey]</div>
+                    <div style="color:#64748b;font-size:.82rem">@T[descKey]</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    @if (active.Any())
+    {
+        <div class="section-head">
+            <h2>@T["Sec_ActiveCampaigns"]</h2>
+            <p>@T["Sec_ActiveSub"]</p>
+        </div>
+        <div class="grid grid-3">
+            @foreach (var c in active)
+            {
+                <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+                    @if (!string.IsNullOrEmpty(c.ImagePath))
+                    {
+                        <div style="height:160px;overflow:hidden;border-radius:var(--r-sm)">
+                            <img src="@c.ImagePath" style="width:100%;height:100%;object-fit:cover" />
+                        </div>
+                    }
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                            <h3 style="font-size:1rem;font-weight:800">@c.Title</h3>
+                            <span class="@c.Status.StatusColor()">@c.Status.ToArabic()</span>
+                        </div>
+                        <p style="font-size:.85rem;color:var(--steel);margin-bottom:10px">📦 @c.ItemName</p>
+                        <div style="background:var(--paper);border-radius:100px;height:8px;overflow:hidden;margin-bottom:6px">
+                            <div style="background:var(--amber);height:100%;width:@(c.ProgressPercent)%;border-radius:100px"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--steel);margin-bottom:10px">
+                            <span>@c.CurrentQuantity وحدة</span>
+                            <span>الهدف: @c.MinQuantity</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <span style="text-decoration:line-through;color:var(--steel);font-size:.85rem">@c.IndividualPrice.ToString("N0") د.أ</span>
+                                <span style="color:var(--amber);font-weight:800;font-size:1.1rem;margin-inline-start:8px">@c.GroupPrice.ToString("N0") د.أ</span>
+                            </div>
+                            <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">التفاصيل</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (other.Any())
+    {
+        <div class="section-head" style="margin-top:48px">
+            <h2>@T["Sec_PastCampaigns"]</h2>
+        </div>
+        <div class="grid grid-3">
+            @foreach (var c in other)
+            {
+                <div class="panel" style="opacity:.75">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                        <h3 style="font-size:1rem;font-weight:700">@c.Title</h3>
+                        <span class="@c.Status.StatusColor()">@c.Status.ToArabic()</span>
+                    </div>
+                    <p style="font-size:.85rem;color:var(--steel)">📦 @c.ItemName</p>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline" style="margin-top:10px">عرض</a>
+                </div>
+            }
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">📦</div>
+            <h3>@T["Empty_NoCampaigns"]</h3>
+            <p>@T["Empty_NoCampaignsMsg"]</p>
+        </div>
+    }
+</div>

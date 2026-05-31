@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "صندوق الرسائل";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>صندوق الرسائل</h1>
+    </div>
+</div>
+
+<div class="container section">
+    @if (ViewBag.Conversations != null)
+    {
+        var convList = (System.Collections.IEnumerable)ViewBag.Conversations;
+        bool hasAny = false;
+        <div class="msg-list">
+            @foreach (dynamic conv in convList)
+            {
+                hasAny = true;
+                string otherUserId = conv.OtherUserId;
+                var otherUser = conv.OtherUser as ApplicationUser;
+                var lastMsg = conv.LastMessage as Message;
+                int unread = (int)conv.UnreadCount;
+                string name = otherUser?.FullName ?? "مستخدم";
+                string initial = name.Length > 0 ? name[..1] : "?";
+                <div class="msg-row @(unread > 0 ? "unread" : "")">
+                    <div class="msg-avatar">@initial</div>
+                    <div class="msg-info">
+                        <div class="msg-name">@name</div>
+                        <div class="msg-preview">@(lastMsg?.Body?.Length > 60 ? lastMsg.Body[..60] + "..." : lastMsg?.Body ?? "")</div>
+                    </div>
+                    <div class="msg-time">@(lastMsg?.SentAt.ToString("yyyy/MM/dd"))</div>
+                    @if (unread > 0)
+                    {
+                        <span class="chip chip-green">@unread</span>
+                    }
+                    <a asp-controller="Messages" asp-action="Conversation"
+                       asp-route-otherUserId="@otherUserId"
+                       class="btn btn-outline btn-sm">فتح</a>
+                </div>
+            }
+        </div>
+        @if (!hasAny)
+        {
+            <div class="empty-state">
+                <div class="ico">💬</div>
+                <h3>لا توجد محادثات</h3>
+                <p>يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="ico">💬</div>
+            <h3>لا توجد رسائل</h3>
+            <p>يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة</p>
+        </div>
+    }
+</div>

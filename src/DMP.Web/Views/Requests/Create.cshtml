@@ -1,0 +1,95 @@
+@model ManufacturingRequest
+@{
+    ViewData["Title"] = T["NewRequest"];
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>@T["NewRequest"]</h1>
+        <p>@T["NewRequestSubtitle"]</p>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-error">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="panel">
+        <form asp-controller="Requests" asp-action="Create" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label asp-for="Title">@T["RequestTitle"]</label>
+                <input asp-for="Title" class="form-control" placeholder="@T["RequestTitlePlaceholder"]" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">@T["Description"]</label>
+                <textarea asp-for="Description" class="form-control" rows="5" placeholder="@T["RequestDescPlaceholder"]"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Category">@T["Category"]</label>
+                    <select asp-for="Category" class="form-control">
+                        @foreach (MachineCategory cat in Enum.GetValues<MachineCategory>())
+                        {
+                            <option value="@((int)cat)">@cat.ToArabic()</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Category" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Material">@T["Material"]</label>
+                    <input asp-for="Material" class="form-control" placeholder="@T["MaterialPlaceholder"]" />
+                    <span asp-validation-for="Material" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Quantity">@T["Quantity"]</label>
+                    <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="Quantity" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Budget">@T["Budget"] (JD)</label>
+                    <input asp-for="Budget" class="form-control" type="number" step="0.01" min="0" />
+                    <span asp-validation-for="Budget" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>@T["AttachFiles"]</label>
+                <div class="upload-zone" id="filesZone">
+                    <input type="file" name="Files" multiple accept=".pdf,.dwg,.dxf,.stl,.step,.jpg,.jpeg,.png" class="upload-input" id="filesInput" />
+                    <span>@T["AttachFilesHint"]</span>
+                </div>
+                <p class="hint" id="filesSelected"></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">@T["SubmitRequest"]</button>
+                <a asp-controller="Requests" asp-action="Index" class="btn btn-outline">@T["Cancel"]</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('filesInput').addEventListener('change', function () {
+            var el = document.getElementById('filesSelected');
+            el.textContent = this.files.length + ' @T["FilesSelected"]';
+        });
+    </script>
+}

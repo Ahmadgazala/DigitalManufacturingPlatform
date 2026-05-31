@@ -1,0 +1,67 @@
+﻿@model Manufacturer
+@{
+    double avgRating = Model.Reviews != null && Model.Reviews.Any()
+        ? Model.Reviews.Average(r => r.Rating)
+        : 0;
+    int reviewCount = Model.Reviews?.Count ?? 0;
+}
+
+<div class="mfr-card">
+    <div class="mfr-card-cover">
+        @if (!string.IsNullOrEmpty(Model.CoverPhotoPath))
+        {
+            <img src="@Model.CoverPhotoPath" alt="@Model.WorkshopName" class="mfr-cover-img" loading="lazy" />
+        }
+        else
+        {
+            <div class="mfr-cover-placeholder"></div>
+        }
+        @if (Model.IsApproved)
+        {
+            <span class="chip chip-green mfr-badge">@T["Verified"]</span>
+        }
+    </div>
+    <div class="mfr-card-body">
+        <div class="mfr-card-avatar">
+            @if (!string.IsNullOrEmpty(Model.ProfilePhotoPath))
+            {
+                <img src="@Model.ProfilePhotoPath" alt="@Model.WorkshopName" />
+            }
+            else
+            {
+                <div class="avatar-placeholder">@(Model.WorkshopName?.Length > 0 ? Model.WorkshopName.Substring(0, 1) : "?")</div>
+            }
+        </div>
+        <h3 class="mfr-card-name">@Model.WorkshopName</h3>
+        @if (!string.IsNullOrEmpty(Model.City))
+        {
+            <p class="mfr-card-city">@Model.City</p>
+        }
+        @if (reviewCount > 0)
+        {
+            <div class="star-rating mfr-rating">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span class="@(i <= Math.Round(avgRating) ? "star filled" : "star")">&#9733;</span>
+                }
+                <span class="rating-count">(@reviewCount)</span>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Model.Bio))
+        {
+            <p class="mfr-card-bio">@(Model.Bio.Length > 80 ? Model.Bio.Substring(0, 80) + "..." : Model.Bio)</p>
+        }
+        <div class="mfr-card-chips">
+            @if (Model.Delivery != DeliveryOption.PickupOnly)
+            {
+                <span class="chip chip-green">توصيل</span>
+            }
+            @if (Model.Machines != null && Model.Machines.Any())
+            {
+                <span class="chip">@Model.Machines.Count @T["Machines"]</span>
+            }
+        </div>
+        <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline btn-sm mfr-card-link">@T["ViewWorkshop"]</a>
+    </div>
+</div>
+

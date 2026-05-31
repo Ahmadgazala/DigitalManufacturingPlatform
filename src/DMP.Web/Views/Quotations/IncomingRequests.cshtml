@@ -1,0 +1,70 @@
+@model List<ManufacturingRequest>
+@{
+    ViewData["Title"] = "الطلبات الواردة";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>الطلبات الواردة</h1>
+        <p>طلبات مفتوحة تناسب تخصصات ورشتك</p>
+    </div>
+</div>
+
+<div class="container section">
+    @if (Model.Any())
+    {
+        <div class="req-list">
+            @foreach (var req in Model.OrderByDescending(r => r.CreatedAt))
+            {
+                var alreadyQuoted = (bool)(ViewBag.QuotedIds != null && ((List<int>)ViewBag.QuotedIds).Contains(req.Id));
+                <div class="req-row @(alreadyQuoted ? "req-quoted" : "")">
+                    <div class="req-info">
+                        <div class="req-top">
+                            <span class="req-title">@req.Title</span>
+                            <span class="chip chip-cat">@req.Category.ToArabic()</span>
+                            @if (alreadyQuoted)
+                            {
+                                <span class="chip chip-done">✓ أرسلت عرضاً</span>
+                            }
+                        </div>
+                        <div class="req-meta">
+                            <span>👤 @req.Customer?.FullName</span>
+                            @if (!string.IsNullOrEmpty(req.Material)) { <span>🧱 @req.Material</span> }
+                            <span>📦 كمية: @req.Quantity</span>
+                            @if (req.Budget.HasValue) { <span>💰 @req.Budget.Value.ToString("N0") د.أ</span> }
+                            <span class="req-date">@req.CreatedAt.ToString("yyyy/MM/dd")</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(req.Description))
+                        {
+                            <p style="font-size:.85rem;color:var(--steel);margin-top:4px">
+                                @(req.Description.Length > 120 ? req.Description[..120] + "..." : req.Description)
+                            </p>
+                        }
+                    </div>
+                    @if (!alreadyQuoted)
+                    {
+                        <a class="btn btn-sm btn-primary"
+                           asp-controller="Quotations" asp-action="Submit" asp-route-requestId="@req.Id">
+                            قدّم عرضاً
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-outline"
+                           asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id">
+                            عرض
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="ico">📭</div>
+            <h3>لا توجد طلبات مفتوحة حالياً</h3>
+            <p>تحقق لاحقاً — ستظهر هنا الطلبات المناسبة لتخصصات ورشتك</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = T["AdminDashboard"];
+    int totalManufacturers = ViewBag.TotalManufacturers ?? 0;
+    int pendingManufacturers = ViewBag.PendingManufacturers ?? 0;
+    int totalUsers = ViewBag.TotalUsers ?? 0;
+    int totalRequests = ViewBag.TotalRequests ?? 0;
+    int totalCampaigns = ViewBag.TotalCampaigns ?? 0;
+    int totalSuppliers = ViewBag.TotalSuppliers ?? 0;
+}
+
+<div class="container">
+    <div class="dash-header">
+        <h1>@T["AdminDashboard"]</h1>
+    </div>
+
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <span class="kpi-label">@T["TotalManufacturers"]</span>
+            <span class="kpi-value">@totalManufacturers</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["PendingApproval"]</span>
+            <span class="kpi-value @(pendingManufacturers > 0 ? "kpi-warning" : "")">@pendingManufacturers</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["TotalUsers"]</span>
+            <span class="kpi-value">@totalUsers</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["TotalRequests"]</span>
+            <span class="kpi-value">@totalRequests</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["ActiveCampaigns"]</span>
+            <span class="kpi-value">@totalCampaigns</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["TotalSuppliers"]</span>
+            <span class="kpi-value">@totalSuppliers</span>
+        </div>
+    </div>
+
+    <div class="dash-grid">
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["ManufacturersManagement"]</h3>
+                <p>@T["PendingApproval"]: <strong>@pendingManufacturers</strong></p>
+                <a asp-controller="Admin" asp-action="Manufacturers" class="btn btn-primary">@T["ManageManufacturers"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["UsersManagement"]</h3>
+                <p>@T["TotalUsers"]: <strong>@totalUsers</strong></p>
+                <a asp-controller="Admin" asp-action="Users" class="btn btn-primary">@T["ManageUsers"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["GroupBuying"]</h3>
+                <a asp-controller="GroupBuying" asp-action="Index" class="btn btn-outline">@T["ViewCampaigns"]</a>
+                <a asp-controller="GroupBuying" asp-action="Create" class="btn btn-primary">@T["CreateCampaign"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["Suppliers"]</h3>
+                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-outline">@T["ViewSuppliers"]</a>
+            </div>
+        </div>
+    </div>
+</div>

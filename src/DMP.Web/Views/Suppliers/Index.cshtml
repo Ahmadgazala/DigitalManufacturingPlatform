@@ -1,0 +1,94 @@
+@model List<Supplier>
+@{
+    ViewData["Title"] = "دليل الموردين";
+    var pageIndex  = (int)(ViewBag.PageIndex  ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+    var totalCount = (int)(ViewBag.TotalCount ?? 0);
+    var searchTerm = (string?)(ViewBag.SearchTerm ?? "");
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>دليل الموردين</h1>
+        <p>تصفّح موردي المواد الخام والمعدات في الأردن</p>
+    </div>
+</div>
+
+<div class="container section">
+    <form asp-controller="Suppliers" asp-action="Index" method="get" class="search-bar">
+        <input type="text" name="searchTerm" class="form-control" value="@searchTerm" placeholder="ابحث عن مورد أو مادة..." />
+        <button type="submit" class="btn btn-primary">بحث</button>
+    </form>
+
+    @if (Model.Any())
+    {
+        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@totalCount نتيجة</p>
+        <div class="grid grid-3">
+            @foreach (var s in Model)
+            {
+                <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+                    @if (!string.IsNullOrEmpty(s.LogoPath))
+                    {
+                        <div style="height:80px;display:flex;align-items:center;justify-content:center">
+                            <img src="@s.LogoPath" style="max-height:70px;max-width:160px;object-fit:contain" />
+                        </div>
+                    }
+                    <h3 style="font-size:1rem;font-weight:800">@s.Name</h3>
+                    @if (!string.IsNullOrEmpty(s.Materials))
+                    {
+                        <span class="chip chip-green" style="align-self:flex-start">@s.Materials</span>
+                    }
+                    @if (!string.IsNullOrEmpty(s.Description))
+                    {
+                        <p style="font-size:.85rem;color:var(--steel)">@(s.Description.Length > 100 ? s.Description[..100] + "..." : s.Description)</p>
+                    }
+                    <ul class="info-list" style="font-size:.85rem">
+                        @if (!string.IsNullOrEmpty(s.City))
+                        {
+                            <li><span class="k">المدينة</span><span class="v">@s.City</span></li>
+                        }
+                        @if (!string.IsNullOrEmpty(s.Phone))
+                        {
+                            <li><span class="k">الهاتف</span><span class="v" dir="ltr">@s.Phone</span></li>
+                        }
+                        @if (!string.IsNullOrEmpty(s.Email))
+                        {
+                            <li><span class="k">البريد</span><span class="v" dir="ltr" style="font-size:.8rem">@s.Email</span></li>
+                        }
+                        @if (!string.IsNullOrEmpty(s.Website))
+                        {
+                            <li><span class="k">الموقع</span><span class="v"><a href="@s.Website" target="_blank" style="color:var(--sky)">رابط</a></span></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <div class="pagination">
+                @if (pageIndex > 1)
+                {
+                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex-1)" asp-route-searchTerm="@searchTerm" class="page-btn">‹ السابق</a>
+                }
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@i" asp-route-searchTerm="@searchTerm"
+                       class="page-btn @(i == pageIndex ? "active" : "")">@i</a>
+                }
+                @if (pageIndex < totalPages)
+                {
+                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex+1)" asp-route-searchTerm="@searchTerm" class="page-btn">التالي ›</a>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="ico">🏭</div>
+            <h3>لا يوجد موردون بعد</h3>
+            <p>سيتم إضافة قائمة الموردين قريباً</p>
+        </div>
+    }
+</div>

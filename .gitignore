@@ -1,0 +1,41 @@
+## .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.swp
+
+## Published output
+publish/
+out/
+
+## EF Core Migrations (keep migrations, ignore snapshots if needed)
+# src/DMP.Web/Migrations/
+
+## Secrets & config
+appsettings.Development.json
+**/secrets.json
+*.pfx
+*.p12
+
+## User uploads (don't commit uploaded files)
+src/DMP.Web/wwwroot/uploads/
+
+## OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Logs
+*.log
+logs/
+
+## NuGet
+*.nupkg
+.nuget/
+
+## Rider / JetBrains
+.idea/
+*.sln.iml

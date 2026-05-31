@@ -1,0 +1,66 @@
+@model List<Notification>
+@{
+    ViewData["Title"] = "الإشعارات";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <h1>الإشعارات</h1>
+            @if (Model.Any(n => !n.IsRead))
+            {
+                <form asp-controller="Notifications" asp-action="MarkAllRead" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline btn-sm">✓ قراءة الكل</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    @if (Model.Any())
+    {
+        <div class="notif-list">
+            @foreach (var n in Model.OrderByDescending(x => x.CreatedAt))
+            {
+                <div class="notif-row @(!n.IsRead ? "unread" : "")">
+                    @if (!n.IsRead)
+                    {
+                        <div class="notif-dot"></div>
+                    }
+                    else
+                    {
+                        <div style="width:8px"></div>
+                    }
+                    <div class="notif-msg">
+                        @if (!string.IsNullOrEmpty(n.Link))
+                        {
+                            <a href="@n.Link" style="color:inherit">@n.Message</a>
+                        }
+                        else
+                        {
+                            @n.Message
+                        }
+                    </div>
+                    <div class="notif-time">@n.CreatedAt.ToString("yyyy/MM/dd HH:mm")</div>
+                    @if (!n.IsRead)
+                    {
+                        <form asp-controller="Notifications" asp-action="MarkRead" asp-route-id="@n.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-ghost" title="تأشير كمقروء">✓</button>
+                        </form>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="ico">🔔</div>
+            <h3>لا توجد إشعارات</h3>
+            <p>ستظهر الإشعارات هنا عند وصول عروض أسعار أو رسائل جديدة</p>
+        </div>
+    }
+</div>

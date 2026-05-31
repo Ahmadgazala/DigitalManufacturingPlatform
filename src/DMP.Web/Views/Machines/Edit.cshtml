@@ -1,0 +1,74 @@
+@model MachineFormViewModel
+@{
+    ViewData["Title"] = T["EditMachine"];
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>@T["EditMachine"]</h1>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-error">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="panel">
+        <form asp-controller="Machines" asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Category">@T["Category"]</label>
+                    <select asp-for="Category" class="form-control">
+                        @foreach (MachineCategory cat in Enum.GetValues<MachineCategory>())
+                        {
+                            <option value="@((int)cat)">@cat.ToArabic()</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Category" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ModelName">@T["ModelName"]</label>
+                    <input asp-for="ModelName" class="form-control" />
+                    <span asp-validation-for="ModelName" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">@T["Description"]</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="SupportedMaterials">@T["SupportedMaterials"]</label>
+                    <input asp-for="SupportedMaterials" class="form-control" placeholder="@T["SupportedMaterialsPlaceholder"]" />
+                    <span asp-validation-for="SupportedMaterials" class="field-error"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PricingNote">@T["PricingNote"]</label>
+                    <input asp-for="PricingNote" class="form-control" placeholder="@T["PricingNotePlaceholder"]" />
+                    <span asp-validation-for="PricingNote" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">@T["SaveChanges"]</button>
+                <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-outline">@T["Cancel"]</a>
+                <a asp-controller="Machines" asp-action="Delete" asp-route-id="@Model.Id"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('@T["ConfirmDeleteMachine"]')">@T["Delete"]</a>
+            </div>
+        </form>
+    </div>
+</div>

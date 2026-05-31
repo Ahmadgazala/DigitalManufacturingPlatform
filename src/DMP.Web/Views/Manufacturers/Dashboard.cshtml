@@ -1,0 +1,217 @@
+@model ManufacturerDashboardViewModel
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    var m = Model.Manufacturer;
+}
+
+<div class="page-header">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h1>@m.WorkshopName</h1>
+            <p style="color:var(--steel);margin:0">
+                @if (m.IsApproved)
+                {
+                    <span class="chip chip-green">✓ ورشة معتمدة</span>
+                }
+                else
+                {
+                    <span class="chip chip-red">⏳ بانتظار الاعتماد</span>
+                }
+            </p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a asp-controller="Manufacturers" asp-action="Edit" class="btn btn-outline btn-sm">✏️ تعديل الملف</a>
+            <a asp-controller="Quotations" asp-action="IncomingRequests" class="btn btn-primary btn-sm">📋 الطلبات الواردة</a>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+
+    <!-- KPI Cards -->
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi-card">
+            <span class="kpi-label">طلبات واردة</span>
+            <span class="kpi-value">@Model.OpenRequestsCount</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">عروض معلقة</span>
+            <span class="kpi-value @(Model.PendingQuotationsCount > 0 ? "kpi-warning" : "")">@Model.PendingQuotationsCount</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">عروض مقبولة</span>
+            <span class="kpi-value" style="color:var(--green)">@Model.AcceptedQuotationsCount</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">طلبات مكتملة</span>
+            <span class="kpi-value">@Model.CompletedOrdersCount</span>
+        </div>
+    </div>
+
+    <div class="dash-detail-grid">
+        <div>
+
+            <!-- الطلبات الواردة -->
+            <div class="panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                    <h2 style="margin:0">📋 آخر الطلبات المناسبة لورشتك</h2>
+                    <a asp-controller="Quotations" asp-action="IncomingRequests" class="btn btn-sm btn-outline">عرض الكل</a>
+                </div>
+
+                @if (Model.RecentRequests.Any())
+                {
+                    <div class="req-list">
+                        @foreach (var req in Model.RecentRequests.Take(5))
+                        {
+                            <div class="req-row">
+                                <div class="req-info">
+                                    <div class="req-top">
+                                        <span class="req-title">@req.Title</span>
+                                        <span class="chip chip-cat">@req.Category.ToArabic()</span>
+                                    </div>
+                                    <div class="req-meta">
+                                        <span>👤 @req.Customer?.FullName</span>
+                                        <span>📦 كمية: @req.Quantity</span>
+                                        @if (req.Budget.HasValue) { <span>💰 @req.Budget.Value.ToString("N0") د.أ</span> }
+                                        <span class="req-date">@req.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                    </div>
+                                </div>
+                                <a class="btn btn-sm btn-primary"
+                                   asp-controller="Quotations" asp-action="Submit" asp-route-requestId="@req.Id">
+                                    قدّم عرضاً
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state" style="padding:24px 0">
+                        <div class="ico">📭</div>
+                        <p>لا توجد طلبات مفتوحة تناسب تخصصاتك حالياً</p>
+                        @if (!m.Machines.Any())
+                        {
+                            <a asp-controller="Machines" asp-action="Add" class="btn btn-primary btn-sm">أضف ماكينة أولاً</a>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- عروض الأسعار المرسلة -->
+            <div class="panel">
+                <h2>💬 عروض الأسعار المرسلة</h2>
+
+                @if (Model.RecentQuotations.Any())
+                {
+                    <div class="quot-list">
+                        @foreach (var q in Model.RecentQuotations)
+                        {
+                            var qCls = q.Status switch {
+                                QuotationStatus.Accepted => "qs-accepted",
+                                QuotationStatus.Rejected => "qs-rejected",
+                                _ => "qs-pending"
+                            };
+                            <div class="quot-row">
+                                <div class="quot-info">
+                                    <div class="quot-title">@(q.Request?.Title ?? "طلب")</div>
+                                    <div class="quot-meta">
+                                        <span>💰 @q.Price.ToString("N0") د.أ</span>
+                                        <span>⏱ @q.EstimatedDays يوم</span>
+                                        <span class="quot-date">@q.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                    </div>
+                                </div>
+                                <span class="quot-status @qCls">@q.Status.ToArabic()</span>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p style="color:var(--steel);font-size:.9rem">لم ترسل أي عروض أسعار بعد.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside>
+            <!-- صورة الورشة -->
+            <div class="panel" style="text-align:center">
+                @if (!string.IsNullOrEmpty(m.ProfilePhotoPath))
+                {
+                    <img src="@m.ProfilePhotoPath" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:10px" />
+                }
+                else
+                {
+                    <div style="width:80px;height:80px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:#fff;margin:0 auto 10px">
+                        @m.WorkshopName?.Substring(0, 1)
+                    </div>
+                }
+                <div style="font-weight:800">@m.WorkshopName</div>
+                <div style="color:var(--steel);font-size:.85rem">@m.City</div>
+            </div>
+
+            <!-- روابط سريعة -->
+            <div class="panel">
+                <h3 style="font-size:.9rem;margin-bottom:12px">روابط سريعة</h3>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <a asp-controller="Machines" asp-action="Add" class="btn btn-outline btn-sm">➕ إضافة ماكينة</a>
+                    <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@m.Id" class="btn btn-outline btn-sm">👁 عرض الملف العام</a>
+                    <a asp-controller="GroupBuying" asp-action="Index" class="btn btn-outline btn-sm">📦 الشراء الجماعي</a>
+                    <a asp-controller="Messages" asp-action="Inbox" class="btn btn-outline btn-sm">💬 الرسائل</a>
+                </div>
+            </div>
+
+            <!-- الماكينات -->
+            @if (m.Machines.Any())
+            {
+                <div class="panel">
+                    <h3 style="font-size:.9rem;margin-bottom:12px">ماكيناتي (@m.Machines.Count)</h3>
+                    @foreach (var mc in m.Machines.Take(5))
+                    {
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:.85rem">
+                            <span>@mc.ModelName</span>
+                            <span class="chip chip-green" style="font-size:.75rem">@mc.Category.ToArabic()</span>
+                        </div>
+                    }
+                    @if (m.Machines.Count > 5)
+                    {
+                        <p style="font-size:.8rem;color:var(--steel);margin-top:6px">+@(m.Machines.Count - 5) ماكينة أخرى</p>
+                    }
+                </div>
+            }
+
+            <!-- صور الورشة -->
+            <div class="panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <h3 style="font-size:.9rem;margin:0">صور الورشة (@m.WorkshopPhotos.Count)</h3>
+                </div>
+                @if (m.WorkshopPhotos.Any())
+                {
+                    <div class="photo-grid" style="grid-template-columns:repeat(3,1fr);gap:6px">
+                        @foreach (var ph in m.WorkshopPhotos.Take(6))
+                        {
+                            <div style="position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px">
+                                <img src="@ph.FilePath" style="width:100%;height:100%;object-fit:cover" />
+                                <form asp-controller="Manufacturers" asp-action="DeletePhoto" asp-route-id="@ph.Id" method="post"
+                                      style="position:absolute;top:2px;inset-inline-end:2px">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            style="padding:2px 6px;font-size:.7rem;min-width:0"
+                                            onclick="return confirm('حذف الصورة؟')">✕</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                }
+                <form asp-controller="Manufacturers" asp-action="UploadPhoto" method="post"
+                      enctype="multipart/form-data" style="margin-top:10px">
+                    @Html.AntiForgeryToken()
+                    <div style="display:flex;gap:6px">
+                        <input type="file" name="photo" accept="image/*" class="form-control" style="font-size:.8rem" required />
+                        <button type="submit" class="btn btn-primary btn-sm">رفع</button>
+                    </div>
+                </form>
+            </div>
+        </aside>
+    </div>
+</div>

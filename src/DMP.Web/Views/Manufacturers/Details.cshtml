@@ -1,0 +1,229 @@
+﻿@model Manufacturer
+@{
+    ViewData["Title"] = Model.WorkshopName;
+    bool hasLocation = Model.Latitude.HasValue && Model.Longitude.HasValue;
+}
+
+<div class="container">
+    <div class="mfr-cover">
+        @if (!string.IsNullOrEmpty(Model.CoverPhotoPath))
+        {
+            <img src="@Model.CoverPhotoPath" alt="@Model.WorkshopName cover" class="cover-photo" />
+        }
+        else
+        {
+            <div class="cover-placeholder"></div>
+        }
+    </div>
+
+    <div class="mfr-hero">
+        <div class="mfr-avatar">
+            @if (!string.IsNullOrEmpty(Model.ProfilePhotoPath))
+            {
+                <img src="@Model.ProfilePhotoPath" alt="@Model.WorkshopName" />
+            }
+            else
+            {
+                <div class="avatar-placeholder">@Model.WorkshopName?.Substring(0,1)</div>
+            }
+        </div>
+        <div class="mfr-hero-info">
+            <h1>@Model.WorkshopName</h1>
+            <div class="mfr-meta">
+                <span>@Model.City</span>
+                @if (Model.IsApproved)
+                {
+                    <span class="chip chip-green">@T["Approved"]</span>
+                }
+                else
+                {
+                    <span class="chip chip-red">@T["PendingApproval"]</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                <div class="panel">
+                    <h2>@T["AboutWorkshop"]</h2>
+                    <p>@Model.Bio</p>
+                </div>
+            }
+
+            @if (Model.WorkshopPhotos != null && Model.WorkshopPhotos.Any())
+            {
+                <div class="panel">
+                    <h2>@T["WorkshopPhotos"]</h2>
+                    <div class="photo-grid">
+                        @foreach (var photo in Model.WorkshopPhotos)
+                        {
+                            <div class="photo-item">
+                                <img src="@photo.FilePath" alt="صورة الورشة" loading="lazy" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Machines != null && Model.Machines.Any())
+            {
+                <div class="panel">
+                    <h2>@T["Machines"]</h2>
+                    <div class="machine-list">
+                        @foreach (var machine in Model.Machines)
+                        {
+                            <div class="machine-row">
+                                <div class="machine-info">
+                                    <h4>@machine.ModelName</h4>
+                                    <span class="chip chip-green">@machine.Category</span>
+                                    <p>@machine.Description</p>
+                                </div>
+                                <div class="machine-meta">
+                                    @if (!string.IsNullOrEmpty(machine.SupportedMaterials))
+                                    {
+                                        <span>@T["Materials"]: @machine.SupportedMaterials</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(machine.PricingNote))
+                                    {
+                                        <span>@T["Pricing"]: @machine.PricingNote</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                <div class="panel">
+                    <h2>@T["Reviews"]</h2>
+                    @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                    {
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="@(i <= review.Rating ? "star filled" : "star")">&#9733;</span>
+                                    }
+                                </div>
+                                <span class="review-date">@review.CreatedAt.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <p>@review.Comment</p>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="panel">
+                <h2>@T["AddReview"]</h2>
+                <form asp-controller="Manufacturers" asp-action="AddReview" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label>@T["Rating"]</label>
+                        <div class="star-rating-input" id="starInput">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span class="star-btn" data-value="@i">&#9733;</span>
+                            }
+                        </div>
+                        <input type="hidden" name="Rating" id="ratingValue" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Comment">@T["Comment"]</label>
+                        <textarea name="Comment" id="Comment" class="form-control" rows="3" placeholder="@T["WriteYourReview"]"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">@T["SubmitReview"]</button>
+                </form>
+            </div>
+        </div>
+
+        <aside class="detail-side">
+            <div class="panel">
+                <ul class="info-list">
+                    @if (!string.IsNullOrEmpty(Model.ContactPhone))
+                    {
+                        <li><strong>@T["Phone"]:</strong> <a href="tel:@Model.ContactPhone">@Model.ContactPhone</a></li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ContactEmail))
+                    {
+                        <li><strong>@T["Email"]:</strong> <a href="mailto:@Model.ContactEmail">@Model.ContactEmail</a></li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <li><strong>@T["Address"]:</strong> @Model.Address</li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.City))
+                    {
+                        <li><strong>@T["City"]:</strong> @Model.City</li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.WorkingHours))
+                    {
+                        <li><strong>@T["WorkingHours"]:</strong> @Model.WorkingHours</li>
+                    }
+                    @if (Model.Delivery != DeliveryOption.PickupOnly)
+                    {
+                        <li><strong>@T["Delivery"]:</strong> <span class="chip chip-green">@T["Available"]</span></li>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ProductionCapacity))
+                    {
+                        <li><strong>@T["ProductionCapacity"]:</strong> @Model.ProductionCapacity</li>
+                    }
+                </ul>
+                <div class="side-actions">
+                    <a asp-controller="Requests" asp-action="Create" asp-route-manufacturerId="@Model.Id" class="btn btn-primary">@T["RequestManufacturing"]</a>
+                    <a asp-controller="Messages" asp-action="Conversation" asp-route-userId="@Model.UserId" class="btn btn-outline">@T["SendMessage"]</a>
+                </div>
+            </div>
+
+            @if (hasLocation)
+            {
+                <div class="panel">
+                    <h3>@T["Location"]</h3>
+                    <div id="map" class="map-box" style="height:250px;"></div>
+                </div>
+
+                @section Scripts {
+                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                    <script>
+                        (function () {
+                            var lat = @Model.Latitude;
+                            var lng = @Model.Longitude;
+                            var map = L.map('map').setView([lat, lng], 15);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; OpenStreetMap contributors'
+                            }).addTo(map);
+                            L.marker([lat, lng]).addTo(map).bindPopup('@Html.Raw(Model.WorkshopName)').openPopup();
+                        })();
+                    </script>
+                }
+            }
+        </aside>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var stars = document.querySelectorAll('#starInput .star-btn');
+            var input = document.getElementById('ratingValue');
+            stars.forEach(function (star) {
+                star.addEventListener('click', function () {
+                    var val = parseInt(this.getAttribute('data-value'));
+                    input.value = val;
+                    stars.forEach(function (s, idx) {
+                        s.classList.toggle('filled', idx < val);
+                    });
+                });
+            });
+        })();
+    </script>
+}
+
+

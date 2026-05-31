@@ -1,0 +1,100 @@
+@model DirectoryViewModel
+@{
+    ViewData["Title"] = "دليل الورش";
+    var pageIndex  = (int)(ViewBag.PageIndex  ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+    var totalCount = (int)(ViewBag.TotalCount ?? 0);
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>دليل الورش</h1>
+        <p>تصفّح ورش التصنيع المعتمدة في الأردن</p>
+    </div>
+</div>
+
+<div class="container section">
+    <form asp-controller="Manufacturers" asp-action="Index" method="get" class="search-bar">
+        <input type="text" name="searchTerm" class="form-control" value="@Model.SearchTerm"
+               placeholder="ابحث عن ورشة أو خدمة..." />
+        <select name="category" class="form-control" style="width:auto">
+            <option value="">كل التخصصات</option>
+            @foreach (MachineCategory cat in Enum.GetValues(typeof(MachineCategory)))
+            {
+                if (Model.Category == cat)
+                {
+                    <option value="@((int)cat)" selected>@cat.ToArabic()</option>
+                }
+                else
+                {
+                    <option value="@((int)cat)">@cat.ToArabic()</option>
+                }
+            }
+        </select>
+        <select name="city" class="form-control" style="width:auto">
+            <option value="">كل المدن</option>
+            @foreach (var city in Model.Cities)
+            {
+                if (Model.City == city)
+                {
+                    <option value="@city" selected>@city</option>
+                }
+                else
+                {
+                    <option value="@city">@city</option>
+                }
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">بحث</button>
+        @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.Category.HasValue || !string.IsNullOrEmpty(Model.City))
+        {
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">مسح</a>
+        }
+    </form>
+
+    @if (Model.Manufacturers.Any())
+    {
+        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@totalCount ورشة</p>
+        <div class="grid grid-3">
+            @foreach (var m in Model.Manufacturers)
+            {
+                <partial name="_ManufacturerCard" model="m" />
+            }
+        </div>
+        @if (totalPages > 1)
+        {
+            <div class="pagination">
+                @if (pageIndex > 1)
+                {
+                    <a asp-controller="Manufacturers" asp-action="Index"
+                       asp-route-page="@(pageIndex-1)" asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-category="@((int?)Model.Category)" asp-route-city="@Model.City"
+                       class="page-btn">‹ السابق</a>
+                }
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <a asp-controller="Manufacturers" asp-action="Index"
+                       asp-route-page="@i" asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-category="@((int?)Model.Category)" asp-route-city="@Model.City"
+                       class="page-btn @(i == pageIndex ? "active" : "")">@i</a>
+                }
+                @if (pageIndex < totalPages)
+                {
+                    <a asp-controller="Manufacturers" asp-action="Index"
+                       asp-route-page="@(pageIndex+1)" asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-category="@((int?)Model.Category)" asp-route-city="@Model.City"
+                       class="page-btn">التالي ›</a>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="ico">🔍</div>
+            <h3>لا توجد نتائج</h3>
+            <p>جرّب تعديل معايير البحث</p>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض الكل</a>
+        </div>
+    }
+</div>

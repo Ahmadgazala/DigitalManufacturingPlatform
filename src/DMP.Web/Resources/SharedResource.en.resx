@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true" />
+  </xsd:schema>
+
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_Manufacturers" xml:space="preserve"><value>Workshops</value></data>
+  <data name="Nav_Suppliers" xml:space="preserve"><value>Suppliers</value></data>
+  <data name="Nav_Requests" xml:space="preserve"><value>My Requests</value></data>
+  <data name="Nav_GroupBuying" xml:space="preserve"><value>Group Buying</value></data>
+  <data name="Nav_Messages" xml:space="preserve"><value>Messages</value></data>
+  <data name="Nav_Notifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Nav_Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>Login</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>Register</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Logout</value></data>
+  <data name="Login" xml:space="preserve"><value>Login</value></data>
+  <data name="LoginSubtitle" xml:space="preserve"><value>Welcome back to Jo Maker</value></data>
+  <data name="LoginBtn" xml:space="preserve"><value>Sign In</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="EnterEmail" xml:space="preserve"><value>Enter your email</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="EnterPassword" xml:space="preserve"><value>Enter your password</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>Remember me</value></data>
+  <data name="ForgotPassword" xml:space="preserve"><value>Forgot password?</value></data>
+  <data name="CreateAccount" xml:space="preserve"><value>Create an account</value></data>
+  <data name="Register" xml:space="preserve"><value>Register</value></data>
+  <data name="RegisterSubtitle" xml:space="preserve"><value>Join the Jo Maker platform</value></data>
+  <data name="RegisterAsManufacturer" xml:space="preserve"><value>Register as Manufacturer</value></data>
+  <data name="FullName" xml:space="preserve"><value>Full Name</value></data>
+  <data name="EnterFullName" xml:space="preserve"><value>Enter your full name</value></data>
+  <data name="ConfirmPassword" xml:space="preserve"><value>Confirm Password</value></data>
+  <data name="ConfirmYourPassword" xml:space="preserve"><value>Re-enter your password</value></data>
+  <data name="AlreadyHaveAccount" xml:space="preserve"><value>Already have an account?</value></data>
+  <data name="LoginHere" xml:space="preserve"><value>Login here</value></data>
+  <data name="SaveChanges" xml:space="preserve"><value>Save Changes</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="View" xml:space="preserve"><value>View</value></data>
+  <data name="Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="All" xml:space="preserve"><value>All</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="Approved" xml:space="preserve"><value>Approved</value></data>
+  <data name="Reject" xml:space="preserve"><value>Reject</value></data>
+  <data name="Approve" xml:space="preserve"><value>Approve</value></data>
+  <data name="ConfirmReject" xml:space="preserve"><value>Are you sure you want to reject?</value></data>
+  <data name="Owner" xml:space="preserve"><value>Owner</value></data>
+  <data name="RegisteredAt" xml:space="preserve"><value>Registered At</value></data>
+  <data name="User" xml:space="preserve"><value>User</value></data>
+  <data name="Send" xml:space="preserve"><value>Send</value></data>
+  <data name="ClickToUpload" xml:space="preserve"><value>Click to upload</value></data>
+  <data name="BackToDashboard" xml:space="preserve"><value>← Dashboard</value></data>
+  <data name="EditWorkshop" xml:space="preserve"><value>Edit Workshop Profile</value></data>
+  <data name="BasicInfo" xml:space="preserve"><value>Basic Information</value></data>
+  <data name="ContactInfo" xml:space="preserve"><value>Contact Information</value></data>
+  <data name="WorkshopName" xml:space="preserve"><value>Workshop Name</value></data>
+  <data name="Bio" xml:space="preserve"><value>About the Workshop</value></data>
+  <data name="City" xml:space="preserve"><value>City</value></data>
+  <data name="Address" xml:space="preserve"><value>Address</value></data>
+  <data name="Phone" xml:space="preserve"><value>Phone</value></data>
+  <data name="WorkingHours" xml:space="preserve"><value>Working Hours</value></data>
+  <data name="WorkingHoursPlaceholder" xml:space="preserve"><value>e.g. Sat-Thu 9am-6pm</value></data>
+  <data name="Delivery" xml:space="preserve"><value>Delivery</value></data>
+  <data name="Available" xml:space="preserve"><value>Available</value></data>
+  <data name="NotAvailable" xml:space="preserve"><value>Not Available</value></data>
+  <data name="ProductionCapacity" xml:space="preserve"><value>Production Capacity</value></data>
+  <data name="Photos" xml:space="preserve"><value>Photos</value></data>
+  <data name="ProfilePhoto" xml:space="preserve"><value>Profile Photo</value></data>
+  <data name="CoverPhoto" xml:space="preserve"><value>Cover Photo</value></data>
+  <data name="CurrentProfilePhoto" xml:space="preserve"><value>Current Profile Photo</value></data>
+  <data name="CurrentCoverPhoto" xml:space="preserve"><value>Current Cover Photo</value></data>
+  <data name="Location" xml:space="preserve"><value>Location on Map</value></data>
+  <data name="Latitude" xml:space="preserve"><value>Latitude</value></data>
+  <data name="Longitude" xml:space="preserve"><value>Longitude</value></data>
+  <data name="ClickMapToSetLocation" xml:space="preserve"><value>Click on the map to set location</value></data>
+  <data name="AboutWorkshop" xml:space="preserve"><value>About the Workshop</value></data>
+  <data name="WorkshopPhotos" xml:space="preserve"><value>Workshop Photos</value></data>
+  <data name="Machines" xml:space="preserve"><value>Machines</value></data>
+  <data name="Reviews" xml:space="preserve"><value>Reviews</value></data>
+  <data name="AddReview" xml:space="preserve"><value>Add Your Review</value></data>
+  <data name="Rating" xml:space="preserve"><value>Rating</value></data>
+  <data name="Comment" xml:space="preserve"><value>Comment</value></data>
+  <data name="WriteYourReview" xml:space="preserve"><value>Write your review here...</value></data>
+  <data name="SubmitReview" xml:space="preserve"><value>Submit Review</value></data>
+  <data name="RequestManufacturing" xml:space="preserve"><value>Request Manufacturing</value></data>
+  <data name="SendMessage" xml:space="preserve"><value>Send Message</value></data>
+  <data name="ViewWorkshop" xml:space="preserve"><value>View Workshop</value></data>
+  <data name="Verified" xml:space="preserve"><value>Verified</value></data>
+  <data name="NoManufacturersFound" xml:space="preserve"><value>No workshops found</value></data>
+  <data name="PendingApproval" xml:space="preserve"><value>Pending Approval</value></data>
+  <data name="AddMachine" xml:space="preserve"><value>Add Machine</value></data>
+  <data name="EditMachine" xml:space="preserve"><value>Edit Machine</value></data>
+  <data name="Category" xml:space="preserve"><value>Category</value></data>
+  <data name="SelectCategory" xml:space="preserve"><value>Select Category</value></data>
+  <data name="ModelName" xml:space="preserve"><value>Model Name</value></data>
+  <data name="Description" xml:space="preserve"><value>Description</value></data>
+  <data name="SupportedMaterials" xml:space="preserve"><value>Supported Materials</value></data>
+  <data name="SupportedMaterialsPlaceholder" xml:space="preserve"><value>e.g. PLA, ABS, Wood, Metal</value></data>
+  <data name="PricingNote" xml:space="preserve"><value>Pricing Note</value></data>
+  <data name="PricingNotePlaceholder" xml:space="preserve"><value>e.g. 5 JD/hour or 2 JD/piece</value></data>
+  <data name="Pricing" xml:space="preserve"><value>Pricing</value></data>
+  <data name="Materials" xml:space="preserve"><value>Materials</value></data>
+  <data name="ConfirmDeleteMachine" xml:space="preserve"><value>Are you sure you want to delete this machine?</value></data>
+  <data name="3DPrinting" xml:space="preserve"><value>3D Printing</value></data>
+  <data name="LaserCutting" xml:space="preserve"><value>Laser Cutting</value></data>
+  <data name="Other" xml:space="preserve"><value>Other</value></data>
+  <data name="NewRequest" xml:space="preserve"><value>New Manufacturing Request</value></data>
+  <data name="NewRequestSubtitle" xml:space="preserve"><value>Submit your request and manufacturers will send you quotes</value></data>
+  <data name="RequestTitle" xml:space="preserve"><value>Request Title</value></data>
+  <data name="RequestTitlePlaceholder" xml:space="preserve"><value>e.g. Laser cut 50 acrylic panels</value></data>
+  <data name="RequestDescPlaceholder" xml:space="preserve"><value>Describe your project in detail: dimensions, quantities, specs...</value></data>
+  <data name="Material" xml:space="preserve"><value>Material</value></data>
+  <data name="MaterialPlaceholder" xml:space="preserve"><value>e.g. 3mm Acrylic, MDF Wood...</value></data>
+  <data name="Quantity" xml:space="preserve"><value>Quantity</value></data>
+  <data name="Budget" xml:space="preserve"><value>Estimated Budget</value></data>
+  <data name="AttachFiles" xml:space="preserve"><value>Attached Files</value></data>
+  <data name="AttachFilesHint" xml:space="preserve"><value>DXF, DWG, STL, PDF, Images (up to 20MB)</value></data>
+  <data name="FilesSelected" xml:space="preserve"><value>file(s) selected</value></data>
+  <data name="SubmitRequest" xml:space="preserve"><value>Submit Request</value></data>
+  <data name="SubmitQuotation" xml:space="preserve"><value>Submit Quotation</value></data>
+  <data name="ForRequest" xml:space="preserve"><value>For Request</value></data>
+  <data name="Price" xml:space="preserve"><value>Price</value></data>
+  <data name="EstimatedDays" xml:space="preserve"><value>Estimated Days</value></data>
+  <data name="Notes" xml:space="preserve"><value>Additional Notes</value></data>
+  <data name="QuotationNotesPlaceholder" xml:space="preserve"><value>Any additional details...</value></data>
+  <data name="Conversation" xml:space="preserve"><value>Conversation</value></data>
+  <data name="ConversationWith" xml:space="preserve"><value>Conversation with</value></data>
+  <data name="BackToInbox" xml:space="preserve"><value>← Inbox</value></data>
+  <data name="TypeMessage" xml:space="preserve"><value>Type your message...</value></data>
+  <data name="NoMessagesYet" xml:space="preserve"><value>No messages yet. Start the conversation!</value></data>
+  <data name="AdminDashboard" xml:space="preserve"><value>Admin Dashboard</value></data>
+  <data name="TotalManufacturers" xml:space="preserve"><value>Total Manufacturers</value></data>
+  <data name="TotalUsers" xml:space="preserve"><value>Total Users</value></data>
+  <data name="TotalRequests" xml:space="preserve"><value>Total Requests</value></data>
+  <data name="TotalSuppliers" xml:space="preserve"><value>Total Suppliers</value></data>
+  <data name="ActiveCampaigns" xml:space="preserve"><value>Active Campaigns</value></data>
+  <data name="ManufacturersManagement" xml:space="preserve"><value>Manufacturers Management</value></data>
+  <data name="ManageManufacturers" xml:space="preserve"><value>Manage Manufacturers</value></data>
+  <data name="UsersManagement" xml:space="preserve"><value>Users Management</value></data>
+  <data name="ManageUsers" xml:space="preserve"><value>Manage Users</value></data>
+  <data name="Suppliers" xml:space="preserve"><value>Suppliers</value></data>
+  <data name="ViewSuppliers" xml:space="preserve"><value>View Suppliers</value></data>
+  <data name="GB_Title" xml:space="preserve"><value>Group Buying</value></data>
+  <data name="GB_Sub" xml:space="preserve"><value>Buy with other manufacturers and get the best prices</value></data>
+  <data name="Btn_CreateCampaign" xml:space="preserve"><value>Create Campaign</value></data>
+  <data name="CreateCampaign" xml:space="preserve"><value>Create Campaign</value></data>
+  <data name="CampaignTitle" xml:space="preserve"><value>Campaign Title</value></data>
+  <data name="ViewCampaigns" xml:space="preserve"><value>View Campaigns</value></data>
+  <data name="GroupBuying" xml:space="preserve"><value>Group Buying</value></data>
+  <data name="Sec_ActiveCampaigns" xml:space="preserve"><value>Active Campaigns</value></data>
+  <data name="Sec_ActiveSub" xml:space="preserve"><value>Join now and get wholesale prices</value></data>
+  <data name="Sec_PastCampaigns" xml:space="preserve"><value>Past Campaigns</value></data>
+  <data name="Empty_NoCampaigns" xml:space="preserve"><value>No campaigns available</value></data>
+  <data name="Empty_NoCampaignsMsg" xml:space="preserve"><value>Check back soon for upcoming campaigns</value></data>
+  <data name="How_Join" xml:space="preserve"><value>Join Campaign</value></data>
+  <data name="How_JoinDesc" xml:space="preserve"><value>Choose quantity and join</value></data>
+  <data name="How_Quorum" xml:space="preserve"><value>Reach Quorum</value></data>
+  <data name="How_QuorumDesc" xml:space="preserve"><value>Order confirmed when minimum quantity is reached</value></data>
+  <data name="How_Import" xml:space="preserve"><value>Import</value></data>
+  <data name="How_ImportDesc" xml:space="preserve"><value>Goods imported at wholesale price</value></data>
+  <data name="How_Deliver" xml:space="preserve"><value>Delivery</value></data>
+  <data name="How_DeliverDesc" xml:space="preserve"><value>Receive your order at a lower price</value></data>
+</root>
