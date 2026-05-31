@@ -39,3 +39,5 @@ logs/
 ## Rider / JetBrains
 .idea/
 *.sln.iml
+
+.claude/
