@@ -20,8 +20,8 @@ appsettings.Development.json
 *.pfx
 *.p12
 
-## User uploads (don't commit uploaded files)
-src/DMP.Web/wwwroot/uploads/
+## User uploads (don't commit uploaded files, but keep seed images)
+# src/DMP.Web/wwwroot/uploads/
 
 ## OS files
 .DS_Store
