@@ -1,0 +1,67 @@
+@model PortfolioItem
+@{
+    ViewData["Title"] = "تعديل المشروع";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>✏️ تعديل المشروع</h1>
+    </div>
+</div>
+
+<div class="container section">
+    <div style="max-width:620px;margin:0 auto">
+        <div class="panel">
+            <form asp-controller="Portfolio" asp-action="Edit" asp-route-id="@Model.Id"
+                  method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label asp-for="Title">عنوان المشروع</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Category">التخصص</label>
+                    <select asp-for="Category" class="form-control">
+                        <option value="">— اختر التخصص —</option>
+                        @foreach (MachineCategory cat in ViewBag.Categories)
+                        {
+                            <option value="@((int)cat)" selected="@(Model.Category == cat)">@cat.ToArabic()</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description">وصف المشروع</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CompletedAt">تاريخ الإنجاز</label>
+                    <input asp-for="CompletedAt" class="form-control" type="date"
+                           value="@Model.CompletedAt.ToString("yyyy-MM-dd")" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="form-group">
+                        <label>الصورة الحالية</label>
+                        <img src="@Model.ImagePath" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--r-sm);border:1.5px solid var(--line)" />
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label>تغيير الصورة (اختياري)</label>
+                    <input type="file" name="image" accept="image/*" class="form-control" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
+                    <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-ghost">إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

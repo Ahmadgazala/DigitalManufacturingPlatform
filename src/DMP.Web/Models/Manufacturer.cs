@@ -49,9 +49,10 @@ public class Manufacturer
     public bool IsApproved { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public List<Machine>       Machines       { get; set; } = new();
-    public List<WorkshopPhoto> WorkshopPhotos { get; set; } = new();
-    public List<Review>        Reviews        { get; set; } = new();
+    public List<Machine>        Machines        { get; set; } = new();
+    public List<WorkshopPhoto>  WorkshopPhotos  { get; set; } = new();
+    public List<Review>         Reviews         { get; set; } = new();
+    public List<PortfolioItem>  PortfolioItems  { get; set; } = new();
 
     // خصائص محسوبة
     public int    ReviewsCount   => Reviews.Count;
@@ -92,6 +93,28 @@ public class WorkshopPhoto
     public string FilePath { get; set; } = string.Empty;
 
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
+}
+
+public class PortfolioItem
+{
+    public int Id { get; set; }
+
+    public int ManufacturerId { get; set; }
+    public Manufacturer? Manufacturer { get; set; }
+
+    [Required(ErrorMessage = "عنوان المشروع مطلوب")]
+    [StringLength(200)]
+    public string Title { get; set; } = string.Empty;
+
+    [StringLength(1000)]
+    public string? Description { get; set; }
+
+    public string? ImagePath { get; set; }
+
+    public MachineCategory? Category { get; set; }
+
+    public DateTime CompletedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt   { get; set; } = DateTime.UtcNow;
 }
 
 public class Review

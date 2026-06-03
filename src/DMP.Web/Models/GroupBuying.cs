@@ -4,32 +4,35 @@ namespace DMP.Web.Models;
 
 public enum CampaignStatus
 {
-    Active    = 1,
-    Confirmed = 2,
-    Shipping  = 3,
-    Delivered = 4,
-    Cancelled = 5
+    Active          = 1,
+    AwaitingPayment = 2,  // اكتمل النصاب — بانتظار دفع المشاركين
+    Confirmed       = 3,
+    Shipping        = 4,
+    Delivered       = 5,
+    Cancelled       = 6
 }
 
 public static class CampaignStatusHelpers
 {
     public static string ToArabic(this CampaignStatus s) => s switch
     {
-        CampaignStatus.Active    => "نشطة",
-        CampaignStatus.Confirmed => "مؤكدة",
-        CampaignStatus.Shipping  => "في الشحن",
-        CampaignStatus.Delivered => "تم التوصيل",
-        CampaignStatus.Cancelled => "ملغية",
+        CampaignStatus.Active          => "نشطة",
+        CampaignStatus.AwaitingPayment => "بانتظار الدفع",
+        CampaignStatus.Confirmed       => "مؤكدة",
+        CampaignStatus.Shipping        => "في الشحن",
+        CampaignStatus.Delivered       => "تم التوصيل",
+        CampaignStatus.Cancelled       => "ملغية",
         _ => s.ToString()
     };
 
     public static string StatusColor(this CampaignStatus s) => s switch
     {
-        CampaignStatus.Active    => "chip-green",
-        CampaignStatus.Confirmed => "chip",
-        CampaignStatus.Shipping  => "chip",
-        CampaignStatus.Delivered => "chip-steel",
-        CampaignStatus.Cancelled => "chip-red",
+        CampaignStatus.Active          => "chip-green",
+        CampaignStatus.AwaitingPayment => "chip-amber",
+        CampaignStatus.Confirmed       => "chip",
+        CampaignStatus.Shipping        => "chip",
+        CampaignStatus.Delivered       => "chip-steel",
+        CampaignStatus.Cancelled       => "chip-red",
         _ => "chip-steel"
     };
 }
@@ -59,6 +62,10 @@ public class GroupBuyingCampaign
 
     [Range(1, 100000)]
     public int MinQuantity { get; set; }
+
+    /// <summary>الحد الأدنى للطلب من كل مصنّع (0 = غير محدد)</summary>
+    [Range(0, 10000)]
+    public int MinOrderPerManufacturer { get; set; } = 0;
 
     public int CurrentQuantity { get; set; } = 0;
 
@@ -93,4 +100,18 @@ public class CampaignParticipant
     public string? Preferences { get; set; }
 
     public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
+
+    // --- الدفع ---
+    public ParticipantPaymentStatus PaymentStatus { get; set; } = ParticipantPaymentStatus.NotRequested;
+    public string?   StripeSessionId { get; set; }
+    public decimal?  PaidAmount      { get; set; }
+    public DateTime? PaidAt          { get; set; }
+}
+
+public enum ParticipantPaymentStatus
+{
+    NotRequested = 0, // لم يُطلب الدفع بعد
+    Pending      = 1, // طُلب الدفع — بانتظار المصنّع
+    Paid         = 2, // دفع بنجاح
+    Refunded     = 3  // مُسترجع
 }

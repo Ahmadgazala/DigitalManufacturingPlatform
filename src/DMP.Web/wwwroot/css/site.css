@@ -326,6 +326,22 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 .auth-links a:hover { color: var(--sky); }
 .auth-links .separator { margin: 0 8px; color: var(--line); }
 
+/* Role selection cards (Register page) */
+.role-card { cursor: pointer; display: block; }
+.role-card-inner {
+    border: 2px solid var(--line);
+    border-radius: var(--r);
+    padding: 16px 14px;
+    text-align: center;
+    transition: border-color .2s, background .2s;
+    background: var(--white);
+}
+.role-card:hover .role-card-inner { border-color: var(--sky); background: #f0f9ff; }
+.role-card-active .role-card-inner { border-color: var(--sky-dark); background: #e0f2fe; }
+.role-icon  { font-size: 1.8rem; margin-bottom: 6px; }
+.role-title { font-weight: 800; font-size: .95rem; margin-bottom: 4px; color: var(--ink); }
+.role-desc  { font-size: .78rem; color: var(--steel); line-height: 1.4; }
+
 /* ================================================================
    INFO LIST
 ================================================================ */
@@ -937,6 +953,58 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 }
 .req-detail-header h1 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
 .req-detail-header p  { color: #94a3b8; }
+
+/* ================================================================
+   ORDER TRACKING TIMELINE
+================================================================ */
+.tracking-timeline { display: flex; flex-direction: column; gap: 0; }
+.track-step {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0; position: relative;
+}
+.track-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 44px; inset-inline-start: 19px;
+    width: 2px; height: calc(100% - 14px);
+    background: var(--line);
+}
+.track-step.done::after { background: var(--green); }
+
+.track-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--line-soft); border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0; z-index: 1;
+    transition: all .2s;
+}
+.track-step.done  .track-icon { background: var(--green-bg); border-color: var(--green-bd); }
+.track-step.current .track-icon { background: var(--sky-light); border-color: var(--sky); box-shadow: 0 0 0 4px var(--sky-glow); }
+
+.track-body { flex: 1; padding-top: 6px; }
+.track-label { font-weight: 700; font-size: .93rem; color: var(--navy-mid); }
+.track-step.done    .track-label { color: var(--navy); }
+.track-step.current .track-label { color: var(--sky-dark); }
+.track-note  { font-size: .82rem; color: var(--steel); margin-top: 2px; }
+.track-date  { font-size: .76rem; color: var(--steel-lt); margin-top: 2px; }
+.track-check { color: var(--green); font-weight: 800; font-size: 1rem; margin-top: 8px; }
+
+/* ================================================================
+   PORTFOLIO GRID
+================================================================ */
+.portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px; }
+.portfolio-card {
+    background: var(--white); border: 1.5px solid var(--line);
+    border-radius: var(--r); overflow: hidden; box-shadow: var(--sh-xs);
+    transition: transform .2s, box-shadow .2s;
+}
+.portfolio-card:hover { transform: translateY(-3px); box-shadow: var(--sh-md); }
+.portfolio-card-img { height: 150px; overflow: hidden; background: linear-gradient(135deg, var(--navy-soft), var(--navy-mid)); }
+.portfolio-card-img img { width:100%; height:100%; object-fit:cover; }
+.portfolio-card-body { padding: 14px; }
+.portfolio-card-title { font-weight: 800; font-size: .93rem; color: var(--navy); margin-bottom: 5px; }
+.portfolio-card-desc  { font-size: .82rem; color: var(--steel); margin-bottom: 8px; line-height: 1.5; }
+.portfolio-card-meta  { display: flex; justify-content: space-between; align-items: center; font-size: .76rem; color: var(--steel-lt); }
 
 /* File list */
 .file-list { list-style: none; padding: 0; }

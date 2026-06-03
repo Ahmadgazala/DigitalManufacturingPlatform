@@ -17,6 +17,22 @@ public enum QuotationStatus
     Rejected = 3
 }
 
+public enum TrackingStage
+{
+    Received        = 1,
+    InManufacturing = 2,
+    ReadyForPickup  = 3,
+    Delivered       = 4
+}
+
+public enum PaymentStatus
+{
+    NotPaid  = 0,
+    Pending  = 1,
+    Paid     = 2,
+    Refunded = 3
+}
+
 public static class RequestStatusHelpers
 {
     private static bool IsEnglish =>
@@ -45,6 +61,33 @@ public static class RequestStatusHelpers
 
     public static string ToDisplay(this QuotationStatus s) =>
         IsEnglish ? s.ToString() : s.ToArabic();
+
+    public static string ToArabic(this TrackingStage s) => s switch
+    {
+        TrackingStage.Received        => "تم الاستلام",
+        TrackingStage.InManufacturing => "قيد التصنيع",
+        TrackingStage.ReadyForPickup  => "جاهز للاستلام",
+        TrackingStage.Delivered       => "تم التسليم",
+        _ => s.ToString()
+    };
+
+    public static string ToIcon(this TrackingStage s) => s switch
+    {
+        TrackingStage.Received        => "📥",
+        TrackingStage.InManufacturing => "⚙️",
+        TrackingStage.ReadyForPickup  => "📦",
+        TrackingStage.Delivered       => "✅",
+        _ => "🔵"
+    };
+
+    public static string ToArabic(this PaymentStatus s) => s switch
+    {
+        PaymentStatus.NotPaid  => "غير مدفوع",
+        PaymentStatus.Pending  => "بانتظار الدفع",
+        PaymentStatus.Paid     => "مدفوع",
+        PaymentStatus.Refunded => "مُسترجع",
+        _ => s.ToString()
+    };
 }
 
 public class ManufacturingRequest
@@ -77,10 +120,36 @@ public class ManufacturingRequest
 
     public RequestStatus Status { get; set; } = RequestStatus.Open;
 
+    // تتبع الطلب
+    public TrackingStage? TrackingStage { get; set; }
+
+    // الدفع
+    public PaymentStatus PaymentStatus   { get; set; } = PaymentStatus.NotPaid;
+    public string?       StripeSessionId { get; set; }
+    public decimal?      PaidAmount      { get; set; }
+    public DateTime?     PaidAt          { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public List<RequestFile> Files      { get; set; } = new();
-    public List<Quotation>   Quotations { get; set; } = new();
+    public List<RequestFile>  Files        { get; set; } = new();
+    public List<Quotation>    Quotations   { get; set; } = new();
+    public List<OrderUpdate>  OrderUpdates { get; set; } = new();
+}
+
+// سجل تحديثات تتبع الطلب
+public class OrderUpdate
+{
+    public int Id { get; set; }
+
+    public int RequestId { get; set; }
+    public ManufacturingRequest? Request { get; set; }
+
+    public TrackingStage Stage { get; set; }
+
+    [StringLength(500)]
+    public string? Note { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
 
 public class RequestFile

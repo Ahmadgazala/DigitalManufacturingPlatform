@@ -1,0 +1,335 @@
+@model List<Manufacturer>
+@{
+    ViewData["Title"] = "خريطة الورش";
+    var cities    = ViewBag.Cities   as List<string> ?? new();
+    var selCat    = ViewBag.Category as MachineCategory?;
+    var selCity   = ViewBag.City     as string;
+    var allCount  = (int)(ViewBag.AllCount ?? 0);
+}
+
+@section Head {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #workshopMap {
+            height: calc(100vh - 68px - 72px);
+            min-height: 500px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .map-layout {
+            display: flex;
+            height: calc(100vh - 68px - 72px);
+            min-height: 500px;
+        }
+
+        /* Sidebar */
+        .map-sidebar {
+            width: 340px;
+            flex-shrink: 0;
+            background: var(--white);
+            border-inline-end: 1.5px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 2px 0 12px rgba(0,0,0,.06);
+            z-index: 2;
+        }
+
+        .map-sidebar-head {
+            padding: 16px;
+            border-bottom: 1.5px solid var(--line);
+            background: var(--navy);
+            color: #fff;
+        }
+        .map-sidebar-head h2 { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+        .map-sidebar-head p  { font-size: .82rem; color: #94a3b8; margin: 0; }
+
+        .map-filters {
+            padding: 12px 16px;
+            border-bottom: 1.5px solid var(--line);
+            background: var(--paper);
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .map-filters select { font-size: .85rem; padding: 8px 10px; }
+
+        .map-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .map-card {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            cursor: pointer;
+            transition: background .12s;
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .map-card:hover { background: var(--sky-light); }
+        .map-card.active { background: var(--sky-light); border-inline-start: 3px solid var(--sky); }
+
+        .map-card-avatar {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--sky); color: #fff; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0; overflow: hidden;
+        }
+        .map-card-avatar img { width:100%; height:100%; object-fit:cover; }
+
+        .map-card-info { flex: 1; min-width: 0; }
+        .map-card-name { font-weight: 800; font-size: .9rem; color: var(--navy); margin-bottom: 3px; }
+        .map-card-city { font-size: .78rem; color: var(--steel); margin-bottom: 5px; }
+        .map-card-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+        .map-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--steel);
+        }
+        .map-empty span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+        /* Custom Leaflet marker */
+        .custom-marker {
+            background: var(--sky);
+            color: white;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .7rem; font-weight: 800;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,.3);
+        }
+        .custom-marker.approved { background: #059669; }
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15) !important;
+            padding: 0 !important;
+            overflow: hidden;
+        }
+        .leaflet-popup-content { margin: 0 !important; width: 220px !important; }
+        .popup-body { padding: 14px; }
+        .popup-name { font-weight: 800; font-size: .95rem; color: var(--navy); margin-bottom: 4px; }
+        .popup-city { font-size: .8rem; color: var(--steel); margin-bottom: 8px; }
+        .popup-btn  {
+            display: block; text-align: center;
+            background: var(--sky); color: #fff;
+            padding: 8px; font-size: .82rem; font-weight: 700;
+            text-decoration: none; border-radius: 0 0 12px 12px;
+            transition: background .15s;
+        }
+        .popup-btn:hover { background: var(--sky-dark); }
+
+        @@media(max-width:700px) {
+            .map-layout { flex-direction: column; height: auto; }
+            .map-sidebar { width: 100%; height: 320px; border-inline-end: none; border-bottom: 1.5px solid var(--line); }
+            #workshopMap { height: 400px; }
+        }
+    </style>
+}
+
+<!-- Header -->
+<div class="page-header">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h1>🗺️ خريطة الورش</h1>
+            <p>@allCount ورشة معتمدة في الأردن — @Model.Count ظاهرة على الخريطة</p>
+        </div>
+        <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-sm">
+            ☰ عرض القائمة
+        </a>
+    </div>
+</div>
+
+<!-- Map Layout -->
+<div class="map-layout">
+
+    <!-- Sidebar -->
+    <div class="map-sidebar">
+        <div class="map-sidebar-head">
+            <h2>🏭 الورش (@Model.Count)</h2>
+            <p>انقر على ورشة للانتقال إليها</p>
+        </div>
+
+        <!-- Filters -->
+        <form class="map-filters" asp-controller="Manufacturers" asp-action="Map" method="get">
+            <select name="category" class="form-control" onchange="this.form.submit()">
+                <option value="">كل التخصصات</option>
+                @foreach (MachineCategory cat in Enum.GetValues<MachineCategory>())
+                {
+                    <option value="@((int)cat)" selected="@(selCat == cat)">@cat.ToArabic()</option>
+                }
+            </select>
+            <select name="city" class="form-control" onchange="this.form.submit()">
+                <option value="">كل المدن</option>
+                @foreach (var city in cities)
+                {
+                    <option value="@city" selected="@(selCity == city)">@city</option>
+                }
+            </select>
+            @if (selCat.HasValue || !string.IsNullOrEmpty(selCity))
+            {
+                <a asp-controller="Manufacturers" asp-action="Map"
+                   class="btn btn-ghost btn-sm" style="text-align:center">✕ مسح الفلتر</a>
+            }
+        </form>
+
+        <!-- List -->
+        <div class="map-list" id="mapList">
+            @if (!Model.Any())
+            {
+                <div class="map-empty">
+                    <span>📍</span>
+                    <p>لا توجد ورش بموقع جغرافي محدد</p>
+                    <p style="font-size:.8rem">المصنّعون يحددون موقعهم من لوحة التحكم</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var m in Model.OrderBy(x => x.City))
+                {
+                    var avg = m.AverageRating;
+                    <div class="map-card" id="card-@m.Id" onclick="focusMarker(@m.Id)">
+                        <div class="map-card-avatar">
+                            @if (!string.IsNullOrEmpty(m.ProfilePhotoPath))
+                            {
+                                <img src="@m.ProfilePhotoPath" alt="@m.WorkshopName" />
+                            }
+                            else
+                            {
+                                @(m.WorkshopName.Substring(0, 1))
+                            }
+                        </div>
+                        <div class="map-card-info">
+                            <div class="map-card-name">@m.WorkshopName</div>
+                            <div class="map-card-city">📍 @m.City</div>
+                            <div class="map-card-chips">
+                                @foreach (var cat in m.Machines.Select(mc => mc.Category).Distinct().Take(2))
+                                {
+                                    <span class="chip chip-blue" style="font-size:.7rem">@cat.ToArabic()</span>
+                                }
+                                @if (avg > 0)
+                                {
+                                    <span class="chip" style="font-size:.7rem">⭐ @avg.ToString("0.0")</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div id="workshopMap"></div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // بيانات الورش
+        const workshops = [
+            @foreach (var m in Model)
+            {
+                var cats  = string.Join(", ", m.Machines.Select(mc => mc.Category.ToArabic()).Distinct().Take(3));
+                var avg   = m.AverageRating;
+                var stars = avg > 0 ? $"⭐ {avg:0.0}" : "";
+                var lat   = m.Latitude!.Value.ToString("G", System.Globalization.CultureInfo.InvariantCulture);
+                var lng   = m.Longitude!.Value.ToString("G", System.Globalization.CultureInfo.InvariantCulture);
+                <text>
+                {
+                    id:      @m.Id,
+                    name:    "@Html.Raw(m.WorkshopName.Replace("\"", "\\\""))",
+                    city:    "@m.City",
+                    lat:     @lat,
+                    lng:     @lng,
+                    cats:    "@cats",
+                    rating:  "@stars",
+                    photo:   "@m.ProfilePhotoPath",
+                    url:     "/Manufacturers/Details/@m.Id"
+                },
+                </text>
+            }
+        ];
+
+        // تهيئة الخريطة — مركزها الأردن
+        const map = L.map('workshopMap', { zoomControl: true }).setView([31.95, 35.93], 8);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
+            maxZoom: 18
+        }).addTo(map);
+
+        // تخزين الـ markers
+        const markers = {};
+
+        // أنشئ marker مخصص
+        function createIcon(initials) {
+            return L.divIcon({
+                className: '',
+                html: `<div style="
+                    background:#0ea5e9;color:#fff;
+                    width:36px;height:36px;border-radius:50% 50% 50% 0;
+                    transform:rotate(-45deg);display:flex;align-items:center;
+                    justify-content:center;font-size:.7rem;font-weight:800;
+                    border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);
+                "><span style="transform:rotate(45deg)">${initials}</span></div>`,
+                iconSize:   [36, 36],
+                iconAnchor: [18, 36],
+                popupAnchor:[0, -38]
+            });
+        }
+
+        // أضف markers
+        workshops.forEach(w => {
+            const initials = w.name.charAt(0);
+            const marker   = L.marker([w.lat, w.lng], { icon: createIcon(initials) })
+                .addTo(map)
+                .bindPopup(`
+                    <div class="popup-body">
+                        <div class="popup-name">${w.name}</div>
+                        <div class="popup-city">📍 ${w.city}</div>
+                        ${w.cats  ? `<div style="font-size:.78rem;color:#64748b;margin-bottom:4px">🔧 ${w.cats}</div>` : ''}
+                        ${w.rating? `<div style="font-size:.78rem;margin-bottom:4px">${w.rating}</div>` : ''}
+                    </div>
+                    <a href="${w.url}" class="popup-btn">عرض الورشة ←</a>
+                `, { maxWidth: 220 });
+
+            marker.on('click', () => highlightCard(w.id));
+            markers[w.id] = marker;
+        });
+
+        // اضبط الخريطة لتشمل كل الـ markers
+        if (workshops.length > 0) {
+            const group = L.featureGroup(Object.values(markers));
+            map.fitBounds(group.getBounds().pad(0.15));
+        }
+
+        // التركيز على marker من الـ sidebar
+        function focusMarker(id) {
+            const marker = markers[id];
+            if (!marker) return;
+            map.flyTo(marker.getLatLng(), 14, { duration: 0.8 });
+            marker.openPopup();
+            highlightCard(id);
+        }
+
+        // تظليل الـ card النشطة
+        function highlightCard(id) {
+            document.querySelectorAll('.map-card').forEach(c => c.classList.remove('active'));
+            const card = document.getElementById('card-' + id);
+            if (card) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // عند فتح popup — ظلّل الـ card المقابلة
+        map.on('popupopen', e => {
+            const w = workshops.find(w =>
+                markers[w.id] && markers[w.id].getLatLng().equals(e.popup.getLatLng()));
+            if (w) highlightCard(w.id);
+        });
+    </script>
+}

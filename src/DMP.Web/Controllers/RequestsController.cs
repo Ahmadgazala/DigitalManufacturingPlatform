@@ -54,6 +54,9 @@ public class RequestsController : Controller
     {
         ViewBag.Categories = Enum.GetValues<MachineCategory>();
 
+        // CustomerId يُضبط من الجلسة وليس من الفورم — استثنه من التحقق
+        ModelState.Remove(nameof(ManufacturingRequest.CustomerId));
+
         if (!ModelState.IsValid)
             return View(model);
 
@@ -104,6 +107,7 @@ public class RequestsController : Controller
             .Include(r => r.Files)
             .Include(r => r.Quotations)
                 .ThenInclude(q => q.Manufacturer)
+            .Include(r => r.OrderUpdates)
             .FirstOrDefaultAsync(r => r.Id == id && r.CustomerId == userId);
 
         if (request == null)
@@ -125,10 +129,57 @@ public class RequestsController : Controller
         if (request == null)
             return NotFound();
 
-        request.Status = RequestStatus.Completed;
+        request.Status        = RequestStatus.Completed;
+        request.TrackingStage = TrackingStage.Delivered;
+
+        _db.OrderUpdates.Add(new OrderUpdate
+        {
+            RequestId = request.Id,
+            Stage     = TrackingStage.Delivered,
+            Note      = "تم تأكيد الاستلام من قِبل العميل"
+        });
+
         await _db.SaveChangesAsync();
 
         TempData["Success"] = "تم تحديد الطلب كمكتمل.";
         return RedirectToAction(nameof(Details), new { id });
+    }
+
+    // POST: /Requests/UpdateTracking  (للمصنّع فقط)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Manufacturer")]
+    public async Task<IActionResult> UpdateTracking(int requestId, TrackingStage stage, string? note)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var mfr    = await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
+        if (mfr == null) return Forbid();
+
+        var request = await _db.ManufacturingRequests
+            .FirstOrDefaultAsync(r => r.Id == requestId && r.ManufacturerId == mfr.Id);
+        if (request == null) return NotFound();
+
+        request.TrackingStage = stage;
+
+        _db.OrderUpdates.Add(new OrderUpdate
+        {
+            RequestId = requestId,
+            Stage     = stage,
+            Note      = note
+        });
+
+        // إشعار للعميل
+        _db.Notifications.Add(new Notification
+        {
+            UserId  = request.CustomerId,
+            Message = $"تحديث على طلبك \"{request.Title}\": {stage.ToArabic()}",
+            Link    = Url.Action("Details", "Requests", new { id = requestId }),
+            IsRead  = false
+        });
+
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = $"تم تحديث حالة الطلب إلى: {stage.ToArabic()}";
+        return RedirectToAction("Dashboard", "Manufacturers");
     }
 }

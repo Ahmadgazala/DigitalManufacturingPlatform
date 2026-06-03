@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Head", required: false)
 </head>
 <body>
 
@@ -25,6 +26,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a asp-controller="Home" asp-action="Index">@T["Nav_Home"]</a></li>
             <li><a asp-controller="Manufacturers" asp-action="Index">@T["Nav_Manufacturers"]</a></li>
+            <li><a asp-controller="Manufacturers" asp-action="Map">🗺️ الخريطة</a></li>
             <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
@@ -98,6 +100,7 @@
         </div>
         <div class="footer-links">
             <a asp-controller="Manufacturers" asp-action="Index">دليل الورش</a>
+            <a asp-controller="Manufacturers" asp-action="Map">🗺️ خريطة الورش</a>
             <a asp-controller="Suppliers" asp-action="Index">الموردون</a>
             <a asp-controller="Requests" asp-action="Create">اطلب تصنيعاً</a>
         </div>

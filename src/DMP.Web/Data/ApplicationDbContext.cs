@@ -20,6 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CampaignParticipant>  CampaignParticipants  => Set<CampaignParticipant>();
     public DbSet<Message>              Messages              => Set<Message>();
     public DbSet<Notification>         Notifications         => Set<Notification>();
+    public DbSet<OrderUpdate>          OrderUpdates          => Set<OrderUpdate>();
+    public DbSet<PortfolioItem>        PortfolioItems        => Set<PortfolioItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -108,6 +110,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(n => n.User)
             .WithMany()
             .HasForeignKey(n => n.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<OrderUpdate>()
+            .HasOne(o => o.Request)
+            .WithMany(r => r.OrderUpdates)
+            .HasForeignKey(o => o.RequestId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<PortfolioItem>()
+            .HasOne(p => p.Manufacturer)
+            .WithMany(m => m.PortfolioItems)
+            .HasForeignKey(p => p.ManufacturerId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -97,6 +97,55 @@
                 }
             </div>
 
+            <!-- تتبع الطلبات الجارية -->
+            @if (Model.ActiveOrders.Any())
+            {
+                <div class="panel">
+                    <div class="dc-head">
+                        <div class="dc-title">⚙️ طلبات قيد التنفيذ</div>
+                        <span class="dc-count dc-count-alert">@Model.ActiveOrders.Count</span>
+                    </div>
+                    @foreach (var req in Model.ActiveOrders)
+                    {
+                        <div style="border:1.5px solid var(--line);border-radius:var(--r-sm);padding:14px;margin-bottom:12px">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+                                <div>
+                                    <div style="font-weight:700;font-size:.93rem">@req.Title</div>
+                                    <div style="font-size:.82rem;color:var(--steel)">
+                                        المرحلة الحالية:
+                                        @if (req.TrackingStage.HasValue)
+                                        {
+                                            <strong>@req.TrackingStage.Value.ToIcon() @req.TrackingStage.Value.ToArabic()</strong>
+                                        }
+                                        else { <span>—</span> }
+                                    </div>
+                                </div>
+                                @if (req.PaymentStatus == PaymentStatus.Paid)
+                                {
+                                    <span class="chip chip-green">💳 مدفوع</span>
+                                }
+                            </div>
+                            <form asp-controller="Requests" asp-action="UpdateTracking" method="post"
+                                  style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="requestId" value="@req.Id" />
+                                <select name="stage" class="form-control" style="flex:1;min-width:160px">
+                                    @foreach (TrackingStage s in Enum.GetValues<TrackingStage>())
+                                    {
+                                        <option value="@((int)s)" selected="@(req.TrackingStage == s)">
+                                            @s.ToIcon() @s.ToArabic()
+                                        </option>
+                                    }
+                                </select>
+                                <input type="text" name="note" class="form-control" placeholder="ملاحظة (اختياري)"
+                                       style="flex:1;min-width:160px" />
+                                <button type="submit" class="btn btn-primary btn-sm">تحديث</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+
             <!-- عروض الأسعار المرسلة -->
             <div class="panel">
                 <h2>💬 عروض الأسعار المرسلة</h2>
@@ -155,6 +204,7 @@
                 <h3 style="font-size:.9rem;margin-bottom:12px">روابط سريعة</h3>
                 <div style="display:flex;flex-direction:column;gap:8px">
                     <a asp-controller="Machines" asp-action="Add" class="btn btn-outline btn-sm">➕ إضافة ماكينة</a>
+                    <a asp-controller="Portfolio" asp-action="Create" class="btn btn-outline btn-sm">🗂️ إضافة مشروع لملفي</a>
                     <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@m.Id" class="btn btn-outline btn-sm">👁 عرض الملف العام</a>
                     <a asp-controller="GroupBuying" asp-action="Index" class="btn btn-outline btn-sm">📦 الشراء الجماعي</a>
                     <a asp-controller="Messages" asp-action="Inbox" class="btn btn-outline btn-sm">💬 الرسائل</a>

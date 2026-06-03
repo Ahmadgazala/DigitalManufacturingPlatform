@@ -78,10 +78,24 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
-            await _userManager.AddToRoleAsync(user, SeedData.ManufacturerRole);
+            // تحديد الدور: عميل أو مصنّع فقط (منع تعيين Admin من التسجيل)
+            var role = model.Role == SeedData.ManufacturerRole
+                ? SeedData.ManufacturerRole
+                : SeedData.CustomerRole;
+
+            await _userManager.AddToRoleAsync(user, role);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            TempData["Success"] = "تم إنشاء حسابك بنجاح. يمكنك الآن إكمال ملف الورشة.";
-            return RedirectToAction("Edit", "Manufacturers");
+
+            if (role == SeedData.ManufacturerRole)
+            {
+                TempData["Success"] = "تم إنشاء حسابك بنجاح. يمكنك الآن إكمال ملف الورشة.";
+                return RedirectToAction("Edit", "Manufacturers");
+            }
+            else
+            {
+                TempData["Success"] = "مرحباً! تم إنشاء حسابك بنجاح.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         foreach (var error in result.Errors)

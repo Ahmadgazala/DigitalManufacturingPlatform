@@ -1,0 +1,77 @@
+@{
+    ViewData["Title"] = "الدفع الإلكتروني";
+    var request  = ViewBag.Request  as ManufacturingRequest;
+    var quotation = ViewBag.Quotation as Quotation;
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>💳 الدفع الإلكتروني</h1>
+        <p>أكمل عملية الدفع لطلبك</p>
+    </div>
+</div>
+
+<div class="container section">
+    <div style="max-width:560px;margin:0 auto">
+
+        <div class="panel">
+            <h2>📋 ملخص الطلب</h2>
+            <ul class="info-list">
+                <li>
+                    <span class="k">الطلب</span>
+                    <span class="v fw-bold">@request?.Title</span>
+                </li>
+                <li>
+                    <span class="k">الورشة</span>
+                    <span class="v">@quotation?.Manufacturer?.WorkshopName</span>
+                </li>
+                <li>
+                    <span class="k">مدة التنفيذ</span>
+                    <span class="v">@quotation?.EstimatedDays يوم</span>
+                </li>
+                @if (!string.IsNullOrEmpty(quotation?.Notes))
+                {
+                    <li>
+                        <span class="k">ملاحظات المصنّع</span>
+                        <span class="v">@quotation.Notes</span>
+                    </li>
+                }
+                <li style="border-top:2px solid var(--line);padding-top:14px;margin-top:4px">
+                    <span class="k" style="font-size:1rem;font-weight:800">المبلغ الإجمالي</span>
+                    <span class="v" style="font-size:1.4rem;font-weight:900;color:var(--sky-dark)">
+                        @quotation?.Price.ToString("N2") $
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel" style="border-color:rgba(14,165,233,.3);background:var(--sky-light)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <span style="font-size:1.4rem">🔒</span>
+                <div>
+                    <div style="font-weight:800;color:var(--navy)">دفع آمن عبر Stripe</div>
+                    <div style="font-size:.82rem;color:var(--steel)">بياناتك محمية بتشفير SSL 256-bit</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+                <span class="chip chip-blue">Visa</span>
+                <span class="chip chip-blue">Mastercard</span>
+                <span class="chip chip-blue">American Express</span>
+            </div>
+
+            <form asp-controller="Payments" asp-action="CreateCheckoutSession" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="requestId" value="@request?.Id" />
+                <button type="submit" class="btn btn-primary btn-block" style="font-size:1rem;padding:14px">
+                    💳 ادفع @quotation?.Price.ToString("N2") $ الآن
+                </button>
+            </form>
+        </div>
+
+        <div style="text-align:center;margin-top:8px">
+            <a asp-controller="Requests" asp-action="Details" asp-route-id="@request?.Id"
+               class="btn btn-ghost btn-sm">← العودة للطلب</a>
+        </div>
+
+    </div>
+</div>

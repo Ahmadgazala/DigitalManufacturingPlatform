@@ -4,6 +4,13 @@
     bool hasLocation = Model.Latitude.HasValue && Model.Longitude.HasValue;
 }
 
+@if (hasLocation)
+{
+    @section Head {
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    }
+}
+
 <div class="container">
     <div class="mfr-cover">
         @if (!string.IsNullOrEmpty(Model.CoverPhotoPath))
@@ -98,6 +105,42 @@
                 </div>
             }
 
+            @if (Model.PortfolioItems != null && Model.PortfolioItems.Any())
+            {
+                <div class="panel">
+                    <h2>🗂️ @T["Portfolio"]</h2>
+                    <div class="portfolio-grid">
+                        @foreach (var item in Model.PortfolioItems.OrderByDescending(p => p.CompletedAt))
+                        {
+                            <div class="portfolio-card">
+                                <div class="portfolio-card-img">
+                                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                                    {
+                                        <img src="@item.ImagePath" alt="@item.Title" loading="lazy" />
+                                    }
+                                </div>
+                                <div class="portfolio-card-body">
+                                    <div class="portfolio-card-title">@item.Title</div>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <div class="portfolio-card-desc">
+                                            @(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "..." : item.Description)
+                                        </div>
+                                    }
+                                    <div class="portfolio-card-meta">
+                                        @if (item.Category.HasValue)
+                                        {
+                                            <span class="chip chip-blue" style="font-size:.72rem">@item.Category.Value.ToArabic()</span>
+                                        }
+                                        <span>@item.CompletedAt.ToString("yyyy/MM")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
             @if (Model.Reviews != null && Model.Reviews.Any())
             {
                 <div class="panel">
@@ -177,7 +220,7 @@
                 </ul>
                 <div class="side-actions">
                     <a asp-controller="Requests" asp-action="Create" asp-route-manufacturerId="@Model.Id" class="btn btn-primary">@T["RequestManufacturing"]</a>
-                    <a asp-controller="Messages" asp-action="Conversation" asp-route-userId="@Model.UserId" class="btn btn-outline">@T["SendMessage"]</a>
+                    <a asp-controller="Messages" asp-action="Conversation" asp-route-otherUserId="@Model.UserId" class="btn btn-outline">@T["SendMessage"]</a>
                 </div>
             </div>
 
@@ -187,22 +230,6 @@
                     <h3>@T["Location"]</h3>
                     <div id="map" class="map-box" style="height:250px;"></div>
                 </div>
-
-                @section Scripts {
-                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-                    <script>
-                        (function () {
-                            var lat = @Model.Latitude;
-                            var lng = @Model.Longitude;
-                            var map = L.map('map').setView([lat, lng], 15);
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; OpenStreetMap contributors'
-                            }).addTo(map);
-                            L.marker([lat, lng]).addTo(map).bindPopup('@Html.Raw(Model.WorkshopName)').openPopup();
-                        })();
-                    </script>
-                }
             }
         </aside>
     </div>
@@ -224,6 +251,23 @@
             });
         })();
     </script>
+
+    @if (hasLocation)
+    {
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script>
+            (function () {
+                var lat = @Model.Latitude;
+                var lng = @Model.Longitude;
+                var map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map).bindPopup('@Html.Raw(Model.WorkshopName)').openPopup();
+                setTimeout(function () { map.invalidateSize(); }, 200);
+            })();
+        </script>
+    }
 }
 
 

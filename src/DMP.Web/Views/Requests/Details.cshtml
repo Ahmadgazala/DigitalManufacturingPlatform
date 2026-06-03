@@ -1,23 +1,115 @@
 @model ManufacturingRequest
 @{
     ViewData["Title"] = Model.Title;
-    var isOpen = Model.Status == RequestStatus.Open;
+    var isOpen       = Model.Status == RequestStatus.Open;
+    var isInProgress = Model.Status == RequestStatus.InProgress;
+    var isCompleted  = Model.Status == RequestStatus.Completed;
+    var acceptedQ    = Model.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
+    var stages       = new[] { TrackingStage.Received, TrackingStage.InManufacturing, TrackingStage.ReadyForPickup, TrackingStage.Delivered };
 }
 
 <div class="page-header">
     <div class="container">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
             <h1>@Model.Title</h1>
-            <span class="chip @(isOpen ? "chip-green" : Model.Status == RequestStatus.Completed ? "chip-steel" : "chip")">
+            <span class="chip @(isOpen ? "chip-green" : isCompleted ? "chip-steel" : "chip-blue")">
                 @Model.Status.ToArabic()
             </span>
+            @if (Model.PaymentStatus == PaymentStatus.Paid)
+            {
+                <span class="chip chip-green">💳 مدفوع</span>
+            }
         </div>
+        <p>@Model.CreatedAt.ToString("yyyy/MM/dd")</p>
     </div>
 </div>
 
 <div class="container section">
     <div class="detail-grid">
         <div>
+
+            <!-- ── تتبع الطلب ── -->
+            @if (isInProgress || isCompleted)
+            {
+                <div class="panel">
+                    <h2>📍 تتبع الطلب</h2>
+                    <div class="tracking-timeline">
+                        @foreach (var s in stages)
+                        {
+                            var isDone    = Model.TrackingStage.HasValue && (int)Model.TrackingStage >= (int)s;
+                            var isCurrent = Model.TrackingStage == s;
+                            var update    = Model.OrderUpdates.LastOrDefault(u => u.Stage == s);
+                            <div class="track-step @(isDone ? "done" : "") @(isCurrent ? "current" : "")">
+                                <div class="track-icon">@s.ToIcon()</div>
+                                <div class="track-body">
+                                    <div class="track-label">@s.ToArabic()</div>
+                                    @if (update != null)
+                                    {
+                                        @if (!string.IsNullOrEmpty(update.Note))
+                                        {
+                                            <div class="track-note">@update.Note</div>
+                                        }
+                                        <div class="track-date">@update.CreatedAt.ToString("yyyy/MM/dd — HH:mm")</div>
+                                    }
+                                </div>
+                                @if (isDone)
+                                {
+                                    <span class="track-check">✓</span>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    @if (isInProgress && !isCompleted)
+                    {
+                        <form asp-controller="Requests" asp-action="MarkCompleted" asp-route-id="@Model.Id" method="post" style="margin-top:16px">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary"
+                                    onclick="return confirm('هل استلمت طلبك وتريد تأشيره كمكتمل؟')">
+                                ✅ تأكيد الاستلام
+                            </button>
+                        </form>
+                    }
+                </div>
+            }
+
+            <!-- ── الدفع الإلكتروني ── -->
+            @if (acceptedQ != null && Model.PaymentStatus != PaymentStatus.Paid)
+            {
+                <div class="panel" style="border-color:rgba(14,165,233,.3);background:var(--sky-light)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+                        <div>
+                            <div style="font-weight:800;font-size:1rem;color:var(--navy);margin-bottom:4px">
+                                💳 ادفع الآن لبدء التصنيع
+                            </div>
+                            <div style="font-size:.88rem;color:var(--steel)">
+                                المبلغ: <strong style="color:var(--sky-dark)">@acceptedQ.Price.ToString("N2") $</strong>
+                                — عبر Stripe (آمن ومشفّر)
+                            </div>
+                        </div>
+                        <a asp-controller="Payments" asp-action="Checkout"
+                           asp-route-requestId="@Model.Id"
+                           class="btn btn-primary">💳 ادفع الآن</a>
+                    </div>
+                </div>
+            }
+            @if (Model.PaymentStatus == PaymentStatus.Paid && Model.PaidAt.HasValue)
+            {
+                <div class="panel" style="border-color:var(--green-bd);background:var(--green-bg)">
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <span style="font-size:1.5rem">✅</span>
+                        <div>
+                            <div style="font-weight:800;color:#065f46">تم الدفع بنجاح</div>
+                            <div style="font-size:.82rem;color:#059669">
+                                المبلغ: @Model.PaidAmount?.ToString("N2") $
+                                — @Model.PaidAt.Value.ToString("yyyy/MM/dd")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- ── تفاصيل الطلب ── -->
             <div class="panel">
                 <h2>تفاصيل الطلب</h2>
                 <ul class="info-list">
@@ -42,27 +134,17 @@
                 {
                     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
                         <div style="font-weight:700;font-size:.88rem;margin-bottom:8px">الملفات المرفقة</div>
-                        @foreach (var f in Model.Files)
-                        {
-                            <a href="@f.FilePath" target="_blank" style="display:block;font-size:.85rem;color:var(--sky);margin-bottom:4px">
-                                📎 @f.OriginalFileName
-                            </a>
-                        }
+                        <ul class="file-list">
+                            @foreach (var f in Model.Files)
+                            {
+                                <li>📎 <a href="@f.FilePath" target="_blank">@f.OriginalFileName</a></li>
+                            }
+                        </ul>
                     </div>
-                }
-
-                @if (isOpen)
-                {
-                    <form asp-controller="Requests" asp-action="MarkCompleted" asp-route-id="@Model.Id" method="post" style="margin-top:16px">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-primary"
-                                onclick="return confirm('هل أنت متأكد من تأشير الطلب كمكتمل؟')">
-                            ✅ اكتمل التنفيذ
-                        </button>
-                    </form>
                 }
             </div>
 
+            <!-- ── عروض الأسعار ── -->
             <div class="panel">
                 <h2>عروض الأسعار (@Model.Quotations.Count)</h2>
                 @if (Model.Quotations.Any())
@@ -109,16 +191,33 @@
                 {
                     <div class="dc-empty">
                         <span>💬</span>
-                        <p>لا توجد عروض أسعار بعد</p>
+                        <p>لا توجد عروض أسعار بعد. سيتواصل معك المصنّعون قريباً.</p>
                     </div>
                 }
             </div>
         </div>
 
+        <!-- ── Sidebar ── -->
         <aside>
             <div class="panel">
                 <ul class="info-list">
                     <li><span class="k">الحالة</span><span class="v">@Model.Status.ToArabic()</span></li>
+                    @if (Model.TrackingStage.HasValue)
+                    {
+                        <li><span class="k">مرحلة التتبع</span>
+                            <span class="v">@Model.TrackingStage.Value.ToIcon() @Model.TrackingStage.Value.ToArabic()</span>
+                        </li>
+                    }
+                    <li><span class="k">الدفع</span>
+                        <span class="v">
+                            @if (Model.PaymentStatus == PaymentStatus.Paid)
+                            { <span class="chip chip-green">مدفوع ✓</span> }
+                            else if (Model.PaymentStatus == PaymentStatus.Pending)
+                            { <span class="chip chip-amber">بانتظار الدفع</span> }
+                            else
+                            { <span class="chip">غير مدفوع</span> }
+                        </span>
+                    </li>
                     <li><span class="k">عدد العروض</span><span class="v fw-bold">@Model.Quotations.Count</span></li>
                 </ul>
             </div>

@@ -7,9 +7,14 @@
 }
 
 <div class="page-header">
-    <div class="container">
-        <h1>دليل الورش</h1>
-        <p>تصفّح ورش التصنيع المعتمدة في الأردن</p>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h1>دليل الورش</h1>
+            <p>تصفّح ورش التصنيع المعتمدة في الأردن</p>
+        </div>
+        <a asp-controller="Manufacturers" asp-action="Map" class="btn btn-outline btn-sm">
+            🗺️ عرض على الخريطة
+        </a>
     </div>
 </div>
 

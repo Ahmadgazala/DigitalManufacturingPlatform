@@ -1,0 +1,109 @@
+@model GroupBuyingCampaign
+@{
+    ViewData["Title"] = "تعديل الحملة";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>✏️ تعديل الحملة</h1>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline btn-sm">← رجوع</a>
+    </div>
+
+    <div class="panel">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="Title">عنوان الحملة <span style="color:var(--red)">*</span></label>
+                <input type="text" name="Title" id="Title" class="form-control"
+                       value="@Model.Title" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">وصف الحملة</label>
+                <textarea name="Description" id="Description" class="form-control" rows="4">@Model.Description</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ItemName">اسم المنتج / المادة <span style="color:var(--red)">*</span></label>
+                <input type="text" name="ItemName" id="ItemName" class="form-control"
+                       value="@Model.ItemName" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="IndividualPrice">السعر الفردي (د.أ)</label>
+                    <input type="number" name="IndividualPrice" id="IndividualPrice" class="form-control"
+                           step="0.01" min="0.01" value="@Model.IndividualPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" required />
+                </div>
+                <div class="form-group">
+                    <label for="GroupPrice">سعر المجموعة (د.أ)</label>
+                    <input type="number" name="GroupPrice" id="GroupPrice" class="form-control"
+                           step="0.01" min="0.01" value="@Model.GroupPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="MinQuantity">الحد الأدنى للكمية الإجمالية</label>
+                    <input type="number" name="MinQuantity" id="MinQuantity" class="form-control"
+                           min="1" value="@Model.MinQuantity" required />
+                </div>
+                <div class="form-group">
+                    <label for="MinOrderPerManufacturer">
+                        الحد الأدنى لكل مصنّع
+                        <span style="font-size:.8rem;color:var(--steel);font-weight:400">(0 = غير محدد)</span>
+                    </label>
+                    <input type="number" name="MinOrderPerManufacturer" id="MinOrderPerManufacturer"
+                           class="form-control" min="0" value="@Model.MinOrderPerManufacturer" />
+                    <span style="font-size:.8rem;color:var(--steel)">
+                        الحد الأدنى من الوحدات الذي يجب أن يطلبه كل مصنّع عند الانضمام
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="DeadlineDate">تاريخ انتهاء الحملة</label>
+                <input type="date" name="DeadlineDate" id="DeadlineDate" class="form-control"
+                       value="@Model.DeadlineDate.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="form-group">
+                <label>صورة الحملة</label>
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div style="margin-bottom:10px">
+                        <img src="@Model.ImagePath" style="height:120px;border-radius:8px;object-fit:cover;" />
+                        <div style="font-size:.8rem;color:var(--steel);margin-top:4px">الصورة الحالية — ارفع صورة جديدة للاستبدال</div>
+                    </div>
+                }
+                <div class="upload-zone">
+                    <input type="file" name="image" id="image" accept="image/*" class="upload-input" />
+                    <span>اضغط لرفع صورة جديدة</span>
+                </div>
+                <img id="imgPreview" class="preview-img" style="display:none;margin-top:8px;" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('image').addEventListener('change', function () {
+            var preview = document.getElementById('imgPreview');
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+}

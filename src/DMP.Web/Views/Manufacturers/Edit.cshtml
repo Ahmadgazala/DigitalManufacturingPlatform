@@ -3,6 +3,10 @@
     ViewData["Title"] = T["EditWorkshop"];
 }
 
+@section Head {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+}
+
 <div class="container">
     <div class="page-header">
         <h1>@T["EditWorkshop"]</h1>
@@ -154,7 +158,6 @@
 </div>
 
 @section Scripts {
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         (function () {

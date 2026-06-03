@@ -33,12 +33,29 @@ public class AdminController : Controller
     }
 
     // GET: /Admin/Manufacturers
-    public async Task<IActionResult> Manufacturers()
+    public async Task<IActionResult> Manufacturers(string? searchTerm, string? filter)
     {
-        var manufacturers = await _db.Manufacturers
+        var query = _db.Manufacturers
             .Include(m => m.User)
             .Include(m => m.Machines)
             .Include(m => m.Reviews)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+            query = query.Where(m =>
+                m.WorkshopName.Contains(searchTerm) ||
+                (m.City != null && m.City.Contains(searchTerm)) ||
+                (m.User != null && m.User.FullName.Contains(searchTerm)));
+
+        if (filter == "pending")
+            query = query.Where(m => !m.IsApproved);
+        else if (filter == "approved")
+            query = query.Where(m => m.IsApproved);
+
+        ViewBag.SearchTerm = searchTerm;
+        ViewBag.Filter     = filter;
+
+        var manufacturers = await query
             .OrderByDescending(m => m.CreatedAt)
             .ToListAsync();
 

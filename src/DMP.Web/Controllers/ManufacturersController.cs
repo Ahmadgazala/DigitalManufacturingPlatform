@@ -109,6 +109,11 @@ public class ManufacturersController : Controller
             .OrderByDescending(q => q.CreatedAt)
             .ToListAsync();
 
+        var activeOrders = await _db.ManufacturingRequests
+            .Where(r => r.ManufacturerId == manufacturer.Id && r.Status == RequestStatus.InProgress)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+
         var vm = new ManufacturerDashboardViewModel
         {
             Manufacturer = manufacturer,
@@ -117,11 +122,44 @@ public class ManufacturersController : Controller
             AcceptedQuotationsCount = quotations.Count(q => q.Status == QuotationStatus.Accepted),
             CompletedOrdersCount = await _db.ManufacturingRequests
                 .CountAsync(r => r.ManufacturerId == manufacturer.Id && r.Status == RequestStatus.Completed),
-            RecentRequests = recentRequests,
-            RecentQuotations = quotations.Take(5).ToList()
+            RecentRequests   = recentRequests,
+            RecentQuotations = quotations.Take(5).ToList(),
+            ActiveOrders     = activeOrders
         };
 
         return View(vm);
+    }
+
+    // GET: /Manufacturers/Map
+    public async Task<IActionResult> Map(MachineCategory? category, string? city)
+    {
+        var query = _db.Manufacturers
+            .Include(m => m.Machines)
+            .Include(m => m.Reviews)
+            .Where(m => m.IsApproved && m.Latitude.HasValue && m.Longitude.HasValue)
+            .AsQueryable();
+
+        if (category.HasValue)
+            query = query.Where(m => m.Machines.Any(mc => mc.Category == category));
+
+        if (!string.IsNullOrWhiteSpace(city))
+            query = query.Where(m => m.City == city);
+
+        var manufacturers = await query.ToListAsync();
+
+        var cities = await _db.Manufacturers
+            .Where(m => m.IsApproved && !string.IsNullOrEmpty(m.City))
+            .Select(m => m.City)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToListAsync();
+
+        ViewBag.Cities    = cities;
+        ViewBag.Category  = category;
+        ViewBag.City      = city;
+        ViewBag.AllCount  = await _db.Manufacturers.CountAsync(m => m.IsApproved);
+
+        return View(manufacturers);
     }
 
     // GET: /Manufacturers/Details/5
@@ -133,9 +171,14 @@ public class ManufacturersController : Controller
             .Include(m => m.WorkshopPhotos)
             .Include(m => m.Reviews)
                 .ThenInclude(r => r.Customer)
-            .FirstOrDefaultAsync(m => m.Id == id && m.IsApproved);
+            .Include(m => m.PortfolioItems)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
         if (manufacturer == null)
+            return NotFound();
+
+        // غير معتمدة — يسمح فقط للـ Admin بالمشاهدة
+        if (!manufacturer.IsApproved && !User.IsInRole("Admin"))
             return NotFound();
 
         return View(manufacturer);

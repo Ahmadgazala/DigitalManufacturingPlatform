@@ -86,9 +86,9 @@ public class ManufacturerDashboardViewModel
 
     public int CompletedOrdersCount { get; set; }
 
-    public List<ManufacturingRequest> RecentRequests { get; set; } = new();
-
-    public List<Quotation> RecentQuotations { get; set; } = new();
+    public List<ManufacturingRequest> RecentRequests   { get; set; } = new();
+    public List<Quotation>            RecentQuotations { get; set; } = new();
+    public List<ManufacturingRequest> ActiveOrders     { get; set; } = new();
 }
 
 public class LoginViewModel
@@ -120,4 +120,8 @@ public class RegisterViewModel
 
     [Compare(nameof(Password), ErrorMessage = "كلمتا المرور غير متطابقتين")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    /// <summary>"Customer" أو "Manufacturer"</summary>
+    [Required]
+    public string Role { get; set; } = "Customer";
 }

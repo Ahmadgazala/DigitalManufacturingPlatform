@@ -158,8 +158,17 @@ public class QuotationsController : Controller
             return Forbid();
 
         quotation.Status = QuotationStatus.Accepted;
-        quotation.Request.Status = RequestStatus.InProgress;
+        quotation.Request.Status        = RequestStatus.InProgress;
         quotation.Request.ManufacturerId = quotation.ManufacturerId;
+        quotation.Request.TrackingStage  = TrackingStage.Received;
+
+        // سجل تتبع أولي
+        _db.OrderUpdates.Add(new OrderUpdate
+        {
+            RequestId = quotation.RequestId,
+            Stage     = TrackingStage.Received,
+            Note      = "تم قبول العرض وبدء التنفيذ"
+        });
 
         // رفض باقي العروض تلقائياً
         var otherQuotations = await _db.Quotations

@@ -25,6 +25,29 @@
         <form asp-controller="Account" asp-action="Register" method="post">
             @Html.AntiForgeryToken()
 
+            @* اختيار نوع الحساب *@
+            <div class="form-group" style="margin-bottom:24px">
+                <label style="font-weight:700;margin-bottom:10px;display:block">نوع الحساب</label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <label class="role-card" id="card-customer">
+                        <input type="radio" name="Role" value="Customer" checked style="display:none" />
+                        <div class="role-card-inner">
+                            <div class="role-icon">🏢</div>
+                            <div class="role-title">عميل / شركة</div>
+                            <div class="role-desc">أبحث عن خدمات تصنيع وأطلب عروض أسعار</div>
+                        </div>
+                    </label>
+                    <label class="role-card" id="card-manufacturer">
+                        <input type="radio" name="Role" value="Manufacturer" style="display:none" />
+                        <div class="role-card-inner">
+                            <div class="role-icon">⚙️</div>
+                            <div class="role-title">مصنّع / ورشة</div>
+                            <div class="role-desc">أملك ورشة وأقدم خدمات التصنيع</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label asp-for="FullName">@T["FullName"]</label>
                 <input asp-for="FullName" class="form-control" placeholder="@T["EnterFullName"]" />
@@ -50,7 +73,7 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">@T["RegisterAsManufacturer"]</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">إنشاء حساب عميل</button>
             </div>
 
             <div class="auth-links">
@@ -59,3 +82,36 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    (function () {
+        var cards = document.querySelectorAll('.role-card');
+        var radios = document.querySelectorAll('input[name="Role"]');
+        var btn   = document.getElementById('submitBtn');
+
+        var labels = {
+            'Customer':     'إنشاء حساب عميل',
+            'Manufacturer': 'إنشاء حساب مصنّع'
+        };
+
+        function update() {
+            radios.forEach(function (r) {
+                var card = r.closest('.role-card');
+                card.classList.toggle('role-card-active', r.checked);
+            });
+            var selected = document.querySelector('input[name="Role"]:checked');
+            if (selected && btn) btn.textContent = labels[selected.value] || 'إنشاء حساب';
+        }
+
+        cards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                var radio = card.querySelector('input[type="radio"]');
+                if (radio) { radio.checked = true; update(); }
+            });
+        });
+
+        update();
+    })();
+</script>
+}

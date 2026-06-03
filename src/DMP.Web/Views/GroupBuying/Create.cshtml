@@ -51,14 +51,24 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="MinQuantity">الحد الأدنى للكمية</label>
+                    <label for="MinQuantity">الحد الأدنى للكمية الإجمالية</label>
                     <input type="number" name="MinQuantity" id="MinQuantity" class="form-control" min="2" required />
                 </div>
                 <div class="form-group">
-                    <label for="DeadlineDate">تاريخ انتهاء الحملة</label>
-                    <input type="date" name="DeadlineDate" id="DeadlineDate" class="form-control"
-                           value="@DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd")" />
+                    <label for="MinOrderPerManufacturer">
+                        الحد الأدنى لكل مصنّع
+                        <span style="font-size:.8rem;color:var(--steel);font-weight:400">(0 = غير محدد)</span>
+                    </label>
+                    <input type="number" name="MinOrderPerManufacturer" id="MinOrderPerManufacturer"
+                           class="form-control" min="0" value="0" />
+                    <span style="font-size:.8rem;color:var(--steel)">الحد الأدنى من الوحدات لكل مصنّع عند الانضمام</span>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label for="DeadlineDate">تاريخ انتهاء الحملة</label>
+                <input type="date" name="DeadlineDate" id="DeadlineDate" class="form-control"
+                       value="@DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-dd")" />
             </div>
 
             <div class="form-group">

@@ -4,9 +4,13 @@ using DMP.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Stripe
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // DB
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
@@ -53,7 +57,7 @@ builder.Services.AddMvc()
             factory.Create(typeof(DMP.Web.SharedResource));
     });
 
-builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IFileService, DMP.Web.Services.FileService>();
 
 var app = builder.Build();
 
@@ -64,9 +68,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRequestLocalization();
 app.UseRouting();
