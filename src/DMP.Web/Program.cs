@@ -7,7 +7,22 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using System.Globalization;
 
-var builder = WebApplication.CreateBuilder(args);
+// تحديد مسار wwwroot بشكل صريح لضمان عمل الملفات الثابتة من VS
+var projectDir = Directory.GetCurrentDirectory();
+var webRootPath = Path.Combine(projectDir, "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    var dir = new DirectoryInfo(projectDir);
+    while (dir != null && !Directory.Exists(Path.Combine(dir.FullName, "wwwroot")))
+        dir = dir.Parent;
+    if (dir != null) webRootPath = Path.Combine(dir.FullName, "wwwroot");
+}
+
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = webRootPath
+});
 
 // Stripe
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
