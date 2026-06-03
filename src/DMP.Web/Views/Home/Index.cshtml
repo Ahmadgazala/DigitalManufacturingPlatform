@@ -4,18 +4,43 @@
     var activeCampaigns = ViewBag.ActiveCampaigns as List<GroupBuyingCampaign> ?? new List<GroupBuyingCampaign>();
 }
 
+<!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <h1 class="hero-title">منصة التصنيع الرقمي في الأردن</h1>
-        <p class="hero-sub">اربط مشاريعك بأفضل ورش التصنيع — طباعة ثلاثية الأبعاد، ليزر، CNC والمزيد</p>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);border-radius:20px;padding:5px 14px;margin-bottom:24px;font-size:.82rem;color:var(--sky);font-weight:700">
+            <span style="width:6px;height:6px;background:var(--sky);border-radius:50%;display:inline-block;box-shadow:0 0 6px var(--sky)"></span>
+            منصة التصنيع الرقمي في الأردن
+        </div>
+        <h1 class="hero-title">
+            صنّع أفكارك مع<br/>
+            <span>أفضل الورش المحلية</span>
+        </h1>
+        <p class="hero-sub">اربط مشاريعك بورش التصنيع المعتمدة — طباعة ثلاثية الأبعاد، قطع ليزر، CNC والمزيد. احصل على عروض أسعار خلال ساعات.</p>
         <div class="hero-btns">
-            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">🔧 اطلب تصنيعاً</a>
-            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)">تصفّح الورش</a>
+            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">🔧 اطلب تصنيعاً الآن</a>
+            <a asp-controller="Manufacturers" asp-action="Map" class="btn btn-outline">🗺️ خريطة الورش</a>
+        </div>
+        <!-- Stats -->
+        <div style="display:flex;gap:40px;margin-top:52px;flex-wrap:wrap">
+            @{
+                var stats = new[]{
+                    ("5+","ورشة معتمدة"),
+                    ("3","مدن أردنية"),
+                    ("100%","محلي وموثوق")
+                };
+            }
+            @foreach(var (num, lbl) in stats)
+            {
+                <div>
+                    <div style="font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.03em">@num</div>
+                    <div style="font-size:.82rem;color:rgba(255,255,255,.45);margin-top:2px">@lbl</div>
+                </div>
+            }
         </div>
     </div>
 </section>
 
-<!-- شريط الخطوات -->
+<!-- Steps Strip -->
 <div class="steps-strip">
     <div class="container">
         <div class="grid grid-4">
@@ -37,11 +62,12 @@
     </div>
 </div>
 
-<!-- آخر الورش -->
+<!-- ورش معتمدة -->
 <section class="section">
     <div class="container">
         <div class="section-head">
             <h2>ورش معتمدة</h2>
+            <p>اكتشف أفضل ورش التصنيع في الأردن</p>
         </div>
         @if (latestManufacturers.Any())
         {
@@ -51,8 +77,8 @@
                     <partial name="_ManufacturerCard" model="m" />
                 }
             </div>
-            <div style="text-align:center;margin-top:28px">
-                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض كل الورش</a>
+            <div style="text-align:center;margin-top:36px">
+                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض كل الورش ←</a>
             </div>
         }
         else
@@ -67,36 +93,65 @@
     </div>
 </section>
 
+<!-- Features Strip -->
+<section style="background:var(--navy-soft);padding:56px 0;border-top:1px solid rgba(14,165,233,.08);border-bottom:1px solid rgba(14,165,233,.08)">
+    <div class="container">
+        <div class="grid grid-3" style="gap:32px">
+            @foreach(var (ico, title, desc) in new[]{
+                ("⚡","سريع وفعّال","احصل على عروض أسعار خلال 24 ساعة من أفضل الورش"),
+                ("🔒","آمن وموثوق","جميع المصنّعين معتمدون ومراجعون من فريقنا"),
+                ("💳","دفع مضمون","ادفع بأمان عبر Stripe مع ضمان استرداد الأموال")
+            })
+            {
+                <div style="text-align:center;padding:8px">
+                    <div style="font-size:2.2rem;margin-bottom:14px">@ico</div>
+                    <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:8px">@title</div>
+                    <div style="font-size:.87rem;color:rgba(255,255,255,.45);line-height:1.6">@desc</div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- حملات الشراء الجماعي -->
 @if (activeCampaigns.Any())
 {
-    <section class="section" style="background:var(--paper)">
+    <section class="section">
         <div class="container">
             <div class="section-head">
-                <h2>حملات الشراء الجماعي النشطة</h2>
+                <h2>🛒 حملات الشراء الجماعي</h2>
                 <p>انضم مع مصنّعين آخرين واحصل على سعر الجملة</p>
             </div>
             <div class="grid grid-3">
                 @foreach (var c in activeCampaigns)
                 {
-                    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+                    <div class="panel" style="display:flex;flex-direction:column;gap:12px;padding:0;overflow:hidden">
                         @if (!string.IsNullOrEmpty(c.ImagePath))
                         {
-                            <div style="height:140px;overflow:hidden;border-radius:var(--r-sm)">
-                                <img src="@c.ImagePath" style="width:100%;height:100%;object-fit:cover" />
+                            <div style="height:150px;overflow:hidden">
+                                <img src="@c.ImagePath" style="width:100%;height:100%;object-fit:cover;transition:transform .35s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
                             </div>
                         }
-                        <h3 style="font-size:1rem;font-weight:800">@c.Title</h3>
-                        <div class="progress-bar-wrap">
-                            <div class="progress-bar-fill" style="width:@(c.ProgressPercent)%"></div>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--steel)">
-                            <span>@c.CurrentQuantity وحدة</span>
-                            <span>الهدف: @c.MinQuantity</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;align-items:center">
-                            <span style="color:var(--amber);font-weight:800">@c.GroupPrice.ToString("N0") د.أ</span>
-                            <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id"
-                               class="btn btn-sm btn-primary">انضم</a>
+                        else
+                        {
+                            <div style="height:150px;background:linear-gradient(135deg,var(--navy-soft),var(--navy-mid));display:flex;align-items:center;justify-content:center;font-size:2.5rem">🛒</div>
+                        }
+                        <div style="padding:16px 20px 20px">
+                            <h3 style="font-size:1rem;font-weight:800;margin-bottom:12px;color:var(--navy)">@c.Title</h3>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill" style="width:@(c.ProgressPercent)%"></div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--steel);margin:8px 0 14px">
+                                <span>@c.CurrentQuantity / @c.MinQuantity وحدة</span>
+                                <span style="color:var(--amber);font-weight:700">@c.ProgressPercent%</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <div>
+                                    <span style="color:var(--amber-dark);font-weight:900;font-size:1.1rem">@c.GroupPrice.ToString("N0")</span>
+                                    <span style="font-size:.78rem;color:var(--steel);margin-inline-start:3px">د.أ</span>
+                                </div>
+                                <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">انضم الآن</a>
+                            </div>
                         </div>
                     </div>
                 }
@@ -104,3 +159,13 @@
         </div>
     </section>
 }
+
+<!-- CTA -->
+<section style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-soft) 100%);padding:72px 0;text-align:center;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(14,165,233,.08) 0%,transparent 65%);pointer-events:none"></div>
+    <div class="container" style="position:relative">
+        <h2 style="font-size:2rem;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-.02em">هل أنت مصنّع؟</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:1rem;margin-bottom:32px;max-width:440px;margin-inline:auto;line-height:1.7">انضم إلى منصة Jo Maker واحصل على عملاء جدد من جميع أنحاء الأردن</p>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-primary" style="padding:14px 32px;font-size:.97rem">سجّل ورشتك مجاناً ←</a>
+    </div>
+</section>
