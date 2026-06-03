@@ -6,27 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Jo Maker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Head", required: false)
+    <!-- Anti-flash: set theme before paint -->
+    <script>
+        (function(){
+            var t = localStorage.getItem('jomaker-theme') ||
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="container nav-inner">
         <a class="nav-brand" asp-controller="Home" asp-action="Index">
-            <span class="brand-icon">⚙</span>
+            <span class="brand-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </span>
             <span>Jo Maker</span>
         </a>
 
-        <button class="nav-toggle" id="navToggle" aria-label="القائمة">
+        <button class="nav-toggle" id="navToggle" aria-label="القائمة" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
 
         <ul class="nav-links" id="navLinks">
             <li><a asp-controller="Home" asp-action="Index">@T["Nav_Home"]</a></li>
             <li><a asp-controller="Manufacturers" asp-action="Index">@T["Nav_Manufacturers"]</a></li>
-            <li><a asp-controller="Manufacturers" asp-action="Map">🗺️ الخريطة</a></li>
+            <li><a asp-controller="Manufacturers" asp-action="Map">الخريطة</a></li>
             <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
@@ -42,8 +55,12 @@
         <div class="nav-actions">
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <a class="nav-bell" asp-controller="Notifications" asp-action="Index">
-                    🔔 <span class="bell-badge" id="bellBadge" style="display:none">0</span>
+                <a class="nav-bell" asp-controller="Notifications" asp-action="Index" title="الإشعارات">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="bell-badge" id="bellBadge" style="display:none">0</span>
                 </a>
                 @if (User.IsInRole("Manufacturer"))
                 {
@@ -66,6 +83,26 @@
             @{
                 var isAr = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("ar");
             }
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+                <!-- Sun: shown in dark mode -->
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <!-- Moon: shown in light mode -->
+                <svg class="icon-moon icon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+
             <a asp-controller="Lang" asp-action="SetLanguage"
                asp-route-culture="@(isAr ? "en" : "ar")"
                asp-route-returnUrl="@Context.Request.Path"
@@ -78,52 +115,142 @@
     @if (TempData["Success"] is string success)
     {
         <div class="container" style="padding-top:12px">
-            <div class="alert alert-success">✓ @success</div>
+            <div class="alert alert-success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
+                @success
+            </div>
         </div>
     }
     @if (TempData["Error"] is string error)
     {
         <div class="container" style="padding-top:12px">
-            <div class="alert alert-error">⚠ @error</div>
+            <div class="alert alert-error">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                @error
+            </div>
         </div>
     }
     @RenderBody()
 </main>
 
 <footer class="footer">
-    <div class="container footer-inner">
-        <div class="footer-brand">
-            <div style="font-size:1.4rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px">
-                <span>⚙</span> Jo Maker
+    <div class="container">
+        <div class="footer-grid">
+            <!-- Brand column -->
+            <div class="footer-brand-col">
+                <div class="brand-logo">
+                    <span class="brand-icon" style="width:28px;height:28px;border-radius:7px">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </span>
+                    Jo Maker
+                </div>
+                <p>منصة التصنيع الرقمي في الأردن — نربط أصحاب الأفكار بورش التصنيع المحترفة.</p>
             </div>
-            <p style="color:#64748b;font-size:.85rem;margin-top:6px">منصة التصنيع الرقمي في الأردن</p>
+            <!-- Platform links -->
+            <div>
+                <div class="footer-col-title">المنصة</div>
+                <div class="footer-col-links">
+                    <a asp-controller="Manufacturers" asp-action="Index">دليل الورش</a>
+                    <a asp-controller="Manufacturers" asp-action="Map">خريطة الورش</a>
+                    <a asp-controller="Suppliers" asp-action="Index">الموردون</a>
+                    <a asp-controller="GroupBuying" asp-action="Index">الشراء الجماعي</a>
+                </div>
+            </div>
+            <!-- Services links -->
+            <div>
+                <div class="footer-col-title">الخدمات</div>
+                <div class="footer-col-links">
+                    <a asp-controller="Requests" asp-action="Create">اطلب تصنيعاً</a>
+                    <a asp-controller="Account" asp-action="Register">سجّل ورشتك</a>
+                    <a asp-controller="Manufacturers" asp-action="Index">قطع CNC</a>
+                    <a asp-controller="Manufacturers" asp-action="Index">طباعة ثلاثية الأبعاد</a>
+                </div>
+            </div>
+            <!-- Account links -->
+            <div>
+                <div class="footer-col-title">الحساب</div>
+                <div class="footer-col-links">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-controller="Requests" asp-action="Index">طلباتي</a>
+                        <a asp-controller="Messages" asp-action="Inbox">الرسائل</a>
+                        <a asp-controller="Notifications" asp-action="Index">الإشعارات</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login">تسجيل الدخول</a>
+                        <a asp-controller="Account" asp-action="Register">إنشاء حساب</a>
+                    }
+                    <a asp-controller="Home" asp-action="Privacy">الخصوصية</a>
+                </div>
+            </div>
         </div>
-        <div class="footer-links">
-            <a asp-controller="Manufacturers" asp-action="Index">دليل الورش</a>
-            <a asp-controller="Manufacturers" asp-action="Map">🗺️ خريطة الورش</a>
-            <a asp-controller="Suppliers" asp-action="Index">الموردون</a>
-            <a asp-controller="Requests" asp-action="Create">اطلب تصنيعاً</a>
-        </div>
-        <div style="color:#475569;font-size:.82rem">
-            © @DateTime.Now.Year Jo Maker — جميع الحقوق محفوظة
+        <div class="footer-bottom">
+            <p>© @DateTime.Now.Year Jo Maker. جميع الحقوق محفوظة.</p>
+            <p style="color:var(--text-3);font-size:.8rem">صُنع في الأردن</p>
         </div>
     </div>
 </footer>
 
 <script>
-    document.getElementById('navToggle')?.addEventListener('click', function () {
-        document.getElementById('navLinks')?.classList.toggle('open');
-    });
+    // Theme toggle
+    function toggleTheme() {
+        var current = document.documentElement.getAttribute('data-theme') || 'dark';
+        var next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('jomaker-theme', next);
+        updateThemeIcons(next);
+    }
+    function updateThemeIcons(theme) {
+        var sun  = document.querySelector('.icon-sun');
+        var moon = document.querySelector('.icon-moon');
+        if (!sun || !moon) return;
+        if (theme === 'light') {
+            sun.classList.add('icon-hidden');
+            moon.classList.remove('icon-hidden');
+        } else {
+            sun.classList.remove('icon-hidden');
+            moon.classList.add('icon-hidden');
+        }
+    }
+    // Init icons on page load
+    updateThemeIcons(document.documentElement.getAttribute('data-theme') || 'dark');
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            const open = navLinks.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', open);
+        });
+    }
+
+    // Active link highlight
+    (function() {
+        const path = window.location.pathname.toLowerCase();
+        document.querySelectorAll('.nav-links a').forEach(function(a) {
+            const href = a.getAttribute('href');
+            if (href && path !== '/' && path.startsWith(href.toLowerCase()) && href !== '/') {
+                a.classList.add('active-link');
+            } else if (href === '/' && path === '/') {
+                a.classList.add('active-link');
+            }
+        });
+    })();
+
     @if (User.Identity?.IsAuthenticated == true)
     {
         <text>
         function fetchUnread() {
             fetch('/Notifications/GetUnread')
-                .then(r => r.json())
-                .then(d => {
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
                     var b = document.getElementById('bellBadge');
                     if (b) { b.textContent = d.count; b.style.display = d.count > 0 ? 'inline-flex' : 'none'; }
-                }).catch(() => {});
+                }).catch(function() {});
         }
         fetchUnread();
         setInterval(fetchUnread, 30000);

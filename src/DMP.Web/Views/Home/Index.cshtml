@@ -4,71 +4,281 @@
     var activeCampaigns = ViewBag.ActiveCampaigns as List<GroupBuyingCampaign> ?? new List<GroupBuyingCampaign>();
 }
 
-<!-- Hero Section -->
+<!-- ═══════════════════════════════════════════════
+     HERO — Asymmetric split
+═══════════════════════════════════════════════ -->
 <section class="hero">
     <div class="container">
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);border-radius:20px;padding:5px 14px;margin-bottom:24px;font-size:.82rem;color:var(--sky);font-weight:700">
-            <span style="width:6px;height:6px;background:var(--sky);border-radius:50%;display:inline-block;box-shadow:0 0 6px var(--sky)"></span>
-            منصة التصنيع الرقمي في الأردن
-        </div>
-        <h1 class="hero-title">
-            صنّع أفكارك مع<br/>
-            <span>أفضل الورش المحلية</span>
-        </h1>
-        <p class="hero-sub">اربط مشاريعك بورش التصنيع المعتمدة — طباعة ثلاثية الأبعاد، قطع ليزر، CNC والمزيد. احصل على عروض أسعار خلال ساعات.</p>
-        <div class="hero-btns">
-            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">🔧 اطلب تصنيعاً الآن</a>
-            <a asp-controller="Manufacturers" asp-action="Map" class="btn btn-outline">🗺️ خريطة الورش</a>
-        </div>
-        <!-- Stats -->
-        <div style="display:flex;gap:40px;margin-top:52px;flex-wrap:wrap">
-            @{
-                var stats = new[]{
-                    ("5+","ورشة معتمدة"),
-                    ("3","مدن أردنية"),
-                    ("100%","محلي وموثوق")
-                };
-            }
-            @foreach(var (num, lbl) in stats)
-            {
-                <div>
-                    <div style="font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.03em">@num</div>
-                    <div style="font-size:.82rem;color:rgba(255,255,255,.45);margin-top:2px">@lbl</div>
+        <div class="hero-grid">
+
+            <!-- Content side -->
+            <div class="hero-content">
+                <div class="hero-label">
+                    <span class="hero-label-dot"></span>
+                    منصة التصنيع الرقمي في الأردن
                 </div>
-            }
+
+                <h1 class="hero-title">
+                    حوّل أفكارك<br/>
+                    إلى <span class="accent">منتجات حقيقية</span>
+                </h1>
+
+                <p class="hero-sub">
+                    تواصل مع ورش CNC والطباعة ثلاثية الأبعاد وقطع الليزر المعتمدة. احصل على عروض أسعار خلال ساعات.
+                </p>
+
+                <div class="hero-btns">
+                    <a asp-controller="Requests" asp-action="Create" class="btn btn-primary btn-lg">اطلب تصنيعاً</a>
+                    <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">استعرض الورش</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">5+</div>
+                        <div class="hero-stat-lbl">ورشة معتمدة</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">3</div>
+                        <div class="hero-stat-lbl">مدن أردنية</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">24h</div>
+                        <div class="hero-stat-lbl">متوسط الرد</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual side — Manufacturing illustration -->
+            <div class="hero-visual">
+                <div class="hero-visual-card">
+
+                    <!-- SVG Manufacturing Illustration -->
+                    <svg class="mfg-illustration" viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <!-- Grid background -->
+                        <defs>
+                            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(14,165,233,0.08)" stroke-width="1"/>
+                            </pattern>
+                            <pattern id="grid-major" width="96" height="96" patternUnits="userSpaceOnUse">
+                                <path d="M 96 0 L 0 0 0 96" fill="none" stroke="rgba(14,165,233,0.14)" stroke-width="1"/>
+                            </pattern>
+                            <radialGradient id="glowBlue" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+                            </radialGradient>
+                            <radialGradient id="glowTeal" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2"/>
+                                <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+                            </radialGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                        </defs>
+
+                        <rect width="520" height="420" fill="#071828"/>
+                        <rect width="520" height="420" fill="url(#grid)"/>
+                        <rect width="520" height="420" fill="url(#grid-major)"/>
+
+                        <!-- Ambient glow -->
+                        <ellipse cx="260" cy="210" rx="200" ry="160" fill="url(#glowBlue)"/>
+
+                        <!-- ── CNC Machine frame ── -->
+                        <!-- Base platform -->
+                        <rect x="80" y="290" width="360" height="16" rx="4" fill="#0d2035" stroke="#0ea5e9" stroke-width="1.5"/>
+                        <!-- Vertical columns -->
+                        <rect x="88" y="140" width="12" height="152" rx="3" fill="#0d2035" stroke="#1e4a6e" stroke-width="1"/>
+                        <rect x="420" y="140" width="12" height="152" rx="3" fill="#0d2035" stroke="#1e4a6e" stroke-width="1"/>
+                        <!-- Horizontal gantry -->
+                        <rect x="88" y="134" width="344" height="14" rx="3" fill="#0f2236" stroke="#0ea5e9" stroke-width="1.5"/>
+
+                        <!-- Gantry carriage (X-axis slider) -->
+                        <rect x="220" y="126" width="80" height="28" rx="5" fill="#142840" stroke="#0ea5e9" stroke-width="1.5"/>
+                        <!-- Spindle rod -->
+                        <rect x="257" y="154" width="6" height="90" rx="3" fill="#0ea5e9" opacity="0.9" filter="url(#glow)"/>
+                        <!-- Tool head -->
+                        <polygon points="255,244 265,244 268,270 252,270" fill="#0284c7" stroke="#0ea5e9" stroke-width="1"/>
+                        <!-- Cutting bit -->
+                        <line x1="260" y1="270" x2="260" y2="288" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
+                        <!-- Cutting glow on workpiece -->
+                        <ellipse cx="260" cy="291" rx="12" ry="4" fill="#0ea5e9" opacity="0.4"/>
+
+                        <!-- Workpiece on bed -->
+                        <rect x="130" y="262" width="260" height="30" rx="4" fill="#0d2035" stroke="#1e4a6e" stroke-width="1.5"/>
+                        <!-- Cut path on workpiece -->
+                        <path d="M 150 277 Q 200 265 260 277 Q 310 289 360 277" fill="none" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.7"/>
+                        <!-- Already cut portion -->
+                        <path d="M 150 277 Q 200 265 245 274" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.9"/>
+
+                        <!-- Axis arrows (XYZ) -->
+                        <!-- X axis -->
+                        <line x1="60" y1="360" x2="130" y2="360" stroke="#ef4444" stroke-width="1.5" marker-end="url(#arrowX)"/>
+                        <text x="135" y="364" fill="#ef4444" font-size="11" font-family="monospace" opacity="0.9">X</text>
+                        <!-- Y axis -->
+                        <line x1="60" y1="360" x2="60" y2="290" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrowY)"/>
+                        <text x="54" y="284" fill="#22c55e" font-size="11" font-family="monospace" opacity="0.9">Y</text>
+                        <!-- Z axis (diagonal for 3D feel) -->
+                        <line x1="60" y1="360" x2="40" y2="340" stroke="#0ea5e9" stroke-width="1.5" marker-end="url(#arrowZ)"/>
+                        <text x="28" y="336" fill="#0ea5e9" font-size="11" font-family="monospace" opacity="0.9">Z</text>
+
+                        <defs>
+                            <marker id="arrowX" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L6,3 z" fill="#ef4444"/>
+                            </marker>
+                            <marker id="arrowY" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L6,3 z" fill="#22c55e"/>
+                            </marker>
+                            <marker id="arrowZ" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L6,3 z" fill="#0ea5e9"/>
+                            </marker>
+                        </defs>
+
+                        <!-- ── 3D Printer (top right) ── -->
+                        <!-- Frame -->
+                        <rect x="370" y="100" width="110" height="130" rx="6" fill="none" stroke="#1e4a6e" stroke-width="1.5"/>
+                        <!-- Print bed -->
+                        <rect x="378" y="210" width="94" height="8" rx="2" fill="#0f2236" stroke="#06b6d4" stroke-width="1"/>
+                        <!-- Printed object (layers) -->
+                        <rect x="400" y="188" width="50" height="8" rx="1" fill="#0d2035" stroke="#06b6d4" stroke-width="1" opacity="0.9"/>
+                        <rect x="402" y="180" width="46" height="8" rx="1" fill="#0d2035" stroke="#06b6d4" stroke-width="1" opacity="0.8"/>
+                        <rect x="406" y="172" width="38" height="8" rx="1" fill="#0d2035" stroke="#06b6d4" stroke-width="1" opacity="0.7"/>
+                        <rect x="410" y="164" width="30" height="8" rx="1" fill="#0d2035" stroke="#06b6d4" stroke-width="1" opacity="0.6"/>
+                        <!-- Extruder -->
+                        <rect x="415" y="120" width="20" height="30" rx="3" fill="#142840" stroke="#06b6d4" stroke-width="1.5"/>
+                        <line x1="425" y1="150" x2="425" y2="165" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" filter="url(#glow)" opacity="0.9"/>
+                        <!-- Print glow -->
+                        <ellipse cx="425" cy="164" rx="8" ry="3" fill="#06b6d4" opacity="0.35"/>
+                        <!-- Label -->
+                        <text x="425" y="96" fill="#06b6d4" font-size="9" font-family="monospace" text-anchor="middle" opacity="0.8">3D PRINT</text>
+
+                        <!-- ── Laser cutter (bottom left) ── -->
+                        <rect x="40" y="170" width="100" height="70" rx="5" fill="none" stroke="#1e4a6e" stroke-width="1.5"/>
+                        <!-- Laser head -->
+                        <rect x="72" y="175" width="36" height="22" rx="3" fill="#142840" stroke="#f59e0b" stroke-width="1.5"/>
+                        <circle cx="90" cy="186" r="6" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                        <!-- Laser beam -->
+                        <line x1="90" y1="197" x2="90" y2="228" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 2" filter="url(#glow)" opacity="0.85"/>
+                        <!-- Material -->
+                        <rect x="50" y="228" width="80" height="8" rx="2" fill="#0f2236" stroke="#374151" stroke-width="1"/>
+                        <!-- Cut marks -->
+                        <line x1="75" y1="228" x2="75" y2="236" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+                        <line x1="90" y1="228" x2="90" y2="236" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+                        <line x1="105" y1="228" x2="105" y2="236" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+                        <!-- Label -->
+                        <text x="90" y="165" fill="#f59e0b" font-size="9" font-family="monospace" text-anchor="middle" opacity="0.8">LASER</text>
+
+                        <!-- Measurement annotations -->
+                        <line x1="130" y1="310" x2="390" y2="310" stroke="#1e4a6e" stroke-width="1" stroke-dasharray="4 3"/>
+                        <text x="260" y="325" fill="#475569" font-size="9" font-family="monospace" text-anchor="middle">260.00 mm</text>
+                        <!-- Tick marks -->
+                        <line x1="130" y1="306" x2="130" y2="314" stroke="#1e4a6e" stroke-width="1"/>
+                        <line x1="390" y1="306" x2="390" y2="314" stroke="#1e4a6e" stroke-width="1"/>
+
+                        <!-- Status indicators (top) -->
+                        <circle cx="160" cy="50" r="5" fill="#10b981" filter="url(#glow)"/>
+                        <text x="172" y="54" fill="#94a3b8" font-size="10" font-family="monospace">CNC — RUNNING</text>
+                        <circle cx="160" cy="72" r="5" fill="#06b6d4" filter="url(#glow)"/>
+                        <text x="172" y="76" fill="#94a3b8" font-size="10" font-family="monospace">3D — PRINTING</text>
+                        <circle cx="160" cy="94" r="5" fill="#f59e0b" filter="url(#glow)"/>
+                        <text x="172" y="98" fill="#94a3b8" font-size="10" font-family="monospace">LASER — IDLE</text>
+
+                        <!-- Corner crosshairs -->
+                        <g stroke="#0ea5e9" stroke-width="1" opacity="0.3">
+                            <line x1="10" y1="0" x2="10" y2="20"/><line x1="0" y1="10" x2="20" y2="10"/>
+                            <line x1="510" y1="0" x2="510" y2="20"/><line x1="500" y1="10" x2="520" y2="10"/>
+                            <line x1="10" y1="420" x2="10" y2="400"/><line x1="0" y1="410" x2="20" y2="410"/>
+                            <line x1="510" y1="420" x2="510" y2="400"/><line x1="500" y1="410" x2="520" y2="410"/>
+                        </g>
+                    </svg>
+
+                    <!-- Floaters -->
+                    <div class="hero-floater hero-floater-1">
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span style="color:var(--green-txt);font-size:.72rem;font-weight:700">طلب منجز</span>
+                        </div>
+                        <div class="hero-floater-num">47</div>
+                        <div class="hero-floater-lbl">هذا الشهر</div>
+                    </div>
+                    <div class="hero-floater hero-floater-2">
+                        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span style="color:var(--text-2);font-size:.7rem">متوسط التسليم</span>
+                        </div>
+                        <div class="hero-floater-num" style="font-size:1.1rem">3 أيام</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<!-- Steps Strip -->
+<!-- ═══════════════════════════════════════════════
+     HOW IT WORKS — 4 steps (manufacturing icons)
+═══════════════════════════════════════════════ -->
 <div class="steps-strip">
     <div class="container">
         <div class="grid grid-4">
-            @foreach (var (num, ico, title, desc) in new[]{
-                ("1","📁","ارفع ملفك","DXF, STL, PDF أو صف مشروعك"),
-                ("2","💬","استقبل عروضاً","ورش متخصصة ترسل لك أسعار"),
-                ("3","✅","اعتمد العرض","اختر المصنّع وابدأ الإنتاج"),
-                ("4","📦","استلم طلبك","توصيل أو استلام من الورشة")
-            })
-            {
-                <div class="step-item">
-                    <span class="step-icon">@ico</span>
-                    <span class="step-num">@num</span>
-                    <div class="step-title">@title</div>
-                    <div class="step-desc">@desc</div>
+
+            <!-- Step 1: Upload design file -->
+            <div class="step-item">
+                <div class="step-num-wrap">
+                    <!-- File with upload arrow -->
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+                    <span class="step-num">1</span>
                 </div>
-            }
+                <div class="step-title">ارفع ملف التصميم</div>
+                <div class="step-desc">DXF, STL, PDF أو صف مشروعك بالتفصيل</div>
+            </div>
+
+            <!-- Step 2: Receive quotes from workshops -->
+            <div class="step-item">
+                <div class="step-num-wrap">
+                    <!-- Factory / workshop icon -->
+                    <svg viewBox="0 0 24 24"><path d="M2 20V8l7-5 7 5v12H2z"/><path d="M22 20V10l-6-4"/><path d="M2 20h20"/><rect x="6" y="14" width="3" height="6"/><rect x="11" y="14" width="3" height="6"/></svg>
+                    <span class="step-num">2</span>
+                </div>
+                <div class="step-title">استقبل عروض الورش</div>
+                <div class="step-desc">ورش متخصصة ترسل عروض أسعار تنافسية</div>
+            </div>
+
+            <!-- Step 3: Accept & pay -->
+            <div class="step-item">
+                <div class="step-num-wrap">
+                    <!-- Handshake / approval -->
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    <span class="step-num">3</span>
+                </div>
+                <div class="step-title">اعتمد وادفع بأمان</div>
+                <div class="step-desc">اختر المصنّع وادفع عبر Stripe المحمي</div>
+            </div>
+
+            <!-- Step 4: Receive product -->
+            <div class="step-item">
+                <div class="step-num-wrap">
+                    <!-- Package / delivery box -->
+                    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    <span class="step-num">4</span>
+                </div>
+                <div class="step-title">استلم منتجك</div>
+                <div class="step-desc">توصيل إلى بابك أو استلام من الورشة</div>
+            </div>
+
         </div>
     </div>
 </div>
 
-<!-- ورش معتمدة -->
+<!-- ═══════════════════════════════════════════════
+     MANUFACTURERS — Latest workshops
+═══════════════════════════════════════════════ -->
 <section class="section">
     <div class="container">
         <div class="section-head">
             <h2>ورش معتمدة</h2>
-            <p>اكتشف أفضل ورش التصنيع في الأردن</p>
+            <p>اكتشف أفضل ورش التصنيع الرقمي في الأردن، كل ورشة مراجعة ومعتمدة من فريقنا</p>
         </div>
+
         @if (latestManufacturers.Any())
         {
             <div class="grid grid-3">
@@ -77,78 +287,168 @@
                     <partial name="_ManufacturerCard" model="m" />
                 }
             </div>
-            <div style="text-align:center;margin-top:36px">
-                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض كل الورش ←</a>
+            <div style="text-align:center;margin-top:40px">
+                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">
+                    عرض جميع الورش
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
         }
         else
         {
             <div class="empty-state">
-                <div class="ico">🏭</div>
+                <div class="ico">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                        <line x1="12" y1="12" x2="12" y2="16"/>
+                        <line x1="10" y1="14" x2="14" y2="14"/>
+                    </svg>
+                </div>
                 <h3>لا توجد ورش بعد</h3>
-                <p>سجّل كمصنّع وكن أول من ينضم</p>
+                <p>سجّل كمصنّع وكن أول من ينضم للمنصة</p>
                 <a asp-controller="Account" asp-action="Register" class="btn btn-primary">سجّل ورشتك</a>
             </div>
         }
     </div>
 </section>
 
-<!-- Features Strip -->
-<section style="background:var(--navy-soft);padding:56px 0;border-top:1px solid rgba(14,165,233,.08);border-bottom:1px solid rgba(14,165,233,.08)">
+<!-- ═══════════════════════════════════════════════
+     FEATURES — Bento grid (manufacturing-specific)
+═══════════════════════════════════════════════ -->
+<section class="features-bento">
     <div class="container">
-        <div class="grid grid-3" style="gap:32px">
-            @foreach(var (ico, title, desc) in new[]{
-                ("⚡","سريع وفعّال","احصل على عروض أسعار خلال 24 ساعة من أفضل الورش"),
-                ("🔒","آمن وموثوق","جميع المصنّعين معتمدون ومراجعون من فريقنا"),
-                ("💳","دفع مضمون","ادفع بأمان عبر Stripe مع ضمان استرداد الأموال")
-            })
-            {
-                <div style="text-align:center;padding:8px">
-                    <div style="font-size:2.2rem;margin-bottom:14px">@ico</div>
-                    <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:8px">@title</div>
-                    <div style="font-size:.87rem;color:rgba(255,255,255,.45);line-height:1.6">@desc</div>
+        <div class="section-head">
+            <h2>لماذا Jo Maker؟</h2>
+            <p>منصة متكاملة تجمع كل ما تحتاجه لتحويل مشروعك من ملف تصميم إلى منتج مصنوع</p>
+        </div>
+
+        <div class="bento-grid">
+
+            <!-- Cell 1: Wide — CNC / 3D / Laser services -->
+            <div class="bento-cell bento-cell-wide">
+                <div class="bento-icon bento-icon-sky">
+                    <!-- CNC milling bit -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
+                    </svg>
                 </div>
-            }
+                <h3>CNC، طباعة ثلاثية الأبعاد، قطع ليزر</h3>
+                <p>احصل على عروض أسعار من ورش متخصصة في جميع تقنيات التصنيع الرقمي — كل ما تحتاجه في مكان واحد خلال أقل من 24 ساعة.</p>
+                <div class="bento-accent"></div>
+                <!-- Mini tech tags -->
+                <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
+                    <span class="chip chip-blue">CNC Milling</span>
+                    <span class="chip chip-blue">3D Printing</span>
+                    <span class="chip chip-blue">Laser Cutting</span>
+                    <span class="chip chip-blue">Sheet Metal</span>
+                </div>
+            </div>
+
+            <!-- Cell 2: Verified workshops -->
+            <div class="bento-cell">
+                <div class="bento-icon bento-icon-green">
+                    <!-- Shield with checkmark -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <polyline points="9 12 11 14 15 10"/>
+                    </svg>
+                </div>
+                <h3>ورش معتمدة وموثّقة</h3>
+                <p>كل ورشة تمر بعملية تحقق من الهوية والمعدات والجودة قبل القبول في المنصة.</p>
+            </div>
+
+            <!-- Cell 3: Secure payment -->
+            <div class="bento-cell">
+                <div class="bento-icon bento-icon-amber">
+                    <!-- Lock / secure -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <h3>دفع محمي بالكامل</h3>
+                <p>أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر Stripe مع ضمان استرداد.</p>
+            </div>
+
+            <!-- Cell 4: Order tracking -->
+            <div class="bento-cell">
+                <div class="bento-icon bento-icon-violet">
+                    <!-- Timeline / stages -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="5" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="19" r="2"/>
+                        <line x1="12" y1="7" x2="12" y2="10"/>
+                        <line x1="12" y1="14" x2="12" y2="17"/>
+                    </svg>
+                </div>
+                <h3>تتبع مراحل الإنتاج</h3>
+                <p>تابع طلبك عبر 4 مراحل واضحة: استلام، إنتاج، جاهز، مسلّم.</p>
+            </div>
+
+            <!-- Cell 5: Map -->
+            <div class="bento-cell">
+                <div class="bento-icon bento-icon-sky">
+                    <!-- Map with pin -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+                        <line x1="9" y1="3" x2="9" y2="18"/>
+                        <line x1="15" y1="6" x2="15" y2="21"/>
+                    </svg>
+                </div>
+                <h3>خريطة الورش التفاعلية</h3>
+                <p>اعثر على أقرب ورشة إليك عبر خريطة تغطي مدن الأردن كاملة.</p>
+            </div>
+
         </div>
     </div>
 </section>
 
-<!-- حملات الشراء الجماعي -->
+<!-- ═══════════════════════════════════════════════
+     GROUP BUYING CAMPAIGNS
+═══════════════════════════════════════════════ -->
 @if (activeCampaigns.Any())
 {
     <section class="section">
         <div class="container">
             <div class="section-head">
-                <h2>🛒 حملات الشراء الجماعي</h2>
+                <h2>الشراء الجماعي</h2>
                 <p>انضم مع مصنّعين آخرين واحصل على سعر الجملة</p>
             </div>
             <div class="grid grid-3">
                 @foreach (var c in activeCampaigns)
                 {
-                    <div class="panel" style="display:flex;flex-direction:column;gap:12px;padding:0;overflow:hidden">
+                    <div class="panel" style="display:flex;flex-direction:column;gap:0;padding:0;overflow:hidden">
                         @if (!string.IsNullOrEmpty(c.ImagePath))
                         {
-                            <div style="height:150px;overflow:hidden">
-                                <img src="@c.ImagePath" style="width:100%;height:100%;object-fit:cover;transition:transform .35s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
+                            <div style="height:160px;overflow:hidden">
+                                <img src="@c.ImagePath" alt="@c.Title" style="width:100%;height:100%;object-fit:cover;transition:transform .4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" loading="lazy"/>
                             </div>
                         }
                         else
                         {
-                            <div style="height:150px;background:linear-gradient(135deg,var(--navy-soft),var(--navy-mid));display:flex;align-items:center;justify-content:center;font-size:2.5rem">🛒</div>
+                            <div class="campaign-cover-placeholder">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                                </svg>
+                                <span style="color:var(--text-2);font-size:.8rem;margin-top:8px">شراء جماعي</span>
+                            </div>
                         }
-                        <div style="padding:16px 20px 20px">
-                            <h3 style="font-size:1rem;font-weight:800;margin-bottom:12px;color:var(--navy)">@c.Title</h3>
+                        <div style="padding:18px 20px 20px">
+                            <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px;color:var(--text-1)">@c.Title</h3>
                             <div class="progress-bar-wrap">
                                 <div class="progress-bar-fill" style="width:@(c.ProgressPercent)%"></div>
                             </div>
-                            <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--steel);margin:8px 0 14px">
+                            <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-2);margin:8px 0 14px">
                                 <span>@c.CurrentQuantity / @c.MinQuantity وحدة</span>
-                                <span style="color:var(--amber);font-weight:700">@c.ProgressPercent%</span>
+                                <span style="color:var(--amber-txt);font-weight:700">@c.ProgressPercent%</span>
                             </div>
                             <div style="display:flex;justify-content:space-between;align-items:center">
                                 <div>
-                                    <span style="color:var(--amber-dark);font-weight:900;font-size:1.1rem">@c.GroupPrice.ToString("N0")</span>
-                                    <span style="font-size:.78rem;color:var(--steel);margin-inline-start:3px">د.أ</span>
+                                    <span style="color:var(--sky);font-weight:900;font-size:1.1rem">@c.GroupPrice.ToString("N0")</span>
+                                    <span style="font-size:.75rem;color:var(--text-2);margin-inline-start:3px">د.أ</span>
                                 </div>
                                 <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">انضم الآن</a>
                             </div>
@@ -160,12 +460,16 @@
     </section>
 }
 
-<!-- CTA -->
-<section style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-soft) 100%);padding:72px 0;text-align:center;position:relative;overflow:hidden">
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(14,165,233,.08) 0%,transparent 65%);pointer-events:none"></div>
-    <div class="container" style="position:relative">
-        <h2 style="font-size:2rem;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-.02em">هل أنت مصنّع؟</h2>
-        <p style="color:rgba(255,255,255,.55);font-size:1rem;margin-bottom:32px;max-width:440px;margin-inline:auto;line-height:1.7">انضم إلى منصة Jo Maker واحصل على عملاء جدد من جميع أنحاء الأردن</p>
-        <a asp-controller="Account" asp-action="Register" class="btn btn-primary" style="padding:14px 32px;font-size:.97rem">سجّل ورشتك مجاناً ←</a>
+<!-- ═══════════════════════════════════════════════
+     CTA — Manufacturer registration
+═══════════════════════════════════════════════ -->
+<section class="cta-section">
+    <div class="container">
+        <h2>هل تمتلك ورشة تصنيع؟</h2>
+        <p>انضم إلى Jo Maker وابدأ باستقبال طلبات من عملاء جدد في جميع أنحاء الأردن مجاناً.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">سجّل ورشتك مجاناً</a>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">استعرض الورش</a>
+        </div>
     </div>
 </section>

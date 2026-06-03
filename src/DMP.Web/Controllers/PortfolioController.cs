@@ -31,6 +31,10 @@ public class PortfolioController : Controller
         return await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
     }
 
+    // GET: /Portfolio  →  يُعيد توجيه للوحة المصنّع
+    public IActionResult Index()
+        => RedirectToAction("Dashboard", "Manufacturers");
+
     // GET: /Portfolio/Create
     [HttpGet]
     public IActionResult Create()

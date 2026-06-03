@@ -26,6 +26,16 @@ public class QuotationsController : Controller
             .FirstOrDefaultAsync(m => m.UserId == userId);
     }
 
+    // GET: /Quotations  →  مصنّع: طلبات واردة | عميل / مدير: طلباتي
+    [Authorize]
+    public IActionResult Index()
+    {
+        if (User.IsInRole(SeedData.ManufacturerRole))
+            return RedirectToAction(nameof(IncomingRequests));
+
+        return RedirectToAction("Index", "Requests");
+    }
+
     // GET: /Quotations/IncomingRequests
     [Authorize(Roles = SeedData.ManufacturerRole)]
     public async Task<IActionResult> IncomingRequests()

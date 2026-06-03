@@ -30,8 +30,8 @@ public class GroupBuyingController : Controller
         Stripe.StripeConfiguration.ApiKey = config["Stripe:SecretKey"];
     }
 
-    // GET: /GroupBuying
-    [Authorize(Roles = $"{SeedData.ManufacturerRole},{SeedData.AdminRole}")]
+    // GET: /GroupBuying  —  متاح لجميع المستخدمين المسجّلين (قراءة فقط للعملاء)
+    [Authorize]
     public async Task<IActionResult> Index()
     {
         var campaigns = await _db.GroupBuyingCampaigns
@@ -42,8 +42,8 @@ public class GroupBuyingController : Controller
         return View(campaigns);
     }
 
-    // GET: /GroupBuying/Details/5
-    [Authorize(Roles = $"{SeedData.ManufacturerRole},{SeedData.AdminRole}")]
+    // GET: /GroupBuying/Details/5  —  متاح لجميع المستخدمين المسجّلين
+    [Authorize]
     public async Task<IActionResult> Details(int id)
     {
         var campaign = await _db.GroupBuyingCampaigns

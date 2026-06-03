@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Stripe;
-using Stripe.Checkout;
 using DMP.Web.Data;
 using DMP.Web.Models;
 
@@ -15,20 +12,19 @@ public class PaymentsController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _config;
+    private readonly IWebHostEnvironment _env;
 
     public PaymentsController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IConfiguration config)
+        IWebHostEnvironment env)
     {
         _db = db;
         _userManager = userManager;
-        _config = config;
-        StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+        _env = env;
     }
 
-    // GET: /Payments/Checkout/5  (requestId)
+    // GET: /Payments/Checkout/5
     [HttpGet]
     public async Task<IActionResult> Checkout(int requestId)
     {
@@ -46,7 +42,12 @@ public class PaymentsController : Controller
             return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
-        // العرض المقبول
+        if (request.PaymentStatus == PaymentStatus.UnderReview)
+        {
+            TempData["Error"] = "إيصال الدفع قيد المراجعة من المدير.";
+            return RedirectToAction("Details", "Requests", new { id = requestId });
+        }
+
         var accepted = request.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
         if (accepted == null)
         {
@@ -54,16 +55,15 @@ public class PaymentsController : Controller
             return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
-        ViewBag.Request  = request;
+        ViewBag.Request   = request;
         ViewBag.Quotation = accepted;
-        ViewBag.PublishableKey = _config["Stripe:PublishableKey"];
         return View();
     }
 
-    // POST: /Payments/CreateCheckoutSession
+    // POST: /Payments/SubmitReceipt  — رفع صورة إيصال الدفع
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateCheckoutSession(int requestId)
+    public async Task<IActionResult> SubmitReceipt(int requestId, IFormFile receiptImage)
     {
         var userId = _userManager.GetUserId(User)!;
 
@@ -73,82 +73,51 @@ public class PaymentsController : Controller
 
         if (request == null) return NotFound();
 
-        var accepted = request.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
-        if (accepted == null) return BadRequest("لا يوجد عرض مقبول.");
-
-        var domain = $"{Request.Scheme}://{Request.Host}";
-
-        var options = new SessionCreateOptions
+        if (receiptImage == null || receiptImage.Length == 0)
         {
-            PaymentMethodTypes = new List<string> { "card" },
-            LineItems = new List<SessionLineItemOptions>
-            {
-                new()
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        UnitAmount  = (long)(accepted.Price * 100), // cents
-                        Currency    = "usd",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name        = $"طلب تصنيع: {request.Title}",
-                            Description = $"ورشة: {accepted.Manufacturer?.WorkshopName}"
-                        }
-                    },
-                    Quantity = 1
-                }
-            },
-            Mode       = "payment",
-            SuccessUrl = $"{domain}/Payments/Success?requestId={requestId}&session_id={{CHECKOUT_SESSION_ID}}",
-            CancelUrl  = $"{domain}/Payments/Cancel?requestId={requestId}",
-            Metadata   = new Dictionary<string, string>
-            {
-                { "requestId",   requestId.ToString() },
-                { "quotationId", accepted.Id.ToString() },
-                { "userId",      userId }
-            }
-        };
+            TempData["Error"] = "يرجى رفع صورة إيصال الدفع.";
+            return RedirectToAction("Checkout", new { requestId });
+        }
 
-        var service = new SessionService();
-        var session = await service.CreateAsync(options);
+        // التحقق من نوع الملف
+        var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp", ".pdf" };
+        var ext = Path.GetExtension(receiptImage.FileName).ToLowerInvariant();
+        if (!allowed.Contains(ext))
+        {
+            TempData["Error"] = "صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط.";
+            return RedirectToAction("Checkout", new { requestId });
+        }
 
-        // احفظ session ID
-        request.StripeSessionId  = session.Id;
-        request.PaymentStatus    = PaymentStatus.Pending;
+        // حفظ الصورة
+        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "receipts");
+        Directory.CreateDirectory(uploadsDir);
+
+        var fileName = $"receipt_{requestId}_{DateTime.UtcNow:yyyyMMddHHmmss}{ext}";
+        var filePath = Path.Combine(uploadsDir, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+            await receiptImage.CopyToAsync(stream);
+
+        // تحديث الطلب
+        request.PaymentReceiptPath = $"/uploads/receipts/{fileName}";
+        request.PaymentStatus      = PaymentStatus.UnderReview;
         await _db.SaveChangesAsync();
 
-        return Redirect(session.Url);
-    }
-
-    // GET: /Payments/Success
-    [HttpGet]
-    public async Task<IActionResult> Success(int requestId, string session_id)
-    {
-        var userId = _userManager.GetUserId(User)!;
-
-        var request = await _db.ManufacturingRequests
-            .FirstOrDefaultAsync(r => r.Id == requestId && r.CustomerId == userId);
-
-        if (request == null) return NotFound();
-
-        // تحقق من Stripe
-        var service = new SessionService();
-        var session = await service.GetAsync(session_id);
-
-        if (session.PaymentStatus == "paid")
+        // إشعار للمدير
+        var admin = await _userManager.GetUsersInRoleAsync(SeedData.AdminRole);
+        foreach (var adminUser in admin)
         {
-            request.PaymentStatus = PaymentStatus.Paid;
-            request.PaidAmount    = (decimal)(session.AmountTotal ?? 0) / 100;
-            request.PaidAt        = DateTime.UtcNow;
-            await _db.SaveChangesAsync();
-
-            TempData["Success"] = "✅ تم الدفع بنجاح! سيتواصل معك المصنّع قريباً.";
+            _db.Notifications.Add(new Notification
+            {
+                UserId    = adminUser.Id,
+                Message   = $"إيصال دفع جديد بانتظار مراجعتك — طلب رقم #{requestId}",
+                Link      = $"/Admin/Payments",
+                CreatedAt = DateTime.UtcNow
+            });
         }
-        else
-        {
-            TempData["Error"] = "لم يكتمل الدفع. يرجى المحاولة مجدداً.";
-        }
+        await _db.SaveChangesAsync();
 
+        TempData["Success"] = "تم رفع إيصال الدفع بنجاح. سيتم مراجعته من المدير وتأكيده خلال 24 ساعة.";
         return RedirectToAction("Details", "Requests", new { id = requestId });
     }
 

@@ -1,0 +1,172 @@
+@model List<ManufacturingRequest>
+@{
+    ViewData["Title"] = "مراجعة المدفوعات";
+    var underReview = Model.Where(r => r.PaymentStatus == PaymentStatus.UnderReview).ToList();
+    var approved    = Model.Where(r => r.PaymentStatus == PaymentStatus.Paid).ToList();
+    var rejected    = Model.Where(r => r.PaymentStatus == PaymentStatus.NotPaid && r.PaymentReceiptPath != null).ToList();
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>مراجعة المدفوعات</h1>
+                <p>إيصالات CliQ بانتظار الموافقة</p>
+            </div>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                لوحة التحكم
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+
+    <!-- قيد المراجعة -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+        <h2 style="font-size:1.1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            قيد المراجعة
+            @if (underReview.Any())
+            {
+                <span class="badge-pending">@underReview.Count</span>
+            }
+        </h2>
+    </div>
+
+    @if (!underReview.Any())
+    {
+        <div class="empty-state" style="padding:40px 20px">
+            <div class="ico">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>لا توجد مدفوعات قيد المراجعة</h3>
+            <p>جميع الإيصالات تمت معالجتها</p>
+        </div>
+    }
+    else
+    {
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px">
+            @foreach (var req in underReview)
+            {
+                var accepted = req.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
+                <div class="pay-review-card">
+                    <div class="pay-review-header">
+                        <div>
+                            <div class="pay-review-title">#@req.Id — @req.Title</div>
+                            <div class="pay-review-meta">
+                                العميل: @req.Customer?.FullName
+                                &nbsp;|&nbsp;
+                                الورشة: @(accepted?.Manufacturer?.WorkshopName ?? "—")
+                                &nbsp;|&nbsp;
+                                @req.CreatedAt.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                        <span class="badge-pending">قيد المراجعة</span>
+                    </div>
+
+                    <div class="pay-review-body">
+                        <!-- صورة الإيصال -->
+                        <div class="pay-review-img">
+                            @if (!string.IsNullOrEmpty(req.PaymentReceiptPath))
+                            {
+                                @if (req.PaymentReceiptPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;color:var(--text-2)">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        <span style="font-size:.82rem">ملف PDF</span>
+                                        <a href="@req.PaymentReceiptPath" target="_blank" class="btn btn-sm btn-outline">فتح PDF</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a href="@req.PaymentReceiptPath" target="_blank">
+                                        <img src="@req.PaymentReceiptPath" alt="إيصال الدفع" />
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <div style="padding:20px;color:var(--text-3);font-size:.85rem">لا توجد صورة</div>
+                            }
+                        </div>
+
+                        <!-- إجراءات المدير -->
+                        <div class="pay-review-actions">
+                            <div>
+                                <div style="font-size:.75rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">المبلغ</div>
+                                <div class="pay-review-amount">@(accepted?.Price.ToString("N2") ?? "—") د.أ</div>
+                            </div>
+
+                            <!-- قبول -->
+                            <form asp-controller="Admin" asp-action="ApprovePayment" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="requestId" value="@req.Id" />
+                                <div class="form-group" style="margin-bottom:8px">
+                                    <input type="text" name="note" class="form-control" placeholder="ملاحظة (اختياري)" />
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block"
+                                        onclick="return confirm('هل تؤكد قبول هذه الدفعة؟')">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    قبول الدفع
+                                </button>
+                            </form>
+
+                            <!-- رفض -->
+                            <form asp-controller="Admin" asp-action="RejectPayment" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="requestId" value="@req.Id" />
+                                <div class="form-group" style="margin-bottom:8px">
+                                    <input type="text" name="note" class="form-control" placeholder="سبب الرفض" />
+                                </div>
+                                <button type="submit" class="btn btn-danger btn-block"
+                                        onclick="return confirm('هل تريد رفض هذه الدفعة؟')">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                    رفض الدفع
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- المدفوعات المقبولة -->
+    @if (approved.Any())
+    {
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            تم قبولها
+            <span class="badge-approved">@approved.Count</span>
+        </h2>
+        <div class="panel" style="padding:0;overflow:hidden">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الطلب</th>
+                        <th>العميل</th>
+                        <th>المبلغ</th>
+                        <th>تاريخ القبول</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in approved)
+                    {
+                        var acc = req.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
+                        <tr>
+                            <td style="color:var(--text-2)">#@req.Id</td>
+                            <td>@req.Title</td>
+                            <td>@req.Customer?.FullName</td>
+                            <td style="color:var(--sky);font-weight:700">@(acc?.Price.ToString("N2") ?? req.PaidAmount?.ToString("N2") ?? "—") د.أ</td>
+                            <td style="color:var(--text-2)">@req.PaidAt?.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>

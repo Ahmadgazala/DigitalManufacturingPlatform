@@ -27,10 +27,11 @@ public enum TrackingStage
 
 public enum PaymentStatus
 {
-    NotPaid  = 0,
-    Pending  = 1,
-    Paid     = 2,
-    Refunded = 3
+    NotPaid     = 0,
+    Pending     = 1,
+    Paid        = 2,
+    Refunded    = 3,
+    UnderReview = 4  // رُفعت صورة الدفع وتنتظر موافقة المدير
 }
 
 public static class RequestStatusHelpers
@@ -82,10 +83,11 @@ public static class RequestStatusHelpers
 
     public static string ToArabic(this PaymentStatus s) => s switch
     {
-        PaymentStatus.NotPaid  => "غير مدفوع",
-        PaymentStatus.Pending  => "بانتظار الدفع",
-        PaymentStatus.Paid     => "مدفوع",
-        PaymentStatus.Refunded => "مُسترجع",
+        PaymentStatus.NotPaid     => "غير مدفوع",
+        PaymentStatus.Pending     => "بانتظار الدفع",
+        PaymentStatus.Paid        => "مدفوع",
+        PaymentStatus.Refunded    => "مُسترجع",
+        PaymentStatus.UnderReview => "قيد المراجعة",
         _ => s.ToString()
     };
 }
@@ -124,10 +126,12 @@ public class ManufacturingRequest
     public TrackingStage? TrackingStage { get; set; }
 
     // الدفع
-    public PaymentStatus PaymentStatus   { get; set; } = PaymentStatus.NotPaid;
-    public string?       StripeSessionId { get; set; }
-    public decimal?      PaidAmount      { get; set; }
-    public DateTime?     PaidAt          { get; set; }
+    public PaymentStatus PaymentStatus    { get; set; } = PaymentStatus.NotPaid;
+    public string?       StripeSessionId  { get; set; }  // kept for migration compat
+    public decimal?      PaidAmount       { get; set; }
+    public DateTime?     PaidAt           { get; set; }
+    public string?       PaymentReceiptPath { get; set; } // صورة إيصال الدفع (CliQ)
+    public string?       PaymentReviewNote  { get; set; } // ملاحظة المدير
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

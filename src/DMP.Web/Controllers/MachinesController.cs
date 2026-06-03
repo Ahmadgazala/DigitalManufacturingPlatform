@@ -26,6 +26,10 @@ public class MachinesController : Controller
         return await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
     }
 
+    // GET: /Machines  →  يُعيد توجيه للوحة المصنّع
+    public IActionResult Index()
+        => RedirectToAction("Dashboard", "Manufacturers");
+
     // GET: /Machines/Add
     [HttpGet]
     public async Task<IActionResult> Add()

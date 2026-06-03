@@ -68,5 +68,22 @@
                 <a asp-controller="Suppliers" asp-action="Index" class="btn btn-outline">@T["ViewSuppliers"]</a>
             </div>
         </div>
+        <div class="dash-card" style="border-color:var(--border-sky)">
+            <div class="dash-body">
+                <h3 style="display:flex;align-items:center;gap:8px">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    مراجعة المدفوعات
+                </h3>
+                <p>إيصالات CliQ بانتظار الموافقة</p>
+                <a asp-controller="Admin" asp-action="Payments" class="btn btn-primary">مراجعة الإيصالات</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>إدارة الطلبات</h3>
+                <p>@T["TotalRequests"]: <strong>@totalRequests</strong></p>
+                <a asp-controller="Admin" asp-action="Requests" class="btn btn-outline">عرض الطلبات</a>
+            </div>
+        </div>
     </div>
 </div>
