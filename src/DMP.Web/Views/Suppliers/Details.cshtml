@@ -1,6 +1,7 @@
 @model Supplier
 @{
     ViewData["Title"] = Model.Name;
+    var isAdmin = User.IsInRole("Admin");
 }
 
 <div class="page-header">
@@ -61,6 +62,25 @@
                 </ul>
             </div>
             <a class="btn btn-outline btn-block" asp-controller="Suppliers" asp-action="Index">← كل الموردين</a>
+
+            @if (isAdmin)
+            {
+                <div style="margin-top:12px;padding-top:14px;border-top:1px solid var(--line)">
+                    <div style="font-size:.8rem;color:var(--steel);margin-bottom:8px;font-weight:600">🛠 أدوات الإدارة</div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline" style="text-align:center">
+                            ✏️ تعديل المورد
+                        </a>
+                        <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                              onsubmit="return confirm('هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع.')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger" style="width:100%">
+                                🗑 حذف المورد
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
         </aside>
     </div>
 </div>

@@ -1,18 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Helpers;
 using DMP.Web.Models;
+using DMP.Web.Services;
 
 namespace DMP.Web.Controllers;
 
 public class SuppliersController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly IFileService _fileService;
 
-    public SuppliersController(ApplicationDbContext db)
+    public SuppliersController(ApplicationDbContext db, IFileService fileService)
     {
         _db = db;
+        _fileService = fileService;
     }
 
     // GET: /Suppliers
@@ -49,5 +53,136 @@ public class SuppliersController : Controller
             return NotFound();
 
         return View(supplier);
+    }
+
+    // ══════════════════════════════════════════════════════
+    // Admin — Create
+    // ══════════════════════════════════════════════════════
+
+    // GET: /Suppliers/Create
+    [HttpGet]
+    [Authorize(Roles = SeedData.AdminRole)]
+    public IActionResult Create()
+    {
+        return View(new Supplier());
+    }
+
+    // POST: /Suppliers/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = SeedData.AdminRole)]
+    public async Task<IActionResult> Create(Supplier model, IFormFile? logo)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = string.Join(" | ",
+                ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return View(model);
+        }
+
+        try
+        {
+            if (logo != null && logo.Length > 0)
+                model.LogoPath = await _fileService.SaveImageAsync(logo, "suppliers");
+
+            model.IsApproved = true;
+            model.CreatedAt  = DateTime.UtcNow;
+
+            _db.Suppliers.Add(model);
+            await _db.SaveChangesAsync();
+
+            TempData["Success"] = $"تم إنشاء المورد «{model.Name}» بنجاح.";
+            return RedirectToAction(nameof(Details), new { id = model.Id });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return View(model);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════
+    // Admin — Edit
+    // ══════════════════════════════════════════════════════
+
+    // GET: /Suppliers/Edit/5
+    [HttpGet]
+    [Authorize(Roles = SeedData.AdminRole)]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var supplier = await _db.Suppliers.FindAsync(id);
+        if (supplier == null)
+            return NotFound();
+
+        return View(supplier);
+    }
+
+    // POST: /Suppliers/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = SeedData.AdminRole)]
+    public async Task<IActionResult> Edit(int id, Supplier model, IFormFile? logo)
+    {
+        var supplier = await _db.Suppliers.FindAsync(id);
+        if (supplier == null)
+            return NotFound();
+
+        supplier.Name        = model.Name;
+        supplier.Description = model.Description;
+        supplier.City        = model.City;
+        supplier.Address     = model.Address;
+        supplier.Phone       = model.Phone;
+        supplier.Email       = model.Email;
+        supplier.Website     = model.Website;
+        supplier.Materials   = model.Materials;
+        supplier.IsApproved  = model.IsApproved;
+
+        if (!string.IsNullOrWhiteSpace(supplier.Name))
+        {
+            try
+            {
+                if (logo != null && logo.Length > 0)
+                {
+                    _fileService.Delete(supplier.LogoPath);
+                    supplier.LogoPath = await _fileService.SaveImageAsync(logo, "suppliers");
+                }
+
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "تم تحديث بيانات المورد بنجاح.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+        }
+        else
+        {
+            TempData["Error"] = "اسم المورد مطلوب.";
+        }
+
+        return View(supplier);
+    }
+
+    // ══════════════════════════════════════════════════════
+    // Admin — Delete
+    // ══════════════════════════════════════════════════════
+
+    // POST: /Suppliers/Delete/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = SeedData.AdminRole)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var supplier = await _db.Suppliers.FindAsync(id);
+        if (supplier == null)
+            return NotFound();
+
+        _fileService.Delete(supplier.LogoPath);
+        _db.Suppliers.Remove(supplier);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = $"تم حذف المورد «{supplier.Name}» بنجاح.";
+        return RedirectToAction(nameof(Index));
     }
 }

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jo Maker — Investor Pitch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #0f172a;
+            --bg2:       #1e293b;
+            --primary:   #38bdf8;
+            --primary2:  #0ea5e9;
+            --amber:     #f59e0b;
+            --green:     #10b981;
+            --text:      #f1f5f9;
+            --muted:     #94a3b8;
+            --card:      rgba(255,255,255,0.05);
+            --border:    rgba(255,255,255,0.08);
+            --grad:      linear-gradient(135deg, #38bdf8, #818cf8);
+            --grad2:     linear-gradient(135deg, #f59e0b, #ef4444);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--grad);
+            transition: width 0.4s ease;
+            z-index: 1000;
+        }
+
+        .slide-deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (min-width: 769px) {
+            .slide-deck {
+                max-width: calc(100vh * 16 / 9);
+                max-height: calc(100vw * 9 / 16);
+                margin: auto;
+                position: absolute;
+                inset: 0;
+            }
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 70px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            background: var(--bg);
+            overflow: hidden;
+            text-align: left;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+        .slide.active .animate { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+        .slide.active .animate:nth-child(1) { animation-delay: .0s; }
+        .slide.active .animate:nth-child(2) { animation-delay: .1s; }
+        .slide.active .animate:nth-child(3) { animation-delay: .2s; }
+        .slide.active .animate:nth-child(4) { animation-delay: .3s; }
+        .slide.active .animate:nth-child(5) { animation-delay: .4s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        .slide-title {
+            font-size: clamp(28px, 5.5vw, 68px);
+            font-weight: 900;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.15;
+        }
+
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            opacity: 0;
+        }
+
+        h2.main-head {
+            font-size: clamp(24px, 4vw, 50px);
+            font-weight: 900;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .accent       { color: var(--primary); }
+        .accent-amber { color: var(--amber); }
+
+        .divider {
+            width: 60px; height: 3px;
+            background: var(--grad);
+            border-radius: 10px;
+            margin: 14px 0;
+        }
+
+        /* Cards */
+        .card-grid   { display: grid; gap: 16px; width: 100%; }
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 24px;
+        }
+        .card-icon  { font-size: 30px; margin-bottom: 10px; display: block; }
+        .card-title { font-size: clamp(12px, 1.5vw, 17px); font-weight: 700; margin-bottom: 6px; }
+        .card-desc  { font-size: clamp(11px, 1.1vw, 13px); color: var(--muted); line-height: 1.6; }
+        .card-highlight { border-color: rgba(56,189,248,.3);  background: rgba(56,189,248,.07); }
+        .card-amber     { border-color: rgba(245,158,11,.3);  background: rgba(245,158,11,.07); }
+
+        /* Steps */
+        .steps { display: flex; gap: 0; width: 100%; align-items: stretch; }
+        .step  { flex: 1; text-align: center; padding: 18px 10px; position: relative; }
+        .step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -10px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary); font-size: 18px; opacity: 0.6;
+        }
+        .step-num {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--grad);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 900; margin: 0 auto 12px;
+        }
+        .step-title { font-size: clamp(11px,1.4vw,15px); font-weight: 700; margin-bottom: 6px; }
+        .step-desc  { font-size: clamp(10px,1.1vw,12px); color: var(--muted); line-height: 1.5; }
+
+        /* Two column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px; width: 100%;
+            align-items: center;
+        }
+
+        /* Pillars */
+        .pillar-row { display: flex; gap: 12px; width: 100%; }
+        .pillar {
+            flex: 1;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 14px;
+            text-align: center;
+            border-top: 3px solid transparent;
+        }
+        .pillar.p1 { border-top-color: var(--primary); }
+        .pillar.p2 { border-top-color: var(--amber); }
+        .pillar.p3 { border-top-color: var(--green); }
+        .pillar.p4 { border-top-color: #818cf8; }
+        .pillar-icon  { font-size: 26px; margin-bottom: 10px; }
+        .pillar-title { font-size: clamp(11px,1.3vw,14px); font-weight: 700; }
+        .pillar-sub   { font-size: clamp(10px,1vw,12px); color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+        /* Badge */
+        .badge        { display: inline-block; padding: 4px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+        .badge-blue   { background: rgba(56,189,248,.15);  color: var(--primary); border: 1px solid rgba(56,189,248,.3); }
+        .badge-amber  { background: rgba(245,158,11,.15);  color: var(--amber);   border: 1px solid rgba(245,158,11,.3); }
+        .badge-green  { background: rgba(16,185,129,.15);  color: var(--green);   border: 1px solid rgba(16,185,129,.3); }
+
+        /* Check list */
+        .check-list { list-style: none; }
+        .check-list li {
+            padding: 8px 0;
+            font-size: clamp(12px,1.4vw,16px);
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: flex-start; gap: 10px;
+        }
+        .check-list li:last-child { border: none; }
+        .check-list li::before { content: '✓'; color: var(--primary); font-weight: 900; flex-shrink: 0; }
+
+        /* BGs */
+        .bg-mesh  {
+            background:
+                radial-gradient(ellipse at 80% 20%, rgba(56,189,248,.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 10% 80%, rgba(129,140,248,.07) 0%, transparent 50%),
+                var(--bg);
+        }
+        .bg-mesh2 {
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(245,158,11,.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(56,189,248,.06) 0%, transparent 50%),
+                var(--bg);
+        }
+
+        /* Nav */
+        .nav-controls {
+            position: fixed;
+            bottom: 24px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; align-items: center; gap: 16px;
+            z-index: 1000;
+            background: rgba(15,23,42,0.85);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+        }
+        .nav-btn {
+            background: none; border: none; color: var(--text);
+            width: 34px; height: 34px; border-radius: 50%;
+            cursor: pointer; font-size: 16px; transition: background .2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn:hover { background: var(--card); }
+        .slide-counter { color: var(--muted); font-size: 13px; }
+
+        @media (max-width: 768px) {
+            .slide { padding: 30px 24px; }
+            .card-grid-3 { grid-template-columns: 1fr; }
+            .two-col { grid-template-columns: 1fr; }
+            .steps { flex-direction: column; }
+            .step::after { display: none; }
+            .pillar-row { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-deck">
+
+<!-- ══════════════════════════════════════════
+     1. COVER
+══════════════════════════════════════════ -->
+<div class="slide active bg-mesh" style="align-items:center;text-align:center;">
+    <div class="blob" style="width:500px;height:500px;background:#38bdf8;top:-120px;left:-120px;"></div>
+    <div class="blob" style="width:400px;height:400px;background:#818cf8;bottom:-80px;right:-80px;"></div>
+
+    <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <div class="animate" style="display:flex;align-items:center;gap:14px;">
+            <div style="width:60px;height:60px;background:var(--grad);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;">⚙️</div>
+            <span style="font-size:clamp(30px,5.5vw,56px);font-weight:900;letter-spacing:-1px;">Jo Maker</span>
+        </div>
+
+        <h1 class="animate slide-title" style="font-size:clamp(20px,3.5vw,44px);max-width:680px;line-height:1.3;">
+            Jordan's Digital Manufacturing Platform
+        </h1>
+
+        <p class="animate" style="font-size:clamp(13px,1.7vw,19px);color:var(--muted);max-width:540px;line-height:1.8;">
+            Connecting clients with certified manufacturing workshops —<br>
+            3D Printing · Laser Cutting · CNC · PCB · Woodwork
+        </p>
+
+        <div class="animate" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;">
+            <span class="badge badge-blue">🇯🇴 Jordan</span>
+            <span class="badge badge-amber">Digital Manufacturing</span>
+            <span class="badge badge-green">B2B Marketplace</span>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     2. THE PROBLEM
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh2">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">The Problem</p>
+        <h2 class="main-head animate">The Jordanian market has a <span class="accent">real gap</span></h2>
+        <div class="divider animate"></div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:22px;">
+            <div class="card">
+                <span class="card-icon">🔍</span>
+                <div class="card-title">Clients Can't Find Workshops</div>
+                <div class="card-desc">No trusted directory for digital manufacturing workshops exists. Discovery relies entirely on personal connections.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">❓</span>
+                <div class="card-title">Zero Price Transparency</div>
+                <div class="card-desc">Every client gets a different quote. No comparison, no fair-price guarantee, no standard benchmark.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">🏭</span>
+                <div class="card-title">Workshops Lack Reach</div>
+                <div class="card-desc">Idle production capacity. Skilled workshops cannot access clients beyond their immediate network.</div>
+            </div>
+        </div>
+
+        <div class="card animate card-amber" style="margin-top:14px;display:flex;align-items:center;gap:16px;padding:16px 22px;">
+            <span style="font-size:28px;">📈</span>
+            <div style="flex:1;">
+                <div style="font-weight:700;font-size:clamp(13px,1.5vw,16px);margin-bottom:4px;">Soaring Raw Material Costs</div>
+                <div style="color:var(--muted);font-size:clamp(11px,1.2vw,13px);">Small workshops buy materials at retail prices — they lack the volume to negotiate wholesale. This inflates production costs and kills competitiveness against imports.</div>
+            </div>
+        </div>
+
+        <div class="card animate" style="margin-top:10px;display:flex;align-items:center;gap:16px;padding:14px 22px;">
+            <span style="font-size:22px;">💡</span>
+            <div>
+                <div style="font-weight:700;font-size:clamp(12px,1.4vw,15px);">The Result</div>
+                <div style="color:var(--muted);font-size:clamp(10px,1.2vw,13px);">Clients turn to expensive imports — while capable local workshops lose business they could have won.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     3. THE SOLUTION
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">The Solution</p>
+        <h2 class="main-head animate"><span class="accent">Jo Maker</span> — The Digital Manufacturing Marketplace</h2>
+        <div class="divider animate"></div>
+
+        <div class="two-col animate" style="margin-top:24px;gap:22px;">
+            <div>
+                <div class="card card-highlight" style="margin-bottom:14px;">
+                    <span class="card-icon">📋</span>
+                    <div class="card-title">For Clients</div>
+                    <div class="card-desc">Submit your request, receive competing quotes from certified workshops, track every stage of production — all in one place.</div>
+                </div>
+                <div class="card card-highlight">
+                    <span class="card-icon">🏆</span>
+                    <div class="card-title">For Workshops</div>
+                    <div class="card-desc">Get a steady stream of new clients, manage orders effortlessly, and join group buying campaigns to cut material costs.</div>
+                </div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px;text-align:center;">
+                <div style="font-size:48px;margin-bottom:16px;">⚙️</div>
+                <div style="font-size:clamp(16px,2.4vw,26px);font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;">
+                    "Jordan's First Digital Manufacturing Platform"
+                </div>
+                <div style="color:var(--muted);font-size:clamp(12px,1.3vw,15px);margin-top:14px;line-height:1.7;">
+                    One platform connecting<br>Clients · Workshops · Suppliers
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     4. HOW IT WORKS
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh2">
+    <div style="width:100%;max-width:960px;">
+        <p class="section-label animate">How It Works</p>
+        <h2 class="main-head animate">From <span class="accent">idea</span> to <span class="accent-amber">product</span> in four steps</h2>
+        <div class="divider animate"></div>
+
+        <div class="steps animate" style="margin-top:28px;">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-title">Client Submits Request</div>
+                <div class="step-desc">Describes the product and uploads design files — STL / DXF / SVG</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-title">Workshops Submit Quotes</div>
+                <div class="step-desc">Certified workshops send competitive price offers with timelines</div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-title">Client Chooses & Pays</div>
+                <div class="step-desc">Compares quotes and pays securely via CliQ — Jordan's instant payment</div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-title">Track & Deliver</div>
+                <div class="step-desc">Real-time order tracking through every production stage until delivery</div>
+            </div>
+        </div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:24px;gap:12px;">
+            <div class="card" style="text-align:center;padding:14px;">
+                <div style="font-size:22px;margin-bottom:6px;">🔧</div>
+                <div style="font-size:clamp(11px,1.3vw,14px);font-weight:700;">3D Printing</div>
+            </div>
+            <div class="card" style="text-align:center;padding:14px;">
+                <div style="font-size:22px;margin-bottom:6px;">⚡</div>
+                <div style="font-size:clamp(11px,1.3vw,14px);font-weight:700;">Laser Cutting</div>
+            </div>
+            <div class="card" style="text-align:center;padding:14px;">
+                <div style="font-size:22px;margin-bottom:6px;">🏗️</div>
+                <div style="font-size:clamp(11px,1.3vw,14px);font-weight:700;">CNC Machining</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     5. KEY FEATURES
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh">
+    <div style="width:100%;max-width:940px;">
+        <p class="section-label animate">Key Features</p>
+        <h2 class="main-head animate">An <span class="accent">end-to-end</span> platform built for trust</h2>
+        <div class="divider animate"></div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:22px;gap:14px;">
+            <div class="card">
+                <span class="card-icon">🛡️</span>
+                <div class="card-title">Verified Workshops</div>
+                <div class="card-desc">Every workshop goes through admin review before being listed. Quality and trust guaranteed.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">💰</span>
+                <div class="card-title">Competitive Quotes</div>
+                <div class="card-desc">Receive multiple quotes from different workshops and compare before committing.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">📦</span>
+                <div class="card-title">Order Tracking</div>
+                <div class="card-desc">4 clear stages: Received → In Production → Ready → Delivered.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">💬</span>
+                <div class="card-title">Direct Messaging</div>
+                <div class="card-desc">Built-in messaging between clients and workshops — no need for external channels.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">⭐</span>
+                <div class="card-title">Review System</div>
+                <div class="card-desc">Genuine ratings build trust and continuously improve workshop quality.</div>
+            </div>
+            <div class="card card-amber">
+                <span class="card-icon">🛒</span>
+                <div class="card-title">Group Buying</div>
+                <div class="card-desc">Unique feature — workshops pool together to buy raw materials at wholesale prices.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     6. GROUP BUYING
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh2">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">Unique Feature</p>
+        <h2 class="main-head animate">Group Buying — <span class="accent-amber">nothing like it locally</span></h2>
+        <div class="divider animate" style="background:var(--grad2);"></div>
+
+        <div class="two-col animate" style="margin-top:22px;gap:22px;align-items:stretch;">
+            <div>
+                <div class="card card-amber" style="margin-bottom:14px;">
+                    <span class="card-icon">🤝</span>
+                    <div class="card-title">A Simple but Powerful Idea</div>
+                    <div class="card-desc">Multiple workshops join a shared purchasing campaign for the same raw material — the more members, the lower the unit price.</div>
+                </div>
+                <div class="card card-amber">
+                    <span class="card-icon">📊</span>
+                    <div class="card-title">Smart Deposit System</div>
+                    <div class="card-desc">Workshops pay 50% upfront as a deposit to confirm commitment. The remaining 50% is collected once the minimum quantity is reached.</div>
+                </div>
+            </div>
+            <div style="background:var(--card);border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:28px;text-align:center;">
+                <div style="font-size:44px;margin-bottom:14px;">🏭</div>
+                <div style="font-size:clamp(18px,2.8vw,30px);font-weight:900;color:var(--amber);line-height:1.3;margin-bottom:16px;">
+                    The Power of the Group
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);">
+                        <span>✅</span>
+                        <span style="font-size:clamp(11px,1.3vw,14px);color:var(--muted);">Wholesale pricing for workshops of any size</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);">
+                        <span>✅</span>
+                        <span style="font-size:clamp(11px,1.3vw,14px);color:var(--muted);">Lower production costs, higher profit margins</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);">
+                        <span>✅</span>
+                        <span style="font-size:clamp(11px,1.3vw,14px);color:var(--muted);">Increases workshop loyalty to the platform</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     7. TARGET MARKET
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">Target Market</p>
+        <h2 class="main-head animate">Three stakeholders — <span class="accent">one platform</span></h2>
+        <div class="divider animate"></div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:24px;">
+            <div class="card card-highlight">
+                <span class="card-icon">👤</span>
+                <div class="card-title">Clients</div>
+                <div class="card-desc" style="margin-bottom:12px;">Individuals, startups, and universities that need prototypes, custom parts, or small-batch production.</div>
+                <span class="badge badge-blue">B2C / B2B</span>
+            </div>
+            <div class="card" style="border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05);">
+                <span class="card-icon">🏭</span>
+                <div class="card-title">Workshops</div>
+                <div class="card-desc" style="margin-bottom:12px;">3D printing, laser cutting, CNC, PCB, and woodwork workshops across Jordanian cities.</div>
+                <span class="badge badge-amber">Manufacturers</span>
+            </div>
+            <div class="card" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.05);">
+                <span class="card-icon">📦</span>
+                <div class="card-title">Suppliers</div>
+                <div class="card-desc" style="margin-bottom:12px;">Raw material and industrial supply vendors seeking direct access to Jo Maker's workshop network.</div>
+                <span class="badge badge-green">Suppliers</span>
+            </div>
+        </div>
+
+        <div class="card animate" style="margin-top:16px;padding:16px 22px;display:flex;gap:20px;flex-wrap:wrap;justify-content:space-around;text-align:center;">
+            <div>
+                <div style="font-size:clamp(20px,3vw,34px);font-weight:900;color:var(--primary);">100+</div>
+                <div style="color:var(--muted);font-size:12px;">Manufacturing workshops in Jordan</div>
+            </div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div>
+                <div style="font-size:clamp(20px,3vw,34px);font-weight:900;color:var(--amber);">3</div>
+                <div style="color:var(--muted);font-size:12px;">Target cities in Phase 1</div>
+            </div>
+            <div style="width:1px;background:var(--border);"></div>
+            <div>
+                <div style="font-size:clamp(20px,3vw,34px);font-weight:900;color:var(--green);">Growing</div>
+                <div style="color:var(--muted);font-size:12px;">Digital manufacturing sector globally</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     8. WHY JORDAN?
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh2">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">Why Jordan?</p>
+        <h2 class="main-head animate">Jordan is the <span class="accent">perfect launchpad</span></h2>
+        <div class="divider animate"></div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:22px;gap:14px;">
+            <div class="card card-highlight">
+                <span class="card-icon">🎯</span>
+                <div class="card-title">Unserved Market</div>
+                <div class="card-desc">No dedicated digital manufacturing marketplace exists in Jordan today. The opportunity is wide open and untapped.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">🏭</span>
+                <div class="card-title">Skilled Workshops Exist</div>
+                <div class="card-desc">Jordan has a strong base of specialized manufacturing workshops that are capable but lack client reach.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">🎓</span>
+                <div class="card-title">Real & Growing Demand</div>
+                <div class="card-desc">Engineering universities, startups, and designers continuously need manufacturing for prototypes and products.</div>
+            </div>
+        </div>
+
+        <div class="card-grid card-grid-3 animate" style="margin-top:14px;gap:14px;">
+            <div class="card">
+                <span class="card-icon">📱</span>
+                <div class="card-title">Mature Digital Infrastructure</div>
+                <div class="card-desc">High internet penetration and CliQ instant payments make the platform experience seamless for all users.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">🌍</span>
+                <div class="card-title">Gateway to the Region</div>
+                <div class="card-desc">Jordan's strategic location and startup reputation make it an ideal base for expanding across the Arab world.</div>
+            </div>
+            <div class="card card-amber">
+                <span class="card-icon">⚡</span>
+                <div class="card-title">Perfect Timing</div>
+                <div class="card-desc">Digital manufacturing is growing rapidly worldwide — early entry gives Jo Maker an unassailable competitive advantage.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     9. BUSINESS MODEL
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh">
+    <div style="width:100%;max-width:940px;">
+        <p class="section-label animate">Business Model</p>
+        <h2 class="main-head animate"><span class="accent">Multiple</span> diversified revenue streams</h2>
+        <div class="divider animate"></div>
+
+        <div class="pillar-row animate" style="margin-top:26px;">
+            <div class="pillar p1">
+                <div class="pillar-icon">💸</div>
+                <div class="pillar-title">Transaction Commission</div>
+                <div class="pillar-sub">A percentage of every completed order processed through the platform</div>
+            </div>
+            <div class="pillar p2">
+                <div class="pillar-icon">📅</div>
+                <div class="pillar-title">Workshop Subscriptions</div>
+                <div class="pillar-sub">Monthly and annual plans for workshops seeking premium visibility</div>
+            </div>
+            <div class="pillar p3">
+                <div class="pillar-icon">🛒</div>
+                <div class="pillar-title">Group Buying Fees</div>
+                <div class="pillar-sub">An organization fee on every group purchasing campaign</div>
+            </div>
+            <div class="pillar p4">
+                <div class="pillar-icon">📋</div>
+                <div class="pillar-title">Supplier Directory</div>
+                <div class="pillar-sub">Annual listing fees for suppliers to reach the workshop network</div>
+            </div>
+        </div>
+
+        <div class="card animate" style="margin-top:20px;padding:20px 26px;">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:200px;">
+                    <div style="font-weight:700;font-size:clamp(13px,1.5vw,16px);margin-bottom:6px;">🔑 Why this model works</div>
+                    <div style="color:var(--muted);font-size:clamp(11px,1.2vw,13px);line-height:1.7;">
+                        Recurring revenue · Scales automatically with user growth · Asset-light operations
+                    </div>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <span class="badge badge-blue">Asset Light</span>
+                    <span class="badge badge-green">Recurring Revenue</span>
+                    <span class="badge badge-amber">Network Effects</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     10. VISION & ROADMAP
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh2">
+    <div style="width:100%;max-width:920px;">
+        <p class="section-label animate">Vision & Roadmap</p>
+        <h2 class="main-head animate">From Jordan to the <span class="accent">Arab World</span></h2>
+        <div class="divider animate"></div>
+
+        <div class="two-col animate" style="margin-top:22px;gap:24px;align-items:stretch;">
+            <div>
+                <div style="font-weight:700;font-size:clamp(13px,1.5vw,16px);margin-bottom:12px;color:var(--primary);">📍 Current Stage — Live in Amman</div>
+                <ul class="check-list" style="margin-bottom:20px;">
+                    <li>Full platform built and ready to launch</li>
+                    <li>Requests, quotes & order tracking system</li>
+                    <li>Secure payments via CliQ</li>
+                    <li>Group buying with deposit system</li>
+                    <li>Workshop and supplier directory</li>
+                </ul>
+                <div style="font-weight:700;font-size:clamp(13px,1.5vw,16px);margin-bottom:12px;color:var(--amber);">🚀 Next Phase</div>
+                <ul class="check-list">
+                    <li>iOS & Android mobile app</li>
+                    <li>Expand from Amman to Zarqa & Irbid</li>
+                    <li>Integration with local shipping carriers</li>
+                    <li>Dispute resolution & arbitration system</li>
+                </ul>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+                <div class="card card-highlight" style="text-align:center;padding:22px;">
+                    <div style="font-size:36px;margin-bottom:8px;">🇯🇴</div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.8vw,18px);margin-bottom:4px;">Jordan</div>
+                    <div style="color:var(--muted);font-size:12px;">Phase 1 — Amman launch</div>
+                </div>
+                <div style="text-align:center;color:var(--primary);font-size:22px;">↓</div>
+                <div class="card" style="text-align:center;padding:22px;border-color:rgba(245,158,11,.3);">
+                    <div style="font-size:36px;margin-bottom:8px;">🌍</div>
+                    <div style="font-weight:700;font-size:clamp(14px,1.8vw,18px);margin-bottom:4px;">Arab Region</div>
+                    <div style="color:var(--muted);font-size:12px;">Saudi Arabia · UAE · Egypt</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     11. CALL TO ACTION
+══════════════════════════════════════════ -->
+<div class="slide bg-mesh" style="align-items:center;text-align:center;">
+    <div class="blob" style="width:600px;height:600px;background:#38bdf8;top:-150px;left:-150px;opacity:.08;"></div>
+    <div class="blob" style="width:400px;height:400px;background:#f59e0b;bottom:-100px;right:-100px;opacity:.07;"></div>
+
+    <div style="position:relative;z-index:1;max-width:700px;display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <div class="animate" style="width:70px;height:70px;background:var(--grad);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:34px;">
+            🤝
+        </div>
+
+        <h2 class="animate" style="font-size:clamp(24px,4.5vw,54px);font-weight:900;line-height:1.2;">
+            Join the <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Jo Maker</span> journey
+        </h2>
+
+        <p class="animate" style="color:var(--muted);font-size:clamp(14px,1.8vw,20px);line-height:1.8;max-width:560px;">
+            We're building the future of digital manufacturing in Jordan.<br>
+            We're looking for strategic partners who share this vision.
+        </p>
+
+        <div class="animate" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;width:100%;margin-top:6px;">
+            <div class="card" style="text-align:center;padding:18px 12px;">
+                <div style="font-size:24px;margin-bottom:8px;">💡</div>
+                <div style="font-weight:700;font-size:clamp(11px,1.3vw,14px);">Product Ready</div>
+                <div style="color:var(--muted);font-size:11px;margin-top:4px;">Platform built and ready to launch</div>
+            </div>
+            <div class="card card-highlight" style="text-align:center;padding:18px 12px;">
+                <div style="font-size:24px;margin-bottom:8px;">🎯</div>
+                <div style="font-weight:700;font-size:clamp(11px,1.3vw,14px);">No Competition</div>
+                <div style="color:var(--muted);font-size:11px;margin-top:4px;">First specialized platform in Jordan</div>
+            </div>
+            <div class="card" style="text-align:center;padding:18px 12px;">
+                <div style="font-size:24px;margin-bottom:8px;">🌍</div>
+                <div style="font-weight:700;font-size:clamp(11px,1.3vw,14px);">Regional Vision</div>
+                <div style="color:var(--muted);font-size:11px;margin-top:4px;">Roadmap to expand across the Arab world</div>
+            </div>
+        </div>
+
+        <div class="animate" style="margin-top:8px;padding:18px 36px;background:var(--card);border:1px solid var(--border);border-radius:16px;">
+            <div style="font-size:clamp(13px,1.4vw,15px);color:var(--muted);margin-bottom:6px;">Get in touch</div>
+            <div style="font-size:clamp(16px,2vw,22px);font-weight:700;color:var(--primary);">info@jomaker.jo</div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /.slide-deck -->
+
+<div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">←</button>
+    <span class="slide-counter"><span id="current">1</span> / <span id="total">11</span></span>
+    <button class="nav-btn" onclick="nextSlide()">→</button>
+</div>
+
+<script>
+    let current = 1;
+    const slides = document.querySelectorAll('.slide');
+    const total  = slides.length;
+    document.getElementById('total').textContent = total;
+
+    function showSlide(n) {
+        if (n < 1) n = 1;
+        if (n > total) n = total;
+        current = n;
+        slides.forEach((s, i) => s.classList.toggle('active', i === n - 1));
+        document.getElementById('current').textContent = n;
+        document.getElementById('progressBar').style.width = (n / total * 100) + '%';
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', e => {
+        if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); nextSlide(); }
+        if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); prevSlide(); }
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend',   e => {
+        const dx = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 50) dx > 0 ? nextSlide() : prevSlide();
+    });
+
+    showSlide(1);
+</script>
+</body>
+</html>

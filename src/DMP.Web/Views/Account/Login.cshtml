@@ -1,57 +1,530 @@
 @model LoginViewModel
 @{
-    ViewData["Title"] = T["Login"];
+    ViewData["Title"] = "تسجيل الدخول";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>تسجيل الدخول — Jo Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css"/>
+<style>
+html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
+
+/* ── Page ── */
+.lp-page {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+}
+.lp-page::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+        linear-gradient(rgba(14,165,233,.046) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,165,233,.046) 1px, transparent 1px),
+        radial-gradient(circle, rgba(14,165,233,.14) 1px, transparent 1px);
+    background-size: 44px 44px, 44px 44px, 44px 44px;
 }
 
-<div class="container">
-    <div class="auth-box">
-        <div class="page-header">
-            <h1>@T["Login"]</h1>
-            <p>@T["LoginSubtitle"]</p>
+/* ── Left ── */
+.lp-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 36px 28px;
+    position: relative; z-index: 1;
+    background: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(14,165,233,.07) 0%, transparent 70%);
+    overflow: hidden;
+}
+
+.lp-logo {
+    display: flex; align-items: center; gap: 10px;
+    align-self: flex-start; flex-shrink: 0;
+}
+.lp-logo-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+    box-shadow: 0 3px 12px var(--sky-glow);
+    display: flex; align-items: center; justify-content: center;
+}
+.lp-logo-icon svg { width: 17px; height: 17px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lp-logo-name { font-size: 1.15rem; font-weight: 800; color: var(--text-1); letter-spacing: -.4px; }
+
+/* Printer SVG — fills available vertical space */
+.printer-svg {
+    flex: 1;
+    width: 100%;
+    max-width: 320px;
+    max-height: calc(100vh - 200px);
+    height: auto;
+    display: block;
+    overflow: visible;
+    padding: 12px 0;
+}
+
+/* Caption */
+.lp-caption { flex-shrink: 0; text-align: center; width: 100%; }
+.lp-tagline {
+    font-size: .8rem; color: var(--text-2);
+    line-height: 1.6; max-width: 300px;
+    margin: 0 auto 10px; text-align: center;
+}
+.lp-tagline strong { color: var(--sky); font-weight: 700; }
+
+.lp-chips { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.lp-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 100px;
+    border: 1px solid var(--border-md);
+    background: rgba(14,165,233,.06);
+    font-size: .68rem; font-weight: 600; color: var(--text-2);
+}
+.lp-chip svg { width: 11px; height: 11px; stroke: var(--sky); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Separator ── */
+.lp-sep {
+    background: var(--border);
+    position: relative; z-index: 1;
+    align-self: stretch;
+    margin: 32px 0;
+}
+
+/* ── Right ── */
+.lp-right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 32px 36px;
+    position: relative; z-index: 1;
+    overflow: hidden;
+    background: radial-gradient(ellipse 90% 70% at 50% 50%, rgba(14,165,233,.04) 0%, transparent 70%);
+}
+
+.lp-card {
+    width: 100%;
+    background: var(--surface-1);
+    border: 1px solid var(--border-md);
+    border-radius: var(--r-lg);
+    padding: 32px 40px;
+    box-shadow: 0 0 0 1px rgba(14,165,233,.08), 0 8px 48px rgba(0,0,0,.42);
+    position: relative;
+}
+.lp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--sky-dark), var(--sky), var(--sky-hover));
+    border-radius: var(--r-lg) var(--r-lg) 0 0; opacity: .85;
+}
+
+/* Card header */
+.lf-header { margin-bottom: 20px; }
+.lf-header h1 { font-size: 1.6rem; font-weight: 800; color: var(--text-1); letter-spacing: -.04em; margin-bottom: 4px; line-height: 1.2; }
+.lf-header p  { font-size: .85rem; color: var(--text-2); line-height: 1.5; }
+
+/* Form groups */
+.lp-card .form-group { margin-bottom: 14px; }
+.lp-card .form-group label { font-size: .83rem; margin-bottom: 5px; display: block; }
+
+/* Input icon */
+.input-icon-wrap { position: relative; }
+.input-icon-wrap .input-icon {
+    position: absolute; top: 50%; inset-inline-start: 12px;
+    transform: translateY(-50%); display: flex; align-items: center;
+    pointer-events: none; color: var(--text-3); transition: color .18s;
+}
+.input-icon-wrap .input-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.input-icon-wrap .form-control { padding-inline-start: 38px; font-size: .88rem; height: 42px; }
+.input-icon-wrap:focus-within .input-icon { color: var(--sky); }
+
+/* Password toggle */
+.pw-toggle {
+    position: absolute; top: 50%; inset-inline-end: 10px;
+    transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--text-3);
+    padding: 4px; display: flex; align-items: center;
+    border-radius: var(--r-xs); transition: color .15s;
+}
+.pw-toggle:hover { color: var(--text-1); }
+.pw-toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Meta row */
+.lf-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 8px; }
+.lf-forgot { font-size: .78rem; color: var(--text-3); text-decoration: none; transition: color .15s; }
+.lf-forgot:hover { color: var(--sky); }
+
+/* Divider */
+.lf-divider { display: flex; align-items: center; gap: 12px; margin: 14px 0; }
+.lf-divider::before, .lf-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.lf-divider span { font-size: .72rem; color: var(--text-3); white-space: nowrap; }
+
+/* Register & security */
+.lf-register { text-align: center; font-size: .83rem; color: var(--text-2); }
+.lf-register a { color: var(--sky); font-weight: 700; text-decoration: none; transition: color .15s; }
+.lf-register a:hover { color: var(--sky-hover); }
+
+.lf-security { display: flex; align-items: center; gap: 5px; justify-content: center; margin-top: 14px; font-size: .7rem; color: var(--text-3); }
+.lf-security svg { width: 10px; height: 10px; stroke: var(--text-3); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* Loading */
+.btn-loading { pointer-events: none; opacity: .75; }
+.btn-loading .btn-text { display: none; }
+.btn-loading .btn-spinner { display: inline-flex !important; }
+.btn-spinner { display: none; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-shake { animation: shake .4s ease; }
+@@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+
+/* ── Light mode ── */
+[data-theme="light"] .lp-page  { background: #eef7fe; }
+[data-theme="light"] .lp-page::before {
+    background-image:
+        linear-gradient(rgba(14,165,233,.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,165,233,.09) 1px, transparent 1px),
+        radial-gradient(circle, rgba(14,165,233,.22) 1px, transparent 1px);
+}
+[data-theme="light"] .lp-sep   { background: rgba(0,0,0,.1); }
+[data-theme="light"] .lp-card  { background: #fff; border-color: rgba(14,165,233,.18); box-shadow: 0 0 0 1px rgba(14,165,233,.08), 0 8px 40px rgba(0,0,0,.1); }
+[data-theme="light"] .lp-logo-name { color: #0f172a; }
+[data-theme="light"] .lp-tagline   { color: #475569; }
+[data-theme="light"] .lp-chip  { background: rgba(14,165,233,.08); border-color: rgba(14,165,233,.2); color: #334155; }
+[data-theme="light"] .lf-header h1 { color: #0f172a; }
+[data-theme="light"] .lf-header p  { color: #475569; }
+[data-theme="light"] .lf-divider::before, [data-theme="light"] .lf-divider::after { background: rgba(0,0,0,.1); }
+[data-theme="light"] .lf-register  { color: #475569; }
+[data-theme="light"] .lf-security  { color: #94a3b8; }
+
+/* ── Responsive ── */
+@@media (max-width: 860px) {
+    html, body { overflow: auto; }
+    .lp-page { height: auto; min-height: 100vh; grid-template-columns: 1fr; grid-template-rows: auto 1px auto; }
+    .lp-left  { padding: 28px 20px 20px; }
+    .lp-sep   { margin: 0 32px; align-self: auto; height: 1px; }
+    .lp-right { padding: 24px 20px 36px; overflow-y: visible; }
+    .printer-svg { max-height: 220px; }
+}
+@@media (max-width: 480px) {
+    .lp-left  { padding: 24px 16px 16px; }
+    .lp-right { padding: 20px 16px 32px; }
+    .lp-card  { padding: 24px 18px; }
+}
+
+:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; border-radius: 4px; }
+.form-control:focus-visible { outline: none; }
+</style>
+</head>
+<body>
+<script>
+(function(){
+    var t = localStorage.getItem('jomaker-theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+
+<div class="lp-page">
+
+    <!-- ══════════════════════════════
+         LEFT — Printer + Brand
+    ══════════════════════════════ -->
+    <div class="lp-left" aria-hidden="true">
+
+        <!-- Logo -->
+        <a href="/" class="lp-logo">
+            <div class="lp-logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="lp-logo-name">Jo Maker</span>
+        </a>
+
+        <!-- 3D Printer -->
+        <svg id="printerSvg" class="printer-svg" viewBox="0 0 220 168" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="gs" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="2.5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="gl" x="-120%" y="-120%" width="340%" height="340%">
+                    <feGaussianBlur stdDeviation="7" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+
+            <!-- Frame -->
+            <line x1="32"  y1="10" x2="32"  y2="140" stroke="rgba(14,165,233,.45)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="188" y1="10" x2="188" y2="140" stroke="rgba(14,165,233,.45)" stroke-width="3" stroke-linecap="round"/>
+            <rect x="28" y="6" width="164" height="7" rx="3" fill="rgba(14,165,233,.12)" stroke="rgba(14,165,233,.5)" stroke-width=".8"/>
+            <!-- Z screw -->
+            <line x1="22" y1="18" x2="22" y2="136" stroke="rgba(14,165,233,.2)" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <!-- Motors -->
+            <rect x="26"  y="5" width="12" height="10" rx="2" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width=".8"/>
+            <rect x="182" y="5" width="12" height="10" rx="2" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width=".8"/>
+            <circle cx="32"  cy="10" r="2" fill="rgba(14,165,233,.6)"/>
+            <circle cx="188" cy="10" r="2" fill="rgba(14,165,233,.6)"/>
+            <!-- Z ticks -->
+            <line x1="28" y1="55"  x2="35" y2="55"  stroke="rgba(14,165,233,.26)" stroke-width=".8"/>
+            <line x1="28" y1="88"  x2="35" y2="88"  stroke="rgba(14,165,233,.26)" stroke-width=".8"/>
+            <line x1="28" y1="118" x2="35" y2="118" stroke="rgba(14,165,233,.26)" stroke-width=".8"/>
+
+            <!-- Print bed -->
+            <rect x="30" y="137" width="160" height="6" rx="2" fill="rgba(14,165,233,.1)" stroke="rgba(14,165,233,.45)" stroke-width=".8"/>
+            <line x1="58"  y1="137" x2="58"  y2="143" stroke="rgba(14,165,233,.18)" stroke-width=".6"/>
+            <line x1="86"  y1="137" x2="86"  y2="143" stroke="rgba(14,165,233,.18)" stroke-width=".6"/>
+            <line x1="110" y1="137" x2="110" y2="143" stroke="rgba(14,165,233,.18)" stroke-width=".6"/>
+            <line x1="134" y1="137" x2="134" y2="143" stroke="rgba(14,165,233,.18)" stroke-width=".6"/>
+            <line x1="162" y1="137" x2="162" y2="143" stroke="rgba(14,165,233,.18)" stroke-width=".6"/>
+            <!-- Base + feet -->
+            <rect x="18" y="143" width="184" height="9" rx="3" fill="rgba(14,165,233,.07)" stroke="rgba(14,165,233,.28)" stroke-width=".8"/>
+            <rect x="22"  y="150" width="24" height="6" rx="2" fill="rgba(14,165,233,.1)" stroke="rgba(14,165,233,.26)" stroke-width=".7"/>
+            <rect x="174" y="150" width="24" height="6" rx="2" fill="rgba(14,165,233,.1)" stroke="rgba(14,165,233,.26)" stroke-width=".7"/>
+            <circle cx="34"  cy="156" r="2.5" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.38)" stroke-width=".6"/>
+            <circle cx="186" cy="156" r="2.5" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.38)" stroke-width=".6"/>
+
+            <!-- Object layers -->
+            <rect id="pl1" x="50" y="125" width="0" height="8" rx="1.5" fill="rgba(14,165,233,.22)" stroke="rgba(14,165,233,.42)" stroke-width=".7"/>
+            <rect id="pl2" x="54" y="117" width="0" height="8" rx="1.5" fill="rgba(14,165,233,.28)" stroke="rgba(14,165,233,.52)" stroke-width=".7"/>
+            <rect id="pl3" x="58" y="109" width="0" height="8" rx="1.5" fill="rgba(14,165,233,.34)" stroke="rgba(14,165,233,.62)" stroke-width=".7"/>
+            <rect id="pl4" x="62" y="101" width="0" height="8" rx="1.5" fill="rgba(14,165,233,.40)" stroke="rgba(14,165,233,.72)" stroke-width=".7"/>
+            <rect id="pl5" x="66" y="93"  width="0" height="8" rx="1.5" fill="rgba(14,165,233,.48)" stroke="rgba(14,165,233,.82)" stroke-width=".7"/>
+            <rect id="pl6" x="70" y="85"  width="0" height="8" rx="1.5" fill="rgba(14,165,233,.58)" stroke="rgba(14,165,233,.95)" stroke-width=".7" filter="url(#gs)"/>
+
+            <!-- X-axis rod -->
+            <line id="xRod" x1="32" y1="122" x2="188" y2="122" stroke="rgba(14,165,233,.5)" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Nozzle -->
+            <g id="nozzleGrp" transform="translate(50,122)">
+                <rect x="-15" y="-22" width="30" height="17" rx="3" fill="rgba(14,165,233,.14)" stroke="rgba(14,165,233,.52)" stroke-width="1"/>
+                <circle cx="-8" cy="-13" r="2.2" fill="rgba(14,165,233,.28)" stroke="rgba(14,165,233,.5)" stroke-width=".6"/>
+                <circle cx="8"  cy="-13" r="2.2" fill="rgba(14,165,233,.28)" stroke="rgba(14,165,233,.5)" stroke-width=".6"/>
+                <rect x="-5" y="-5"  width="10" height="8"  rx="1.5" fill="rgba(14,165,233,.08)" stroke="rgba(14,165,233,.45)" stroke-width=".8"/>
+                <rect x="-8" y="3"   width="16" height="11" rx="2"   fill="rgba(14,165,233,.22)" stroke="rgba(14,165,233,.7)"  stroke-width="1"/>
+                <line x1="-8" y1="8.5" x2="8" y2="8.5" stroke="rgba(14,165,233,.35)" stroke-width=".7" stroke-dasharray="2 2"/>
+                <polygon points="-4.5,14 4.5,14 0,21" fill="rgba(14,165,233,.85)" stroke="rgba(14,165,233,1)" stroke-width=".6"/>
+                <circle id="extGlow" cx="0" cy="22" r="4"   fill="rgba(14,165,233,.9)" filter="url(#gl)" opacity="0"/>
+                <circle id="extBead" cx="0" cy="21" r="1.8" fill="rgba(14,165,233,1)"   opacity="0"/>
+            </g>
+        </svg>
+
+        <!-- Caption -->
+        <div class="lp-caption">
+        <p class="lp-tagline">
+            منصة <strong>التصنيع الرقمي</strong> الأردنية — تواصل مع ورش الطباعة والقطع والتصنيع
+        </p>
+        <div class="lp-chips">
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                طباعة ثلاثية الأبعاد
+            </span>
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                قطع ليزر
+            </span>
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                CNC
+            </span>
         </div>
+        </div><!-- /lp-caption -->
 
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-error">
-                <ul>
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                </ul>
+    </div><!-- /lp-left -->
+
+    <!-- Separator -->
+    <div class="lp-sep"></div>
+
+    <!-- ══════════════════════════════
+         RIGHT — Form card
+    ══════════════════════════════ -->
+    <main class="lp-right" id="login-form">
+        <div class="lp-card">
+
+            <header class="lf-header">
+                <h1>مرحباً بك مجدداً</h1>
+                <p>سجّل دخولك للوصول إلى المنصة</p>
+            </header>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-error error-shake" role="alert">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <ul>
+                        @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        { <li>@err.ErrorMessage</li> }
+                    </ul>
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Login" method="post" id="loginForm" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@(Context.Request.Query["returnUrl"].FirstOrDefault() ?? "")"/>
+
+                <div class="form-group">
+                    <label for="Email">البريد الإلكتروني</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </span>
+                        <input asp-for="Email" id="Email" class="form-control" type="email"
+                               placeholder="example@jomaker.jo" autocomplete="email" dir="ltr" autofocus/>
+                    </div>
+                    <span asp-validation-for="Email" class="field-error" role="alert"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Password">كلمة المرور</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </span>
+                        <input asp-for="Password" id="Password" class="form-control" type="password"
+                               placeholder="••••••••" autocomplete="current-password" dir="ltr"/>
+                        <button type="button" class="pw-toggle" id="pwToggle"
+                                aria-label="إظهار كلمة المرور" aria-pressed="false">
+                            <svg id="eyeOpen"  viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg id="eyeClosed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="field-error" role="alert"></span>
+                </div>
+
+                <div class="lf-meta">
+                    <div class="form-check" style="margin:0">
+                        <input asp-for="RememberMe" id="RememberMe" type="checkbox"/>
+                        <label for="RememberMe">تذكّرني</label>
+                    </div>
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="lf-forgot">نسيت كلمة المرور؟</a>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                        <span class="btn-text">تسجيل الدخول</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="lf-divider"><span>أو</span></div>
+
+            <div class="lf-register">
+                ليس لديك حساب؟
+                <a asp-controller="Account" asp-action="Register">أنشئ حساباً مجاناً</a>
             </div>
-        }
 
-        <form asp-controller="Account" asp-action="Login" method="post">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="returnUrl" value="@(Context.Request.Query["returnUrl"].FirstOrDefault() ?? "")" />
-
-            <div class="form-group">
-                <label asp-for="Email">@T["Email"]</label>
-                <input asp-for="Email" class="form-control" type="email" placeholder="@T["EnterEmail"]" autocomplete="email" />
-                <span asp-validation-for="Email" class="field-error"></span>
+            <div style="text-align:center;margin-top:6px;">
+                <a href="/" style="font-size:.78rem;color:var(--text-3);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:color .15s;" onmouseover="this.style.color='var(--sky)'" onmouseout="this.style.color='var(--text-3)'">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    العودة للرئيسية
+                </a>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Password">@T["Password"]</label>
-                <input asp-for="Password" class="form-control" type="password" placeholder="@T["EnterPassword"]" autocomplete="current-password" />
-                <span asp-validation-for="Password" class="field-error"></span>
+            <div class="lf-security" role="note">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                اتصال آمن · Jo Maker الأردنية
             </div>
 
-            <div class="form-group form-check">
-                <input asp-for="RememberMe" type="checkbox" id="RememberMe" />
-                <label for="RememberMe">@T["RememberMe"]</label>
-            </div>
+        </div>
+    </main>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">@T["LoginBtn"]</button>
-            </div>
-
-            <div class="auth-links">
-                <a asp-controller="Account" asp-action="ForgotPassword">@T["ForgotPassword"]</a>
-                <span class="separator">|</span>
-                <a asp-controller="Account" asp-action="Register">@T["CreateAccount"]</a>
-            </div>
-        </form>
-    </div>
 </div>
+
+<script>
+/* ── Printer Animation ───────────────────────────── */
+(function () {
+    var LAYERS = [
+        { y:125, x:50,  w:120, dir: 1 },
+        { y:117, x:54,  w:112, dir:-1 },
+        { y:109, x:58,  w:104, dir: 1 },
+        { y:101, x:62,  w: 96, dir:-1 },
+        { y: 93, x:66,  w: 88, dir: 1 },
+        { y: 85, x:70,  w: 80, dir:-1 },
+    ];
+    var PRINT_MS=1300, Z_MS=380, PAUSE_MS=2400, FADE_MS=700;
+    var CYCLE = LAYERS.length*(PRINT_MS+Z_MS)+PAUSE_MS+FADE_MS;
+
+    var ng  = document.getElementById('nozzleGrp');
+    var rod = document.getElementById('xRod');
+    var eg  = document.getElementById('extGlow');
+    var eb  = document.getElementById('extBead');
+    var svg = document.getElementById('printerSvg');
+    var rects = LAYERS.map(function(_,i){ return document.getElementById('pl'+(i+1)); });
+
+    function eio(t){ return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; }
+    function lerp(a,b,t){ return a+(b-a)*t; }
+    function clamp(v,lo,hi){ return v<lo?lo:v>hi?hi:v; }
+
+    function setLayer(i,p){
+        var ld=LAYERS[i], el=rects[i]; if(!el) return;
+        var w=Math.round(clamp(p,0,1)*ld.w);
+        el.setAttribute('x', ld.dir===1 ? ld.x : ld.x+ld.w-w);
+        el.setAttribute('width', w);
+    }
+    function setNozzle(x,y,printing){
+        ng.setAttribute('transform','translate('+x+','+y+')');
+        rod.setAttribute('y1',y-1); rod.setAttribute('y2',y-1);
+        var o=printing?'1':'0'; eg.setAttribute('opacity',o); eb.setAttribute('opacity',o);
+    }
+
+    var t0=null;
+    function frame(ts){
+        if(!t0) t0=ts;
+        var e=(ts-t0)%CYCLE, pp=LAYERS.length*(PRINT_MS+Z_MS);
+
+        if(e<pp){
+            svg.style.opacity='1';
+            var li=Math.floor(e/(PRINT_MS+Z_MS)), le=e-li*(PRINT_MS+Z_MS), ld=LAYERS[li];
+            for(var i=0;i<li;i++) setLayer(i,1);
+            for(var j=li+1;j<LAYERS.length;j++) setLayer(j,0);
+            if(le<=PRINT_MS){
+                var t=eio(le/PRINT_MS);
+                setLayer(li,t);
+                setNozzle(ld.dir===1?ld.x+t*ld.w:ld.x+ld.w-t*ld.w, ld.y, true);
+            } else {
+                setLayer(li,1);
+                var zt=(le-PRINT_MS)/Z_MS, nxt=LAYERS[li+1];
+                setNozzle(ld.dir===1?ld.x+ld.w:ld.x, lerp(ld.y,nxt?nxt.y:ld.y-8,zt), false);
+            }
+        } else if(e<pp+PAUSE_MS){
+            svg.style.opacity='1';
+            for(var k=0;k<LAYERS.length;k++) setLayer(k,1);
+            var last=LAYERS[LAYERS.length-1];
+            setNozzle(last.dir===1?last.x+last.w:last.x, last.y-35, false);
+        } else {
+            var ft=(e-pp-PAUSE_MS)/FADE_MS;
+            svg.style.opacity=String(1-clamp(ft,0,1));
+            if(ft>=1){ for(var m=0;m<LAYERS.length;m++) setLayer(m,0); setNozzle(LAYERS[0].x,LAYERS[0].y,false); svg.style.opacity='0'; }
+        }
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+})();
+
+/* ── Form ────────────────────────────────────────── */
+(function(){
+    var pw=document.getElementById('Password'),btn=document.getElementById('pwToggle'),
+        op=document.getElementById('eyeOpen'),cl=document.getElementById('eyeClosed');
+    if(btn&&pw) btn.addEventListener('click',function(){
+        var s=pw.type==='text'; pw.type=s?'password':'text';
+        op.style.display=s?'':'none'; cl.style.display=s?'none':'';
+        btn.setAttribute('aria-pressed',String(!s));
+        btn.setAttribute('aria-label',s?'إظهار كلمة المرور':'إخفاء كلمة المرور');
+    });
+    var f=document.getElementById('loginForm'),sb=document.getElementById('submitBtn');
+    if(f&&sb) f.addEventListener('submit',function(){ sb.classList.add('btn-loading'); });
+})();
+</script>
+</body>
+</html>

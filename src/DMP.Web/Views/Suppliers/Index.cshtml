@@ -5,12 +5,21 @@
     var totalPages = (int)(ViewBag.TotalPages ?? 1);
     var totalCount = (int)(ViewBag.TotalCount ?? 0);
     var searchTerm = (string?)(ViewBag.SearchTerm ?? "");
+    var isAdmin    = User.IsInRole("Admin");
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>دليل الموردين</h1>
-        <p>تصفّح موردي المواد الخام والمعدات في الأردن</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>دليل الموردين</h1>
+                <p>تصفّح موردي المواد الخام والمعدات في الأردن</p>
+            </div>
+            @if (isAdmin)
+            {
+                <a asp-action="Create" class="btn btn-primary">➕ إضافة مورد</a>
+            }
+        </div>
     </div>
 </div>
 
@@ -60,6 +69,13 @@
                             <li><span class="k">الموقع</span><span class="v"><a href="@s.Website" target="_blank" style="color:var(--sky)">رابط</a></span></li>
                         }
                     </ul>
+                    <div style="display:flex;gap:8px;margin-top:auto;padding-top:4px">
+                        <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline" style="flex:1;text-align:center">عرض التفاصيل</a>
+                        @if (isAdmin)
+                        {
+                            <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline" title="تعديل">✏️</a>
+                        }
+                    </div>
                 </div>
             }
         </div>
@@ -88,7 +104,15 @@
         <div class="empty-state">
             <div class="ico">🏭</div>
             <h3>لا يوجد موردون بعد</h3>
-            <p>سيتم إضافة قائمة الموردين قريباً</p>
+            @if (isAdmin)
+            {
+                <p>ابدأ بإضافة أول مورد للدليل</p>
+                <a asp-action="Create" class="btn btn-primary" style="margin-top:12px">➕ إضافة مورد</a>
+            }
+            else
+            {
+                <p>سيتم إضافة قائمة الموردين قريباً</p>
+            }
         </div>
     }
 </div>

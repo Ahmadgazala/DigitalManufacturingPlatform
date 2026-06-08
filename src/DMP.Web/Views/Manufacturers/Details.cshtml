@@ -257,8 +257,8 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script>
             (function () {
-                var lat = @Model.Latitude;
-                var lng = @Model.Longitude;
+                var lat = @Model.Latitude!.Value.ToString("G", System.Globalization.CultureInfo.InvariantCulture);
+                var lng = @Model.Longitude!.Value.ToString("G", System.Globalization.CultureInfo.InvariantCulture);
                 var map = L.map('map').setView([lat, lng], 15);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'

@@ -1,117 +1,657 @@
 @model RegisterViewModel
 @{
-    ViewData["Title"] = T["Register"];
+    ViewData["Title"] = "إنشاء حساب";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>إنشاء حساب — Jo Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css"/>
+<style>
+html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
+
+/* ── Page ── */
+.lp-page {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+}
+.lp-page::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+        linear-gradient(rgba(14,165,233,.046) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,165,233,.046) 1px, transparent 1px),
+        radial-gradient(circle, rgba(14,165,233,.14) 1px, transparent 1px);
+    background-size: 44px 44px, 44px 44px, 44px 44px;
 }
 
-<div class="container">
-    <div class="auth-box">
-        <div class="page-header">
-            <h1>@T["Register"]</h1>
-            <p>@T["RegisterSubtitle"]</p>
+/* ── Left — Laser animation ── */
+.lp-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 36px 28px;
+    position: relative; z-index: 1; gap: 0;
+    background: radial-gradient(ellipse 75% 65% at 50% 50%,
+        rgba(14,165,233,.07) 0%, transparent 70%);
+    overflow: hidden;
+}
+
+.lp-logo {
+    display: flex; align-items: center; gap: 10px;
+    align-self: flex-start; flex-shrink: 0;
+}
+.lp-logo-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+    box-shadow: 0 3px 12px var(--sky-glow);
+    display: flex; align-items: center; justify-content: center;
+}
+.lp-logo-icon svg { width: 17px; height: 17px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lp-logo-name { font-size: 1.15rem; font-weight: 800; color: var(--text-1); letter-spacing: -.4px; }
+
+/* Center: SVG fills remaining space */
+.lp-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 0;
+}
+
+.laser-svg {
+    width: 100%;
+    max-width: 380px;
+    max-height: calc(100vh - 210px);
+    height: auto; display: block;
+    overflow: visible;
+}
+
+.lp-bottom {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.lp-tagline {
+    font-size: .8rem; color: var(--text-2);
+    line-height: 1.6; text-align: center;
+    max-width: 300px; margin: 0 auto 10px;
+}
+.lp-tagline strong { color: var(--sky); font-weight: 700; }
+
+.lp-chips { display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap; }
+.lp-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 100px;
+    border: 1px solid var(--border-md);
+    background: rgba(14,165,233,.06);
+    font-size: .68rem; font-weight: 600; color: var(--text-2);
+}
+.lp-chip svg { width: 11px; height: 11px; stroke: var(--sky); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Separator ── */
+.lp-sep {
+    background: var(--border); position: relative; z-index: 1;
+    align-self: stretch; margin: 32px 0;
+}
+
+/* ── Right — Form ── */
+.lp-right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 28px 36px;
+    position: relative; z-index: 1;
+    background: radial-gradient(ellipse 90% 70% at 50% 50%,
+        rgba(14,165,233,.04) 0%, transparent 70%);
+    overflow: hidden;
+}
+
+.lp-card {
+    width: 100%;
+    background: var(--surface-1);
+    border: 1px solid var(--border-md);
+    border-radius: var(--r-lg);
+    padding: 28px 36px;
+    box-shadow: 0 0 0 1px rgba(14,165,233,.08), 0 8px 48px rgba(0,0,0,.42);
+    position: relative;
+}
+.lp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--sky-dark), var(--sky), var(--sky-hover));
+    border-radius: var(--r-lg) var(--r-lg) 0 0; opacity: .85;
+}
+
+.lf-header { margin-bottom: 16px; }
+.lf-header h1 { font-size: 1.55rem; font-weight: 800; color: var(--text-1); letter-spacing: -.04em; margin-bottom: 4px; line-height: 1.2; }
+.lf-header p  { font-size: .83rem; color: var(--text-2); line-height: 1.5; }
+
+/* ── Role cards ── */
+.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+
+.role-card {
+    border: 1.5px solid var(--border-md);
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    padding: 12px 12px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    display: block;
+}
+.role-card:hover {
+    border-color: rgba(14,165,233,.5);
+    background: rgba(14,165,233,.05);
+}
+.role-card-active {
+    border-color: var(--sky) !important;
+    background: rgba(14,165,233,.08) !important;
+    box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+}
+.role-card-inner { display: flex; flex-direction: column; gap: 4px; }
+.role-icon { font-size: 1.1rem; margin-bottom: 3px; }
+.role-title { font-size: .82rem; font-weight: 700; color: var(--text-1); }
+.role-desc  { font-size: .7rem; color: var(--text-3); line-height: 1.4; }
+
+/* ── Form elements ── */
+.lp-card .form-group { margin-bottom: 12px; }
+.lp-card .form-group label { font-size: .82rem; margin-bottom: 4px; display: block; }
+
+.input-icon-wrap { position: relative; }
+.input-icon-wrap .input-icon {
+    position: absolute; top: 50%; inset-inline-start: 12px;
+    transform: translateY(-50%); display: flex; align-items: center;
+    pointer-events: none; color: var(--text-3); transition: color .18s;
+}
+.input-icon-wrap .input-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.input-icon-wrap .form-control { padding-inline-start: 36px; font-size: .86rem; height: 40px; }
+.input-icon-wrap:focus-within .input-icon { color: var(--sky); }
+
+.pw-toggle {
+    position: absolute; top: 50%; inset-inline-end: 10px;
+    transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--text-3);
+    padding: 4px; display: flex; align-items: center;
+    border-radius: var(--r-xs); transition: color .15s;
+}
+.pw-toggle:hover { color: var(--text-1); }
+.pw-toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.lf-divider { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+.lf-divider::before, .lf-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.lf-divider span { font-size: .72rem; color: var(--text-3); white-space: nowrap; }
+
+.lf-login { text-align: center; font-size: .83rem; color: var(--text-2); margin-top: 2px; }
+.lf-login a { color: var(--sky); font-weight: 700; text-decoration: none; transition: color .15s; }
+.lf-login a:hover { color: var(--sky-hover); }
+
+.lf-security { display: flex; align-items: center; gap: 5px; justify-content: center; margin-top: 12px; font-size: .7rem; color: var(--text-3); }
+.lf-security svg { width: 10px; height: 10px; stroke: var(--text-3); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* Loading */
+.btn-loading { pointer-events: none; opacity: .75; }
+.btn-loading .btn-text { display: none; }
+.btn-loading .btn-spinner { display: inline-flex !important; }
+.btn-spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-shake { animation: shake .4s ease; }
+@@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+
+/* ── Light mode ── */
+[data-theme="light"] .lp-page { background: #eef7fe; }
+[data-theme="light"] .lp-page::before {
+    background-image:
+        linear-gradient(rgba(14,165,233,.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,165,233,.09) 1px, transparent 1px),
+        radial-gradient(circle, rgba(14,165,233,.22) 1px, transparent 1px);
+}
+[data-theme="light"] .lp-sep  { background: rgba(0,0,0,.1); }
+[data-theme="light"] .lp-card { background: #fff; border-color: rgba(14,165,233,.18); box-shadow: 0 0 0 1px rgba(14,165,233,.08), 0 8px 40px rgba(0,0,0,.1); }
+[data-theme="light"] .lp-logo-name { color: #0f172a; }
+[data-theme="light"] .lp-tagline   { color: #475569; }
+[data-theme="light"] .lp-chip  { background: rgba(14,165,233,.08); border-color: rgba(14,165,233,.2); color: #334155; }
+[data-theme="light"] .lf-header h1 { color: #0f172a; }
+[data-theme="light"] .lf-header p  { color: #475569; }
+[data-theme="light"] .role-card { background: #f8fafc; border-color: rgba(0,0,0,.1); }
+[data-theme="light"] .role-title { color: #0f172a; }
+[data-theme="light"] .lf-login  { color: #475569; }
+[data-theme="light"] .lf-security { color: #94a3b8; }
+
+/* ── Responsive ── */
+@@media (max-width: 860px) {
+    html, body { overflow: auto; }
+    .lp-page { height: auto; min-height: 100vh; grid-template-columns: 1fr; grid-template-rows: auto 1px auto; }
+    .lp-left  { padding: 24px 20px 20px; }
+    .lp-sep   { margin: 0 32px; align-self: auto; height: 1px; }
+    .lp-right { padding: 20px 20px 36px; overflow-y: visible; }
+    .laser-svg { max-height: 200px; }
+}
+@@media (max-width: 480px) {
+    .lp-left  { padding: 20px 16px 16px; }
+    .lp-right { padding: 16px 16px 32px; }
+    .lp-card  { padding: 20px 16px; }
+    .role-grid { grid-template-columns: 1fr; }
+}
+
+:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; border-radius: 4px; }
+.form-control:focus-visible { outline: none; }
+</style>
+</head>
+<body>
+<script>
+(function(){
+    var t = localStorage.getItem('jomaker-theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+
+<div class="lp-page">
+
+    <!-- ══════════════════════════════
+         LEFT — Laser cutter animation
+    ══════════════════════════════ -->
+    <div class="lp-left" aria-hidden="true">
+
+        <a href="/" class="lp-logo">
+            <div class="lp-logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="lp-logo-name">Jo Maker</span>
+        </a>
+
+        <!-- Laser cutter (top-down view) -->
+        <div class="lp-center">
+        <svg id="laserSvg" class="laser-svg" viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="lg-sm" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="2" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="lg-md" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur stdDeviation="5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="lg-lg" x="-150%" y="-150%" width="400%" height="400%">
+                    <feGaussianBlur stdDeviation="9" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+
+            <!-- Machine outer frame -->
+            <rect x="8" y="8" width="224" height="154" rx="8"
+                  fill="rgba(14,165,233,.05)" stroke="rgba(14,165,233,.4)" stroke-width="2"/>
+
+            <!-- Corner motor blocks -->
+            <rect x="8"   y="8"   width="18" height="18" rx="3" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width="1"/>
+            <rect x="214" y="8"   width="18" height="18" rx="3" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width="1"/>
+            <rect x="8"   y="144" width="18" height="18" rx="3" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width="1"/>
+            <rect x="214" y="144" width="18" height="18" rx="3" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width="1"/>
+            <circle cx="17"  cy="17"  r="3" fill="rgba(14,165,233,.6)"/>
+            <circle cx="223" cy="17"  r="3" fill="rgba(14,165,233,.6)"/>
+            <circle cx="17"  cy="153" r="3" fill="rgba(14,165,233,.6)"/>
+            <circle cx="223" cy="153" r="3" fill="rgba(14,165,233,.6)"/>
+
+            <!-- Y-axis rails -->
+            <line x1="17" y1="26" x2="17" y2="144" stroke="rgba(14,165,233,.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <line x1="223" y1="26" x2="223" y2="144" stroke="rgba(14,165,233,.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+            <!-- Material / work surface -->
+            <rect x="30" y="30" width="180" height="110" rx="3"
+                  fill="rgba(14,165,233,.04)" stroke="rgba(14,165,233,.2)" stroke-width="1"/>
+            <!-- Material grid -->
+            <line x1="70"  y1="30" x2="70"  y2="140" stroke="rgba(14,165,233,.08)" stroke-width=".7"/>
+            <line x1="120" y1="30" x2="120" y2="140" stroke="rgba(14,165,233,.08)" stroke-width=".7"/>
+            <line x1="170" y1="30" x2="170" y2="140" stroke="rgba(14,165,233,.08)" stroke-width=".7"/>
+            <line x1="30"  y1="68" x2="210" y2="68"  stroke="rgba(14,165,233,.08)" stroke-width=".7"/>
+            <line x1="30"  y1="102" x2="210" y2="102" stroke="rgba(14,165,233,.08)" stroke-width=".7"/>
+
+            <!-- Cut lines (animated by JS) -->
+            <line id="lc1" x1="40" y1="55"  x2="40"  y2="55"  stroke="rgba(14,165,233,.85)" stroke-width="1.5" filter="url(#lg-sm)"/>
+            <line id="lc2" x1="200" y1="85" x2="200" y2="85"  stroke="rgba(14,165,233,.85)" stroke-width="1.5" filter="url(#lg-sm)"/>
+            <line id="lc3" x1="40" y1="115" x2="40"  y2="115" stroke="rgba(14,165,233,.85)" stroke-width="1.5" filter="url(#lg-sm)"/>
+
+            <!-- Gantry bar (animated Y) -->
+            <line id="lgantry" x1="8" y1="55" x2="232" y2="55"
+                  stroke="rgba(14,165,233,.6)" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Laser head (animated X) -->
+            <g id="laserHead" transform="translate(40,55)">
+                <!-- Head body -->
+                <rect x="-13" y="-9" width="26" height="18" rx="4"
+                      fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.6)" stroke-width="1.2"/>
+                <!-- Lens -->
+                <circle cx="0" cy="0" r="5" fill="rgba(14,165,233,.25)" stroke="rgba(14,165,233,.8)" stroke-width="1.2"/>
+                <circle cx="0" cy="0" r="2.5" fill="rgba(14,165,233,.6)"/>
+                <!-- Active spot glow -->
+                <circle id="laserSpot" cx="0" cy="0" r="7" fill="rgba(14,165,233,.7)" filter="url(#lg-lg)" opacity="0"/>
+                <!-- Beam pulse ring -->
+                <circle id="laserRing" cx="0" cy="0" r="4" fill="none" stroke="rgba(14,165,233,.9)" stroke-width="1" opacity="0"/>
+            </g>
+
+        </svg>
+        </div><!-- /lp-center -->
+
+        <!-- Bottom caption -->
+        <div class="lp-bottom">
+        <p class="lp-tagline">
+            انضم إلى <strong>مجتمع التصنيع</strong> الأردني — سواء كنت تبحث عن خدمات أو تقدّمها
+        </p>
+        <div class="lp-chips">
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                طباعة ثلاثية الأبعاد
+            </span>
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                قطع ليزر
+            </span>
+            <span class="lp-chip">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                CNC
+            </span>
         </div>
+        </div><!-- /lp-bottom -->
 
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-error">
-                <ul>
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                </ul>
-            </div>
-        }
-
-        <form asp-controller="Account" asp-action="Register" method="post">
-            @Html.AntiForgeryToken()
-
-            @* اختيار نوع الحساب *@
-            <div class="form-group" style="margin-bottom:24px">
-                <label style="font-weight:700;margin-bottom:10px;display:block">نوع الحساب</label>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                    <label class="role-card" id="card-customer">
-                        <input type="radio" name="Role" value="Customer" checked style="display:none" />
-                        <div class="role-card-inner">
-                            <div class="role-icon">🏢</div>
-                            <div class="role-title">عميل / شركة</div>
-                            <div class="role-desc">أبحث عن خدمات تصنيع وأطلب عروض أسعار</div>
-                        </div>
-                    </label>
-                    <label class="role-card" id="card-manufacturer">
-                        <input type="radio" name="Role" value="Manufacturer" style="display:none" />
-                        <div class="role-card-inner">
-                            <div class="role-icon">⚙️</div>
-                            <div class="role-title">مصنّع / ورشة</div>
-                            <div class="role-desc">أملك ورشة وأقدم خدمات التصنيع</div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="FullName">@T["FullName"]</label>
-                <input asp-for="FullName" class="form-control" placeholder="@T["EnterFullName"]" />
-                <span asp-validation-for="FullName" class="field-error"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Email">@T["Email"]</label>
-                <input asp-for="Email" class="form-control" type="email" placeholder="@T["EnterEmail"]" autocomplete="email" />
-                <span asp-validation-for="Email" class="field-error"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Password">@T["Password"]</label>
-                <input asp-for="Password" class="form-control" type="password" placeholder="@T["EnterPassword"]" autocomplete="new-password" />
-                <span asp-validation-for="Password" class="field-error"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ConfirmPassword">@T["ConfirmPassword"]</label>
-                <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="@T["ConfirmYourPassword"]" autocomplete="new-password" />
-                <span asp-validation-for="ConfirmPassword" class="field-error"></span>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary" id="submitBtn">إنشاء حساب عميل</button>
-            </div>
-
-            <div class="auth-links">
-                @T["AlreadyHaveAccount"] <a asp-controller="Account" asp-action="Login">@T["LoginHere"]</a>
-            </div>
-        </form>
     </div>
+
+    <div class="lp-sep"></div>
+
+    <!-- ══════════════════════════════
+         RIGHT — Register form
+    ══════════════════════════════ -->
+    <main class="lp-right">
+        <div class="lp-card">
+
+            <header class="lf-header">
+                <h1>إنشاء حساب جديد</h1>
+                <p>اختر نوع حسابك وابدأ رحلتك مع Jo Maker</p>
+            </header>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-error error-shake" role="alert">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        { <li>@error.ErrorMessage</li> }
+                    </ul>
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Register" method="post" id="regForm" novalidate>
+                @Html.AntiForgeryToken()
+
+                <!-- Role selection -->
+                <div class="form-group">
+                    <label style="font-weight:700;font-size:.9rem;margin-bottom:10px;display:block">نوع الحساب</label>
+                    <div class="role-grid">
+                        <label class="role-card role-card-active" id="card-customer">
+                            <input type="radio" name="Role" value="Customer" checked style="display:none"/>
+                            <div class="role-card-inner">
+                                <div class="role-icon">🏢</div>
+                                <div class="role-title">عميل / شركة</div>
+                                <div class="role-desc">أبحث عن خدمات تصنيع وأطلب عروض أسعار</div>
+                            </div>
+                        </label>
+                        <label class="role-card" id="card-manufacturer">
+                            <input type="radio" name="Role" value="Manufacturer" style="display:none"/>
+                            <div class="role-card-inner">
+                                <div class="role-icon">⚙️</div>
+                                <div class="role-title">مصنّع / ورشة</div>
+                                <div class="role-desc">أملك ورشة وأقدم خدمات التصنيع</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Full name -->
+                <div class="form-group">
+                    <label asp-for="FullName">الاسم الكامل</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </span>
+                        <input asp-for="FullName" class="form-control" placeholder="أدخل اسمك الكامل" autofocus/>
+                    </div>
+                    <span asp-validation-for="FullName" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label asp-for="Email">البريد الإلكتروني</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </span>
+                        <input asp-for="Email" class="form-control" type="email" placeholder="example@jomaker.jo" autocomplete="email" dir="ltr"/>
+                    </div>
+                    <span asp-validation-for="Email" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label asp-for="Password">كلمة المرور</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </span>
+                        <input asp-for="Password" id="pw1" class="form-control" type="password"
+                               placeholder="••••••••" autocomplete="new-password" dir="ltr"/>
+                        <button type="button" class="pw-toggle" onclick="togglePw('pw1',this)" aria-label="إظهار كلمة المرور">
+                            <svg class="eye-open"   viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="eye-closed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Confirm password -->
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">تأكيد كلمة المرور</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </span>
+                        <input asp-for="ConfirmPassword" id="pw2" class="form-control" type="password"
+                               placeholder="••••••••" autocomplete="new-password" dir="ltr"/>
+                        <button type="button" class="pw-toggle" onclick="togglePw('pw2',this)" aria-label="إظهار كلمة المرور">
+                            <svg class="eye-open"   viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="eye-closed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="field-error" role="alert"></span>
+                </div>
+
+                <div class="form-actions" style="margin-top:16px">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                        <span class="btn-text">إنشاء حساب عميل</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="lf-divider"><span>أو</span></div>
+
+            <div class="lf-login">
+                لديك حساب بالفعل؟
+                <a asp-controller="Account" asp-action="Login">سجّل دخولك</a>
+            </div>
+
+            <div style="text-align:center;margin-top:6px;">
+                <a href="/" style="font-size:.78rem;color:var(--text-3);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:color .15s;" onmouseover="this.style.color='var(--sky)'" onmouseout="this.style.color='var(--text-3)'">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    العودة للرئيسية
+                </a>
+            </div>
+
+            <div class="lf-security" role="note">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                حسابك محمي وآمن · Jo Maker الأردنية
+            </div>
+
+        </div>
+    </main>
+
 </div>
 
-@section Scripts {
 <script>
-    (function () {
-        var cards = document.querySelectorAll('.role-card');
-        var radios = document.querySelectorAll('input[name="Role"]');
-        var btn   = document.getElementById('submitBtn');
+/* ── Laser Cutter Animation ───────────────────────── */
+(function () {
+    /* 3 horizontal cut lines across the material */
+    var CUTS = [
+        { y: 55,  x1: 40,  x2: 200, dir:  1, lineId: 'lc1' },  /* LTR */
+        { y: 85,  x1: 200, x2: 40,  dir: -1, lineId: 'lc2' },  /* RTL */
+        { y: 115, x1: 40,  x2: 200, dir:  1, lineId: 'lc3' },  /* LTR */
+    ];
 
-        var labels = {
-            'Customer':     'إنشاء حساب عميل',
-            'Manufacturer': 'إنشاء حساب مصنّع'
-        };
+    var CUT_MS   = 1400;
+    var STEP_MS  = 350;
+    var PAUSE_MS = 2200;
+    var FADE_MS  = 700;
+    var CYCLE    = CUTS.length * (CUT_MS + STEP_MS) + PAUSE_MS + FADE_MS;
 
-        function update() {
-            radios.forEach(function (r) {
-                var card = r.closest('.role-card');
-                card.classList.toggle('role-card-active', r.checked);
-            });
-            var selected = document.querySelector('input[name="Role"]:checked');
-            if (selected && btn) btn.textContent = labels[selected.value] || 'إنشاء حساب';
+    var head  = document.getElementById('laserHead');
+    var gant  = document.getElementById('lgantry');
+    var spot  = document.getElementById('laserSpot');
+    var ring  = document.getElementById('laserRing');
+    var svg   = document.getElementById('laserSvg');
+    var lines = CUTS.map(function(c){ return document.getElementById(c.lineId); });
+
+    function eio(t){ return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; }
+    function lerp(a,b,t){ return a+(b-a)*t; }
+    function clamp(v,lo,hi){ return v<lo?lo:v>hi?hi:v; }
+
+    function setHead(x, y, active) {
+        head.setAttribute('transform', 'translate('+x+','+y+')');
+        gant.setAttribute('y1', y); gant.setAttribute('y2', y);
+        var o = active ? '1' : '0';
+        spot.setAttribute('opacity', o);
+        ring.setAttribute('opacity', o);
+    }
+
+    function setCut(i, progress) {
+        var c = CUTS[i], el = lines[i]; if (!el) return;
+        var p = clamp(progress, 0, 1);
+        if (c.dir === 1) {
+            /* LTR: x1 fixed, x2 grows */
+            el.setAttribute('x1', c.x1);
+            el.setAttribute('x2', c.x1 + p * (c.x2 - c.x1));
+        } else {
+            /* RTL: x2 fixed, x1 shrinks from right */
+            el.setAttribute('x1', c.x1 + (1-p) * (c.x2 - c.x1));
+            el.setAttribute('x2', c.x2);
         }
+        el.setAttribute('y1', c.y); el.setAttribute('y2', c.y);
+    }
 
-        cards.forEach(function (card) {
-            card.addEventListener('click', function () {
-                var radio = card.querySelector('input[type="radio"]');
-                if (radio) { radio.checked = true; update(); }
-            });
-        });
+    var t0 = null;
+    function frame(ts) {
+        if (!t0) t0 = ts;
+        var e = (ts - t0) % CYCLE;
+        var pp = CUTS.length * (CUT_MS + STEP_MS);
 
-        update();
-    })();
-</script>
+        if (e < pp) {
+            svg.style.opacity = '1';
+            var ci = Math.floor(e / (CUT_MS + STEP_MS));
+            var ce = e - ci * (CUT_MS + STEP_MS);
+            var c  = CUTS[ci];
+            for (var i=0; i<ci; i++) setCut(i, 1);
+            for (var j=ci+1; j<CUTS.length; j++) setCut(j, 0);
+
+            if (ce <= CUT_MS) {
+                var t = eio(ce / CUT_MS);
+                setCut(ci, t);
+                var hx = c.dir === 1
+                    ? c.x1 + t * (c.x2 - c.x1)
+                    : c.x1 + (1-t) * (c.x2 - c.x1);
+                setHead(hx, c.y, true);
+            } else {
+                setCut(ci, 1);
+                var st = (ce - CUT_MS) / STEP_MS;
+                var nc = CUTS[ci+1];
+                var endX = c.dir === 1 ? c.x2 : c.x1;
+                setHead(endX, lerp(c.y, nc ? nc.y : c.y+30, st), false);
+            }
+        } else if (e < pp + PAUSE_MS) {
+            svg.style.opacity = '1';
+            for (var k=0; k<CUTS.length; k++) setCut(k, 1);
+            var last = CUTS[CUTS.length-1];
+            setHead(last.dir===1 ? last.x2 : last.x1, last.y, false);
+        } else {
+            var ft = (e - pp - PAUSE_MS) / FADE_MS;
+            svg.style.opacity = String(1 - clamp(ft, 0, 1));
+            if (ft >= 1) {
+                for (var m=0; m<CUTS.length; m++) {
+                    var cm = CUTS[m], lm = lines[m];
+                    if (lm) { lm.setAttribute('x1', cm.x1); lm.setAttribute('x2', cm.x1); lm.setAttribute('y1', cm.y); lm.setAttribute('y2', cm.y); }
+                }
+                setHead(CUTS[0].x1, CUTS[0].y, false);
+                svg.style.opacity = '0';
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+})();
+
+/* ── Role card selection ──────────────────────────── */
+function togglePw(id, btn) {
+    var inp  = document.getElementById(id);
+    var open = btn.querySelector('.eye-open');
+    var shut = btn.querySelector('.eye-closed');
+    var shown = inp.type === 'text';
+    inp.type = shown ? 'password' : 'text';
+    open.style.display = shown ? '' : 'none';
+    shut.style.display = shown ? 'none' : '';
 }
+
+(function () {
+    var cards  = document.querySelectorAll('.role-card');
+    var radios = document.querySelectorAll('input[name="Role"]');
+    var btn    = document.getElementById('submitBtn');
+    var labels = { Customer: 'إنشاء حساب عميل', Manufacturer: 'إنشاء حساب مصنّع' };
+
+    function update() {
+        radios.forEach(function(r) {
+            r.closest('.role-card').classList.toggle('role-card-active', r.checked);
+        });
+        var sel = document.querySelector('input[name="Role"]:checked');
+        if (sel && btn) btn.querySelector('.btn-text').textContent = labels[sel.value] || 'إنشاء حساب';
+    }
+
+    cards.forEach(function(card) {
+        card.addEventListener('click', function() {
+            var r = card.querySelector('input[type="radio"]');
+            if (r) { r.checked = true; update(); }
+        });
+    });
+
+    var form = document.getElementById('regForm');
+    if (form && btn) form.addEventListener('submit', function(){ btn.classList.add('btn-loading'); });
+
+    update();
+})();
+</script>
+</body>
+</html>

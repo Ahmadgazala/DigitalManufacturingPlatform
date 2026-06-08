@@ -102,16 +102,31 @@ public class CampaignParticipant
     public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 
     // --- الدفع ---
-    public ParticipantPaymentStatus PaymentStatus { get; set; } = ParticipantPaymentStatus.NotRequested;
-    public string?   StripeSessionId { get; set; }
-    public decimal?  PaidAmount      { get; set; }
-    public DateTime? PaidAt          { get; set; }
+    public ParticipantPaymentStatus PaymentStatus { get; set; } = ParticipantPaymentStatus.NotPaid;
+    public string?   StripeSessionId { get; set; } // محتفظ به من الـ migrations القديمة
+
+    // العربون (نصف المبلغ)
+    public string?   DepositReceiptPath { get; set; }
+    public decimal?  DepositAmount      { get; set; }
+    public DateTime? DepositPaidAt      { get; set; }
+
+    // المبلغ المتبقي (النصف الثاني بعد اكتمال النصاب)
+    public string?   RemainingReceiptPath { get; set; }
+    public decimal?  RemainingAmount      { get; set; }
+    public DateTime? FullPaidAt           { get; set; }
+
+    public string?   PaymentReviewNote { get; set; }
+
+    // حسابات مساعدة
+    public decimal TotalPaid => (DepositAmount ?? 0) + (RemainingAmount ?? 0);
 }
 
 public enum ParticipantPaymentStatus
 {
-    NotRequested = 0, // لم يُطلب الدفع بعد
-    Pending      = 1, // طُلب الدفع — بانتظار المصنّع
-    Paid         = 2, // دفع بنجاح
-    Refunded     = 3  // مُسترجع
+    NotPaid              = 0, // منضم ولم يدفع عربون بعد
+    DepositUnderReview   = 1, // رفع إيصال العربون — بانتظار المدير
+    DepositPaid          = 2, // المدير أقر العربون (نصف المبلغ)
+    FullUnderReview      = 3, // رفع إيصال المبلغ المتبقي — بانتظار المدير
+    FullPaid             = 4, // دفع كامل — مؤكد
+    Refunded             = 5  // مُسترجع
 }

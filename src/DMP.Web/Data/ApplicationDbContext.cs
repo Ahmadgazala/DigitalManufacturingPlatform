@@ -123,5 +123,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(m => m.PortfolioItems)
             .HasForeignKey(p => p.ManufacturerId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ManufacturingRequest>()
+            .Property(r => r.Budget).HasPrecision(18, 2);
+        builder.Entity<ManufacturingRequest>()
+            .Property(r => r.PaidAmount).HasPrecision(18, 2);
+
+        builder.Entity<Quotation>()
+            .Property(q => q.Price).HasPrecision(18, 2);
+
+        builder.Entity<GroupBuyingCampaign>()
+            .Property(c => c.IndividualPrice).HasPrecision(18, 2);
+        builder.Entity<GroupBuyingCampaign>()
+            .Property(c => c.GroupPrice).HasPrecision(18, 2);
+
+        builder.Entity<CampaignParticipant>()
+            .Property(p => p.DepositAmount).HasPrecision(18, 2);
+        builder.Entity<CampaignParticipant>()
+            .Property(p => p.RemainingAmount).HasPrecision(18, 2);
     }
 }

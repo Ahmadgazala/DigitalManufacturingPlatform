@@ -4,6 +4,7 @@ using DMP.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DMP.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604060155_AddGroupBuyingDepositPayment")]
+    partial class AddGroupBuyingDepositPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +109,6 @@ namespace DMP.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("DepositAmount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("DepositPaidAt")
@@ -135,7 +137,6 @@ namespace DMP.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("RemainingAmount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("RemainingReceiptPath")
@@ -179,14 +180,12 @@ namespace DMP.Web.Migrations
                         .HasColumnType("nvarchar(2000)");
 
                     b.Property<decimal>("GroupPrice")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("IndividualPrice")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ItemName")
@@ -335,7 +334,6 @@ namespace DMP.Web.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal?>("Budget")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Category")
@@ -360,7 +358,6 @@ namespace DMP.Web.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal?>("PaidAmount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("PaidAt")
@@ -559,7 +556,6 @@ namespace DMP.Web.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RequestId")

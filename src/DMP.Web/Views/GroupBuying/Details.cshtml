@@ -8,9 +8,12 @@
     var alreadyJoined    = (bool)(ViewBag.AlreadyJoined    ?? false);
     var canWithdraw      = (bool)(ViewBag.CanWithdraw      ?? false);
     var withdrawDeadline = (DateTime?)(ViewBag.WithdrawDeadline);
+    var myPart           = (CampaignParticipant?)(ViewBag.Participation);
     var days             = (int)(Model.DeadlineDate - DateTime.UtcNow).TotalDays;
     var isManufacturer   = User.IsInRole("Manufacturer");
+    var isAdmin          = User.IsInRole("Admin");
     var currentUserId    = UserManager.GetUserId(User);
+    var quorumReached    = Model.CurrentQuantity >= Model.MinQuantity;
 }
 
 <div class="container section">
@@ -68,13 +71,24 @@
                     </div>
                 </div>
 
-                <!-- نموذج الانضمام -->
+                <!-- ===================== نموذج الانضمام (لم ينضم بعد) ===================== -->
                 @if (Model.IsActive && !alreadyJoined && SignInManager.IsSignedIn(User) && isManufacturer)
                 {
                     <form asp-action="Join" method="post" style="margin-top:20px;padding:20px;background:var(--paper);border-radius:12px;border:1.5px dashed var(--amber)">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="campaignId" value="@Model.Id" />
                         <h3 style="margin:0 0 14px;font-size:1rem">انضم لهذه الحملة</h3>
+
+                        @{
+                            var previewQty    = Model.MinOrderPerManufacturer > 0 ? Model.MinOrderPerManufacturer : 1;
+                            var previewDeposit = Math.Round(Model.GroupPrice * previewQty / 2, 2);
+                        }
+                        <div style="margin-bottom:14px;padding:12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;font-size:.88rem;color:#78350f">
+                            💡 عند الانضمام ستُطلب منك دفع <strong>نصف المبلغ عربوناً</strong> لتأكيد مشاركتك.
+                            يمكنك الانسحاب واسترجاع العربون خلال <strong>48 ساعة</strong> وقبل اكتمال النصاب.
+                            بعد اكتمال النصاب تدفع المبلغ المتبقي.
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group" style="margin:0">
                                 <label style="font-size:.85rem">
@@ -84,9 +98,9 @@
                                         <span style="color:var(--amber);font-size:.8rem">(الحد الأدنى: @Model.MinOrderPerManufacturer وحدة)</span>
                                     }
                                 </label>
-                                <input type="number" name="quantity"
+                                <input type="number" name="quantity" id="qtyInput"
                                        min="@(Model.MinOrderPerManufacturer > 0 ? Model.MinOrderPerManufacturer : 1)"
-                                       value="@(Model.MinOrderPerManufacturer > 0 ? Model.MinOrderPerManufacturer : 1)"
+                                       value="@previewQty"
                                        class="form-control" required />
                             </div>
                             <div class="form-group" style="margin:0">
@@ -94,17 +108,24 @@
                                 <input type="text" name="preferences" class="form-control" placeholder="اختياري" />
                             </div>
                         </div>
-                        <div class="consent-box">
+
+                        <div id="depositPreview" style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border-radius:8px;border:1px solid #86efac;font-size:.9rem;color:#166534">
+                            العربون المطلوب (نصف المبلغ):
+                            <strong id="depositAmt">@previewDeposit.ToString("N2")</strong> د.أ
+                            &nbsp;|&nbsp; المبلغ الكلي: <strong id="totalAmt">@(Math.Round(Model.GroupPrice * previewQty, 2).ToString("N2"))</strong> د.أ
+                        </div>
+
+                        <div class="consent-box" style="margin-top:14px">
                             <label class="consent-label">
                                 <input type="checkbox" name="consent" value="true" id="consentCheck" required />
                                 <span>
-                                    أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً نهائياً بالشراء عند اكتمال النصاب.
-                                    يحق لي الانسحاب خلال <strong>48 ساعة</strong> فقط من الانضمام وقبل اكتمال الكمية المطلوبة.
+                                    أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً بدفع <strong>العربون فوراً</strong> ثم المبلغ الكامل عند اكتمال النصاب.
+                                    يحق لي الانسحاب خلال <strong>48 ساعة</strong> فقط وقبل اكتمال الكمية المطلوبة.
                                 </span>
                             </label>
                         </div>
                         <button class="btn btn-primary" id="joinBtn" style="margin-top:12px;width:100%" type="submit" disabled>
-                            📦 انضم والتزم بالشراء
+                            📦 انضم والتزم بدفع العربون
                         </button>
                     </form>
                 }
@@ -115,64 +136,154 @@
                         <a asp-controller="Account" asp-action="Login" class="btn btn-primary">سجّل الدخول للانضمام</a>
                     </div>
                 }
-                else if (SignInManager.IsSignedIn(User) && !isManufacturer && Model.IsActive)
+                else if (SignInManager.IsSignedIn(User) && !isManufacturer && !isAdmin && Model.IsActive)
                 {
                     <div style="margin-top:18px;padding:16px;background:#fffbeb;border-radius:12px;border:1.5px solid #fde68a">
                         <p style="margin:0;color:#92400e;font-size:.9rem">⚠️ الشراء الجماعي مخصص للمصنّعين فقط.</p>
                     </div>
                 }
-                else if (alreadyJoined)
-                {
-                    var myParticipation = Model.Participants.FirstOrDefault(p => p.UserId == currentUserId);
-                    <div class="alert alert-success" style="margin-top:16px">✓ أنت منضم لهذه الحملة</div>
 
-                    @* زر الدفع — يظهر عند اكتمال النصاب وطلب الدفع *@
-                    @if (Model.Status == CampaignStatus.AwaitingPayment && myParticipation != null)
+                <!-- ===================== حالة المشارك ===================== -->
+                @if (alreadyJoined && myPart != null)
+                {
+                    <div class="alert alert-success" style="margin-top:16px">✓ أنت منضم لهذه الحملة — @myPart.Quantity وحدة</div>
+
+                    var totalDue   = Model.GroupPrice * myPart.Quantity;
+                    var depositDue = Math.Round(totalDue / 2, 2);
+                    var remainDue  = Math.Round(totalDue - (myPart.DepositAmount ?? depositDue), 2);
+
+                    @* --- مرحلة 1: دفع العربون --- *@
+                    @if (myPart.PaymentStatus == ParticipantPaymentStatus.NotPaid)
                     {
-                        @if (myParticipation.PaymentStatus == ParticipantPaymentStatus.Paid)
-                        {
-                            <div style="margin-top:14px;padding:16px;background:#f0fdf4;border-radius:12px;border:1.5px solid #86efac;display:flex;align-items:center;gap:12px">
-                                <span style="font-size:1.4rem">✅</span>
-                                <div>
-                                    <div style="font-weight:700;color:#166534">تم الدفع بنجاح</div>
-                                    <div style="font-size:.85rem;color:#166534">@myParticipation.PaidAmount?.ToString("N2") د.أ — @myParticipation.PaidAt?.ToString("dd/MM/yyyy")</div>
-                                </div>
+                        <div style="margin-top:16px;padding:20px;background:#fffbeb;border-radius:12px;border:2px solid var(--amber)">
+                            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">💳 الخطوة 1: ادفع العربون لتأكيد مشاركتك</div>
+                            <div style="font-size:.88rem;color:#92400e;margin-bottom:14px">
+                                المبلغ: <strong>@depositDue.ToString("N2") د.أ</strong>
+                                (نصف إجمالي @totalDue.ToString("N2") د.أ)
                             </div>
-                        }
-                        else
-                        {
-                            var amountDue = Model.GroupPrice * (myParticipation?.Quantity ?? 1);
-                            <div style="margin-top:14px;padding:18px;background:#fffbeb;border-radius:12px;border:2px solid var(--amber)">
-                                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                                    <span style="font-size:1.3rem">💳</span>
-                                    <div>
-                                        <div style="font-weight:800;font-size:1rem">اكتمل النصاب — يرجى إتمام الدفع</div>
-                                        <div style="font-size:.85rem;color:#92400e">
-                                            المبلغ المطلوب: <strong>@amountDue.ToString("N2") د.أ</strong>
-                                            (@myParticipation?.Quantity وحدة × @Model.GroupPrice.ToString("N2") د.أ)
-                                        </div>
-                                    </div>
+
+                            <div style="padding:12px;background:white;border-radius:8px;border:1px solid #fde68a;margin-bottom:14px;font-size:.88rem">
+                                <div style="font-weight:700;margin-bottom:6px">تعليمات التحويل عبر CliQ:</div>
+                                <div>📱 رقم الهاتف: <strong dir="ltr">07X-XXX-XXXX</strong></div>
+                                <div style="margin-top:4px">📝 ملاحظة التحويل: <strong>عربون حملة @Model.Id - @myPart.Id</strong></div>
+                            </div>
+
+                            <form asp-action="SubmitDeposit" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="campaignId" value="@Model.Id" />
+                                <div class="form-group" style="margin-bottom:10px">
+                                    <label style="font-size:.85rem;font-weight:600">ارفع إيصال التحويل</label>
+                                    <input type="file" name="receiptImage" accept="image/*,.pdf" class="form-control" required />
+                                    <small style="color:var(--steel)">JPG، PNG، PDF — حجم أقصى 5MB</small>
                                 </div>
-                                <form asp-action="PayNow" method="post">
+                                <button type="submit" class="btn btn-primary" style="width:100%">
+                                    📤 رفع الإيصال وتأكيد مشاركتي
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview)
+                    {
+                        <div style="margin-top:16px;padding:16px;background:#f0f9ff;border-radius:12px;border:1.5px solid #7dd3fc">
+                            <div style="font-weight:700;color:#0369a1">⏳ إيصال العربون قيد المراجعة</div>
+                            <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">
+                                المبلغ المرفوع: @myPart.DepositAmount?.ToString("N2") د.أ — سيتم التأكيد خلال 24 ساعة.
+                            </div>
+                        </div>
+                    }
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.DepositPaid)
+                    {
+                        <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border-radius:12px;border:1.5px solid #86efac;display:flex;align-items:center;gap:12px">
+                            <span style="font-size:1.4rem">✅</span>
+                            <div>
+                                <div style="font-weight:700;color:#166534">تم قبول العربون</div>
+                                <div style="font-size:.85rem;color:#166534">@myPart.DepositAmount?.ToString("N2") د.أ — @myPart.DepositPaidAt?.ToString("dd/MM/yyyy")</div>
+                            </div>
+                        </div>
+
+                        @* إذا اكتمل النصاب → ادفع المتبقي *@
+                        @if (quorumReached || Model.Status == CampaignStatus.AwaitingPayment)
+                        {
+                            <div style="margin-top:14px;padding:20px;background:#fffbeb;border-radius:12px;border:2px solid var(--amber)">
+                                <div style="font-weight:800;font-size:1rem;margin-bottom:4px">💳 الخطوة 2: ادفع المبلغ المتبقي</div>
+                                <div style="font-size:.88rem;color:#92400e;margin-bottom:14px">
+                                    اكتمل النصاب! المبلغ المتبقي: <strong>@remainDue.ToString("N2") د.أ</strong>
+                                    (الإجمالي @totalDue.ToString("N2") د.أ − العربون @myPart.DepositAmount?.ToString("N2") د.أ)
+                                </div>
+
+                                <div style="padding:12px;background:white;border-radius:8px;border:1px solid #fde68a;margin-bottom:14px;font-size:.88rem">
+                                    <div style="font-weight:700;margin-bottom:6px">تعليمات التحويل عبر CliQ:</div>
+                                    <div>📱 رقم الهاتف: <strong dir="ltr">07X-XXX-XXXX</strong></div>
+                                    <div style="margin-top:4px">📝 ملاحظة التحويل: <strong>دفع كامل حملة @Model.Id - @myPart.Id</strong></div>
+                                </div>
+
+                                <form asp-action="SubmitRemainingPayment" method="post" enctype="multipart/form-data">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="campaignId" value="@Model.Id" />
+                                    <div class="form-group" style="margin-bottom:10px">
+                                        <label style="font-size:.85rem;font-weight:600">ارفع إيصال التحويل</label>
+                                        <input type="file" name="receiptImage" accept="image/*,.pdf" class="form-control" required />
+                                        <small style="color:var(--steel)">JPG، PNG، PDF — حجم أقصى 5MB</small>
+                                    </div>
                                     <button type="submit" class="btn btn-primary" style="width:100%">
-                                        💳 ادفع الآن @amountDue.ToString("N2") د.أ
+                                        📤 رفع إيصال الدفع الكامل
                                     </button>
                                 </form>
                             </div>
                         }
+                        else
+                        {
+                            <div style="margin-top:12px;padding:12px;background:var(--paper);border-radius:8px;font-size:.88rem;color:var(--steel)">
+                                ⏳ بانتظار اكتمال النصاب (@Model.CurrentQuantity / @Model.MinQuantity وحدة) لطلب المبلغ المتبقي.
+                            </div>
+                        }
+                    }
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.FullUnderReview)
+                    {
+                        <div style="margin-top:16px;padding:16px;background:#f0f9ff;border-radius:12px;border:1.5px solid #7dd3fc">
+                            <div style="font-weight:700;color:#0369a1">⏳ إيصال الدفع الكامل قيد المراجعة</div>
+                            <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">سيتم التأكيد خلال 24 ساعة.</div>
+                        </div>
+                    }
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.FullPaid)
+                    {
+                        <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border-radius:12px;border:1.5px solid #86efac;display:flex;align-items:center;gap:12px">
+                            <span style="font-size:1.6rem">✅</span>
+                            <div>
+                                <div style="font-weight:800;color:#166534;font-size:1rem">تم الدفع الكامل — مشاركتك مؤكدة</div>
+                                <div style="font-size:.85rem;color:#166534">
+                                    العربون: @myPart.DepositAmount?.ToString("N2") د.أ +
+                                    المتبقي: @myPart.RemainingAmount?.ToString("N2") د.أ =
+                                    الإجمالي: @myPart.TotalPaid.ToString("N2") د.أ
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.Refunded)
+                    {
+                        <div style="margin-top:16px;padding:14px 16px;background:#fff1f2;border-radius:12px;border:1.5px solid #fda4af">
+                            <div style="font-weight:700;color:#be123c">↩️ تم طلب الاسترجاع</div>
+                            <div style="font-size:.85rem;color:#9f1239;margin-top:4px">سيتم استرجاع العربون إليك خلال 3 أيام عمل.</div>
+                        </div>
                     }
 
-                    @if (canWithdraw && withdrawDeadline.HasValue && Model.Status == CampaignStatus.Active)
+                    @* --- نافذة الانسحاب --- *@
+                    @if (canWithdraw && withdrawDeadline.HasValue)
                     {
-                        var hoursLeft = (int)(withdrawDeadline.Value - DateTime.UtcNow).TotalHours + 1;
-                        <div class="withdraw-box">
+                        var hoursLeft = Math.Max(1, (int)(withdrawDeadline.Value - DateTime.UtcNow).TotalHours + 1);
+                        <div class="withdraw-box" style="margin-top:14px">
                             <div class="wb-info">
                                 <span class="wb-icon">⏰</span>
                                 <div>
                                     <div class="wb-title">نافذة الانسحاب مفتوحة</div>
-                                    <div class="wb-sub">يمكنك الانسحاب خلال <strong>@hoursLeft ساعة</strong></div>
+                                    <div class="wb-sub">
+                                        يمكنك الانسحاب خلال <strong>@hoursLeft ساعة</strong>
+                                        @if (myPart.PaymentStatus == ParticipantPaymentStatus.DepositPaid ||
+                                             myPart.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview)
+                                        {
+                                            <span> — سيُستعاد العربون تلقائياً</span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                             <form asp-action="Leave" method="post"
@@ -183,44 +294,106 @@
                             </form>
                         </div>
                     }
-                    else if (Model.Status != CampaignStatus.Active && Model.Status != CampaignStatus.AwaitingPayment)
+                    else if (myPart.PaymentStatus == ParticipantPaymentStatus.FullPaid)
                     {
-                        <div class="withdraw-box wb-locked">
+                        <div class="withdraw-box wb-locked" style="margin-top:14px">
                             <span class="wb-icon">🔒</span>
                             <div>
-                                <div class="wb-title">الطلب مؤكد</div>
+                                <div class="wb-title">الطلب مؤكد نهائياً</div>
                                 <div class="wb-sub">التزامك بالشراء نهائي</div>
                             </div>
                         </div>
                     }
                 }
 
-                @if (User.IsInRole("Admin"))
+                <!-- ===================== لوحة الأدمن ===================== -->
+                @if (isAdmin)
                 {
-                    <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
-                            <span style="font-size:.85rem;color:var(--steel);font-weight:600">أدوات الإدارة:</span>
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline">✏️ تعديل الحملة</a>
+                    <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+                            <span style="font-size:.85rem;color:var(--steel);font-weight:600">🛠 أدوات الإدارة</span>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline">✏️ تعديل</a>
                         </div>
 
-                        @* زر طلب الدفع — يظهر عند اكتمال النصاب *@
-                        @if (Model.Status == CampaignStatus.Active && Model.CurrentQuantity >= Model.MinQuantity)
+                        @* إحصاء حالات الدفع *@
+                        @{
+                            var depositPendingCount = Model.Participants.Count(p => p.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview);
+                            var fullPendingCount    = Model.Participants.Count(p => p.PaymentStatus == ParticipantPaymentStatus.FullUnderReview);
+                            var depositPaidCount    = Model.Participants.Count(p => p.PaymentStatus >= ParticipantPaymentStatus.DepositPaid);
+                            var fullPaidCount       = Model.Participants.Count(p => p.PaymentStatus == ParticipantPaymentStatus.FullPaid);
+                        }
+
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;font-size:.8rem">
+                            <div style="padding:8px;background:var(--paper);border-radius:8px">
+                                <div style="font-weight:700;font-size:1.1rem">@Model.Participants.Count</div>
+                                <div style="color:var(--steel)">مشارك</div>
+                            </div>
+                            <div style="padding:8px;background:#fffbeb;border-radius:8px">
+                                <div style="font-weight:700;font-size:1.1rem;color:#d97706">@depositPendingCount</div>
+                                <div style="color:#92400e">عربون بانتظار</div>
+                            </div>
+                            <div style="padding:8px;background:#fffbeb;border-radius:8px">
+                                <div style="font-weight:700;font-size:1.1rem;color:#d97706">@fullPendingCount</div>
+                                <div style="color:#92400e">دفع كامل بانتظار</div>
+                            </div>
+                            <div style="padding:8px;background:#f0fdf4;border-radius:8px">
+                                <div style="font-weight:700;font-size:1.1rem;color:#16a34a">@fullPaidCount / @Model.Participants.Count</div>
+                                <div style="color:#166534">دفعوا كاملاً</div>
+                            </div>
+                        </div>
+
+                        @* إشعار بانتظار مراجعة الإيصالات *@
+                        @foreach (var p in Model.Participants.Where(p =>
+                            p.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview ||
+                            p.PaymentStatus == ParticipantPaymentStatus.FullUnderReview))
+                        {
+                            bool isDepositReview = p.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview;
+                            var receiptPath = isDepositReview ? p.DepositReceiptPath : p.RemainingReceiptPath;
+                            var amount      = isDepositReview ? p.DepositAmount : p.RemainingAmount;
+
+                            <div style="padding:14px;background:#fffbeb;border-radius:10px;border:1.5px solid var(--amber);margin-bottom:10px">
+                                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+                                    <div>
+                                        <div style="font-weight:700;font-size:.9rem">
+                                            @(p.User?.FullName ?? p.UserId) —
+                                            <span style="color:var(--amber)">@(isDepositReview ? "إيصال عربون" : "إيصال دفع كامل")</span>
+                                        </div>
+                                        <div style="font-size:.82rem;color:#92400e">
+                                            @p.Quantity وحدة | المبلغ: @amount?.ToString("N2") د.أ
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(receiptPath))
+                                    {
+                                        <a href="@receiptPath" target="_blank" class="btn btn-sm btn-outline">👁 عرض الإيصال</a>
+                                    }
+                                </div>
+                                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                                    <form asp-action="@(isDepositReview ? "ApproveDeposit" : "ApproveFullPayment")" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="participantId" value="@p.Id" />
+                                        <button type="submit" class="btn btn-sm" style="background:#16a34a;color:white">✅ قبول</button>
+                                    </form>
+                                    <form asp-action="RejectParticipantPayment" method="post" style="display:flex;gap:6px;align-items:center">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="participantId" value="@p.Id" />
+                                        <input type="text" name="reviewNote" placeholder="سبب الرفض..." class="form-control" style="height:32px;font-size:.82rem;width:160px" />
+                                        <button type="submit" class="btn btn-sm btn-danger">❌ رفض</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+
+                        @* طلب الدفع المتبقي عند اكتمال النصاب *@
+                        @if (Model.Status == CampaignStatus.Active && quorumReached)
                         {
                             <form asp-action="RequestPayment" method="post" style="margin-bottom:10px"
-                                  onsubmit="return confirm('سيتم إرسال إشعار الدفع لجميع المشاركين. هل أنت متأكد؟')">
+                                  onsubmit="return confirm('سيتم إرسال إشعار للمشاركين لدفع المبلغ المتبقي. تأكيد؟')">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@Model.Id" />
                                 <button type="submit" class="btn btn-primary" style="width:100%">
-                                    💳 طلب الدفع من المشاركين (@Model.Participants.Count مشارك)
+                                    📣 اكتمل النصاب — أرسل إشعار الدفع المتبقي للمشاركين
                                 </button>
                             </form>
-                        }
-                        else if (Model.Status == CampaignStatus.AwaitingPayment)
-                        {
-                            var paidCount = Model.Participants.Count(p => p.PaymentStatus == ParticipantPaymentStatus.Paid);
-                            <div style="padding:12px;background:var(--paper);border-radius:8px;margin-bottom:10px;font-size:.88rem">
-                                💳 حالة الدفع: <strong style="color:var(--amber)">@paidCount / @Model.Participants.Count</strong> مشارك دفع
-                            </div>
                         }
 
                         <span style="font-size:.82rem;color:var(--steel);display:block;margin-bottom:6px">تغيير الحالة يدوياً:</span>
@@ -257,6 +430,39 @@
                     }
                     <li><span class="k">الحالة</span><span class="v">@Model.Status.ToArabic()</span></li>
                 </ul>
+
+                @if (alreadyJoined && myPart != null)
+                {
+                    var totalDue   = Model.GroupPrice * myPart.Quantity;
+                    var depositDue = Math.Round(totalDue / 2, 2);
+                    <div style="margin-top:14px;padding:12px;background:var(--paper);border-radius:8px;font-size:.85rem">
+                        <div style="font-weight:700;margin-bottom:8px">ملخص دفعتي</div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                            <span style="color:var(--steel)">الكمية</span>
+                            <span>@myPart.Quantity وحدة</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                            <span style="color:var(--steel)">الإجمالي</span>
+                            <span style="font-weight:700">@totalDue.ToString("N2") د.أ</span>
+                        </div>
+                        <div style="border-top:1px solid var(--line);margin:6px 0;padding-top:6px">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                                <span style="color:var(--steel)">العربون (50%)</span>
+                                <span style="color:@(myPart.DepositPaidAt.HasValue ? "#16a34a" : "var(--amber)")">
+                                    @depositDue.ToString("N2") د.أ
+                                    @if (myPart.DepositPaidAt.HasValue) { <text>✅</text> }
+                                </span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <span style="color:var(--steel)">المتبقي (50%)</span>
+                                <span style="color:@(myPart.FullPaidAt.HasValue ? "#16a34a" : "var(--steel)")">
+                                    @Math.Round(totalDue - depositDue, 2).ToString("N2") د.أ
+                                    @if (myPart.FullPaidAt.HasValue) { <text>✅</text> }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
 
             @if (Model.Participants.Any())
@@ -269,17 +475,19 @@
                             <span>@(p.User?.FullName ?? "مشارك")</span>
                             <div style="display:flex;align-items:center;gap:8px">
                                 <span style="font-weight:700">×@p.Quantity</span>
-                                @if (Model.Status == CampaignStatus.AwaitingPayment || Model.Status == CampaignStatus.Confirmed)
-                                {
-                                    @if (p.PaymentStatus == ParticipantPaymentStatus.Paid)
+                                @{
+                                    var badge = p.PaymentStatus switch
                                     {
-                                        <span style="color:#16a34a;font-size:.78rem;font-weight:700">✅ دفع</span>
-                                    }
-                                    else if (p.PaymentStatus == ParticipantPaymentStatus.Pending)
-                                    {
-                                        <span style="color:#d97706;font-size:.78rem;font-weight:700">⏳ لم يدفع</span>
-                                    }
+                                        ParticipantPaymentStatus.NotPaid            => ("⭕ لم يدفع", "#d97706"),
+                                        ParticipantPaymentStatus.DepositUnderReview => ("⏳ عربون بانتظار", "#d97706"),
+                                        ParticipantPaymentStatus.DepositPaid        => ("💛 عربون ✓", "#ca8a04"),
+                                        ParticipantPaymentStatus.FullUnderReview    => ("⏳ دفع كامل بانتظار", "#d97706"),
+                                        ParticipantPaymentStatus.FullPaid           => ("✅ مكتمل", "#16a34a"),
+                                        ParticipantPaymentStatus.Refunded           => ("↩️ مسترجع", "#be123c"),
+                                        _ => ("", "inherit")
+                                    };
                                 }
+                                <span style="color:@badge.Item2;font-size:.75rem;font-weight:700">@badge.Item1</span>
                             </div>
                         </div>
                     }
@@ -293,10 +501,27 @@
 
 @section Scripts {
 <script>
-    var cb = document.getElementById('consentCheck');
+    // تفعيل زر الانضمام عند الموافقة
+    var cb  = document.getElementById('consentCheck');
     var btn = document.getElementById('joinBtn');
     if (cb && btn) {
         cb.addEventListener('change', function () { btn.disabled = !this.checked; });
+    }
+
+    // حساب العربون تلقائياً عند تغيير الكمية
+    var qtyInput   = document.getElementById('qtyInput');
+    var depositAmt = document.getElementById('depositAmt');
+    var totalAmt   = document.getElementById('totalAmt');
+    var groupPrice = @Model.GroupPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+
+    if (qtyInput) {
+        qtyInput.addEventListener('input', function () {
+            var qty     = Math.max(1, parseInt(this.value) || 1);
+            var total   = groupPrice * qty;
+            var deposit = Math.round(total / 2 * 100) / 100;
+            if (depositAmt) depositAmt.textContent = deposit.toFixed(2);
+            if (totalAmt)   totalAmt.textContent   = total.toFixed(2);
+        });
     }
 </script>
 }
