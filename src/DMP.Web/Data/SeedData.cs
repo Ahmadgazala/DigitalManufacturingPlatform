@@ -113,7 +113,7 @@ public static class SeedData
                 MachineDesc= "طابعة ثلاثية الأبعاد احترافية — دقة 0.1mm، حجم طباعة 220×220×300mm",
                 Materials  = "PLA, ABS, PETG, TPU, Resin",
                 Profile    = "/uploads/seed/profile-workshop.jpg",
-                Cover      = "/uploads/seed/cover-3dprint.jpg",
+                Cover      = "/uploads/seed/ws-3dp-1.jpg",
                 Hours      = "السبت – الخميس: 9ص – 7م",
                 Capacity   = "حتى 150 قطعة / أسبوع"
             },
@@ -134,7 +134,7 @@ public static class SeedData
                 MachineDesc= "ليزر 20W عالي الدقة للقطع والنقش على الأكريليك والخشب والجلد",
                 Materials  = "Acrylic, Wood, Leather, Cardboard, Fabric",
                 Profile    = "/uploads/seed/profile-maker1.jpg",
-                Cover      = "/uploads/seed/cover-laser.jpg",
+                Cover      = "/uploads/seed/ws-laser-1.jpg",
                 Hours      = "السبت – الجمعة: 8ص – 8م",
                 Capacity   = "حتى 200 قطعة / أسبوع"
             },
@@ -327,7 +327,7 @@ public static class SeedData
             {
                 new PortfolioItem { ManufacturerId = workshop.Id, Title = "مجسم معماري لمشروع سكني", Description = "طباعة مجسم معماري دقيق لمجمع سكني في عمّان. المقياس 1:100، مدة التنفيذ 3 أيام.", Category = MachineCategory.Printing3D, ImagePath = "/uploads/seed/port-3dp-1.jpg", CompletedAt = DateTime.UtcNow.AddDays(-60) },
                 new PortfolioItem { ManufacturerId = workshop.Id, Title = "نماذج بروتوتايب لشركة ستارتاب", Description = "تصنيع 5 نماذج أولية لمنتج جديد. عدة تعديلات حتى الوصول للتصميم النهائي.", Category = MachineCategory.Printing3D, ImagePath = "/uploads/seed/port-3dp-2.jpg", CompletedAt = DateTime.UtcNow.AddDays(-40) },
-                new PortfolioItem { ManufacturerId = workshop.Id, Title = "أجزاء ميكانيكية بديلة", Description = "طباعة قطع غيار بديلة لآلة صناعية متوقفة عن الإنتاج. وفّرت على العميل 80% من تكلفة الاستيراد.", Category = MachineCategory.Printing3D, ImagePath = "/uploads/seed/port-3dp-3.jpg", CompletedAt = DateTime.UtcNow.AddDays(-20) },
+                new PortfolioItem { ManufacturerId = workshop.Id, Title = "أجزاء ميكانيكية بديلة", Description = "طباعة قطع غيار بديلة لآلة صناعية متوقفة عن الإنتاج. وفّرت على العميل 80% من تكلفة الاستيراد.", Category = MachineCategory.Printing3D, ImagePath = "/uploads/seed/port-3dp-2.jpg", CompletedAt = DateTime.UtcNow.AddDays(-20) },
             });
         }
 
@@ -336,8 +336,8 @@ public static class SeedData
             portfolio.AddRange(new[]
             {
                 new PortfolioItem { ManufacturerId = maker1.Id, Title = "لافتة محل عطور — أكريليك مضيء", Description = "لافتة بحروف بارزة مضيئة بـ LED. أكريليك شفاف مع إضاءة زرقاء. حجم 100×50 سم.", Category = MachineCategory.LaserCutting, ImagePath = "/uploads/seed/port-laser-1.jpg", CompletedAt = DateTime.UtcNow.AddDays(-50) },
-                new PortfolioItem { ManufacturerId = maker1.Id, Title = "هدايا خشبية منقوشة — حفل شركة", Description = "100 قطعة خشبية منقوشة بشعار الشركة وأسماء الموظفين. خشب الزان الطبيعي.", Category = MachineCategory.LaserCutting, ImagePath = "/uploads/seed/port-laser-2.jpg", CompletedAt = DateTime.UtcNow.AddDays(-35) },
-                new PortfolioItem { ManufacturerId = maker1.Id, Title = "بطاقات دعوة زفاف ليزر", Description = "300 بطاقة دعوة بتصميم مخصص، قطع ليزر على ورق مقوى فاخر مع حرق الاسم.", Category = MachineCategory.LaserCutting, ImagePath = "/uploads/seed/port-laser-3.jpg", CompletedAt = DateTime.UtcNow.AddDays(-15) },
+                new PortfolioItem { ManufacturerId = maker1.Id, Title = "هدايا خشبية منقوشة — حفل شركة", Description = "100 قطعة خشبية منقوشة بشعار الشركة وأسماء الموظفين. خشب الزان الطبيعي.", Category = MachineCategory.LaserCutting, ImagePath = "/uploads/seed/ws-laser-1.jpg", CompletedAt = DateTime.UtcNow.AddDays(-35) },
+                new PortfolioItem { ManufacturerId = maker1.Id, Title = "بطاقات دعوة زفاف ليزر", Description = "300 بطاقة دعوة بتصميم مخصص، قطع ليزر على ورق مقوى فاخر مع حرق الاسم.", Category = MachineCategory.LaserCutting, ImagePath = "/uploads/seed/ws-laser-2.jpg", CompletedAt = DateTime.UtcNow.AddDays(-15) },
             });
         }
 
@@ -355,7 +355,7 @@ public static class SeedData
             portfolio.AddRange(new[]
             {
                 new PortfolioItem { ManufacturerId = maker3.Id, Title = "مكاتب هوم أوفيس — تصميم عصري", Description = "تصنيع 8 مكاتب خشبية بتصميم عصري لشركة ناشئة في العقبة. خشب البلوط الطبيعي.", Category = MachineCategory.Woodwork, ImagePath = "/uploads/seed/port-wood-1.jpg", CompletedAt = DateTime.UtcNow.AddDays(-45) },
-                new PortfolioItem { ManufacturerId = maker3.Id, Title = "ديكور مطعم — لوحات خشبية منحوتة", Description = "لوحات ديكورية خشبية بنقوش عربية تقليدية لمطعم فاخر. خشب الجوز الطبيعي.", Category = MachineCategory.Woodwork, ImagePath = "/uploads/seed/port-wood-2.jpg", CompletedAt = DateTime.UtcNow.AddDays(-25) },
+                new PortfolioItem { ManufacturerId = maker3.Id, Title = "ديكور مطعم — لوحات خشبية منحوتة", Description = "لوحات ديكورية خشبية بنقوش عربية تقليدية لمطعم فاخر. خشب الجوز الطبيعي.", Category = MachineCategory.Woodwork, ImagePath = "/uploads/seed/ws-wood-1.jpg", CompletedAt = DateTime.UtcNow.AddDays(-25) },
             });
         }
 

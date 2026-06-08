@@ -77,7 +77,13 @@ builder.Services.AddScoped<IFileService, DMP.Web.Services.FileService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
+{
+    // تطبيق الـ migrations تلقائياً عند كل تشغيل (يعمل من VS أو terminal)
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
+
     await SeedData.InitializeAsync(scope.ServiceProvider);
+}
 
 if (!app.Environment.IsDevelopment())
 {
