@@ -94,6 +94,8 @@ public class GroupBuyingController : Controller
         }
 
         var userId = _userManager.GetUserId(User)!;
+        if (await _userManager.FindByIdAsync(userId) == null)
+            return RedirectToAction("Logout", "Account");
 
         var campaign = await _db.GroupBuyingCampaigns
             .Include(c => c.Participants)

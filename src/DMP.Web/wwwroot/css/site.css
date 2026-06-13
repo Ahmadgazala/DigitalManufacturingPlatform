@@ -551,6 +551,7 @@ textarea.form-control { resize: vertical; min-height: 110px; }
     height: 240px; overflow: hidden;
     background: var(--surface-2);
     margin-bottom: 0;
+    position: relative; z-index: 0;
 }
 .mfr-cover .cover-photo { width:100%; height:100%; object-fit:cover; }
 .cover-placeholder { width:100%; height:100%; }
@@ -558,11 +559,13 @@ textarea.form-control { resize: vertical; min-height: 110px; }
 .mfr-hero {
     display: flex; align-items: flex-end; gap: 20px;
     padding: 0 0 28px; margin-top: -40px; flex-wrap: wrap;
+    position: relative; z-index: 1;
 }
 .mfr-hero .mfr-avatar {
     margin-top: 0; width: 72px; height: 72px; font-size: 1.8rem;
     border: 4px solid var(--surface-1); box-shadow: var(--sh-md);
     border-radius: var(--r); flex-shrink: 0;
+    position: relative; z-index: 2;
 }
 .mfr-hero-info { flex: 1; padding-bottom: 6px; }
 .mfr-hero-info h1 {

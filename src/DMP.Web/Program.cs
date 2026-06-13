@@ -4,23 +4,28 @@ using DMP.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Stripe;
 using System.Globalization;
 
-// تحديد مسار wwwroot بشكل صريح لضمان عمل الملفات الثابتة من VS
-var projectDir = Directory.GetCurrentDirectory();
-var webRootPath = Path.Combine(projectDir, "wwwroot");
-if (!Directory.Exists(webRootPath))
+// إيجاد مجلد wwwroot الحقيقي بغض النظر عن مجلد التشغيل (VS أو terminal)
+// AppContext.BaseDirectory = bin\Debug\net9.0\ → نصعد حتى نجد wwwroot
+static string? FindWebRoot()
 {
-    var dir = new DirectoryInfo(projectDir);
-    while (dir != null && !Directory.Exists(Path.Combine(dir.FullName, "wwwroot")))
+    var dir = new DirectoryInfo(AppContext.BaseDirectory);
+    while (dir != null)
+    {
+        var candidate = Path.Combine(dir.FullName, "wwwroot");
+        if (Directory.Exists(candidate)) return candidate;
         dir = dir.Parent;
-    if (dir != null) webRootPath = Path.Combine(dir.FullName, "wwwroot");
+    }
+    return null;
 }
 
+var webRootPath = FindWebRoot();
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
-    Args = args,
+    Args        = args,
     WebRootPath = webRootPath
 });
 
@@ -49,6 +54,11 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.LogoutPath       = "/Account/Logout";
     opt.AccessDeniedPath = "/Account/AccessDenied";
 });
+
+// في بيئة التطوير: تحقق من صلاحية الجلسة كل دقيقتين بدلاً من 30 دقيقة
+// يمنع خطأ FK عند إعادة تعيين قاعدة البيانات مع بقاء الكوكي القديم
+builder.Services.Configure<SecurityStampValidatorOptions>(opt =>
+    opt.ValidationInterval = TimeSpan.FromMinutes(2));
 
 // Localization
 builder.Services.AddLocalization(opt => opt.ResourcesPath = "");
@@ -92,7 +102,15 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseStaticFiles();
+// خدمة الملفات الثابتة مباشرة من المجلد الحقيقي (يتجاوز StaticWebAssets الذي يسبب 404 في VS)
+if (webRootPath != null)
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(webRootPath),
+        RequestPath  = ""
+    });
+else
+    app.UseStaticFiles();
 app.UseRequestLocalization();
 app.UseRouting();
 app.UseAuthentication();

@@ -101,14 +101,15 @@ public class RequestsController : Controller
     // GET: /Requests/Details/5
     public async Task<IActionResult> Details(int id)
     {
-        var userId = _userManager.GetUserId(User)!;
+        var userId  = _userManager.GetUserId(User)!;
+        var isAdmin = User.IsInRole(SeedData.AdminRole);
 
         var request = await _db.ManufacturingRequests
             .Include(r => r.Files)
             .Include(r => r.Quotations)
                 .ThenInclude(q => q.Manufacturer)
             .Include(r => r.OrderUpdates)
-            .FirstOrDefaultAsync(r => r.Id == id && r.CustomerId == userId);
+            .FirstOrDefaultAsync(r => r.Id == id && (isAdmin || r.CustomerId == userId));
 
         if (request == null)
             return NotFound();
