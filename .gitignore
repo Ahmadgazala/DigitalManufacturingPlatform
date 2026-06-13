@@ -40,4 +40,8 @@ logs/
 .idea/
 *.sln.iml
 
+## AI tooling (ignored — not part of the project)
 .claude/
+.agents/
+CLAUDE.md
+skills-lock.json
