@@ -29,12 +29,16 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath = webRootPath
 });
 
+// Bind to Render's PORT env var (or fall back to appsettings / 5000)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Stripe
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // DB
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>

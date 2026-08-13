@@ -45,3 +45,8 @@ logs/
 .agents/
 CLAUDE.md
 skills-lock.json
+
+## Local SQLite database (created on first run)
+*.db
+*.db-shm
+*.db-wal
