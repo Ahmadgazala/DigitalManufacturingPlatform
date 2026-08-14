@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jomaker.onrender.com/sitemap.xml

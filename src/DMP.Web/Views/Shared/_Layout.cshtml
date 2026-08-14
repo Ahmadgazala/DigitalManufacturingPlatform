@@ -4,7 +4,41 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — Jo Maker</title>
+    @{
+        var rawTitle = ViewData["Title"] as string;
+        var seoTitle = string.IsNullOrWhiteSpace(rawTitle) || rawTitle == "Jo Maker"
+            ? "Jo Maker — منصة التصنيع الرقمي في الأردن"
+            : $"{rawTitle} — Jo Maker";
+        var seoDesc = ViewData["Description"] as string
+            ?? "Jo Maker منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد.";
+        var canonical = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
+        var siteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    }
+    <title>@seoTitle</title>
+    <meta name="description" content="@seoDesc" />
+    <link rel="canonical" href="@canonical" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta property="og:site_name" content="Jo Maker" />
+    <meta property="og:title" content="@seoTitle" />
+    <meta property="og:description" content="@seoDesc" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:locale" content="ar_JO" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="@seoTitle" />
+    <meta name="twitter:description" content="@seoDesc" />
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "WebSite",
+      "name": "Jo Maker",
+      "alternateName": "منصة التصنيع الرقمي في الأردن",
+      "url": "@siteUrl",
+      "inLanguage": "ar",
+      "description": "@(ViewData["Description"] as string ?? "Jo Maker منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد.")"
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
