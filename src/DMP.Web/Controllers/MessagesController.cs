@@ -48,9 +48,10 @@ public class MessagesController : Controller
         return View();
     }
 
-    // GET: /Messages/Conversation/userId
-    public async Task<IActionResult> Conversation(string otherUserId)
+    // GET: /Messages/Conversation/userId  (also accepts ?otherUserId= or path segment id)
+    public async Task<IActionResult> Conversation(string otherUserId, string? id = null)
     {
+        otherUserId ??= id;
         var userId = _userManager.GetUserId(User)!;
 
         var otherUser = await _userManager.FindByIdAsync(otherUserId);
