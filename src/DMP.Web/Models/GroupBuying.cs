@@ -14,16 +14,32 @@ public enum CampaignStatus
 
 public static class CampaignStatusHelpers
 {
-    public static string ToArabic(this CampaignStatus s) => s switch
+    private static bool IsEnglish =>
+        System.Globalization.CultureInfo.CurrentUICulture.Name
+            .StartsWith("en", StringComparison.OrdinalIgnoreCase);
+
+    public static string ToEnglish(this CampaignStatus s) => s switch
     {
-        CampaignStatus.Active          => "نشطة",
-        CampaignStatus.AwaitingPayment => "بانتظار الدفع",
-        CampaignStatus.Confirmed       => "مؤكدة",
-        CampaignStatus.Shipping        => "في الشحن",
-        CampaignStatus.Delivered       => "تم التوصيل",
-        CampaignStatus.Cancelled       => "ملغية",
+        CampaignStatus.Active          => "Active",
+        CampaignStatus.AwaitingPayment => "Awaiting payment",
+        CampaignStatus.Confirmed       => "Confirmed",
+        CampaignStatus.Shipping        => "Shipping",
+        CampaignStatus.Delivered       => "Delivered",
+        CampaignStatus.Cancelled       => "Cancelled",
         _ => s.ToString()
     };
+
+    public static string ToArabic(this CampaignStatus s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            CampaignStatus.Active          => "نشطة",
+            CampaignStatus.AwaitingPayment => "بانتظار الدفع",
+            CampaignStatus.Confirmed       => "مؤكدة",
+            CampaignStatus.Shipping        => "في الشحن",
+            CampaignStatus.Delivered       => "تم التوصيل",
+            CampaignStatus.Cancelled       => "ملغية",
+            _ => s.ToString()
+        };
 
     public static string StatusColor(this CampaignStatus s) => s switch
     {

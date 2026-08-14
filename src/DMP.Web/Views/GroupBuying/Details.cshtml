@@ -43,30 +43,30 @@
                 <!-- شريط التقدم -->
                 <div style="margin-bottom:20px">
                     <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem">
-                        <span style="font-weight:700">التقدم نحو الحد الأدنى</span>
+                        <span style="font-weight:700">@T["التقدم نحو الحد الأدنى"]</span>
                         <span style="color:var(--amber);font-weight:800">@Model.ProgressPercent%</span>
                     </div>
                     <div style="background:var(--paper);border-radius:100px;height:16px;overflow:hidden;border:1px solid var(--line)">
                         <div style="background:var(--amber);height:100%;border-radius:100px;width:@(Model.ProgressPercent)%;transition:width .5s"></div>
                     </div>
                     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.85rem;color:var(--steel)">
-                        <span>@Model.CurrentQuantity وحدة منضمة</span>
-                        <span>الهدف: @Model.MinQuantity وحدة</span>
+                        <span>@T["{0} وحدة منضمة", Model.CurrentQuantity]</span>
+                        <span>@T["الهدف: {0} وحدة", Model.MinQuantity]</span>
                     </div>
                 </div>
 
                 <!-- الأسعار -->
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;background:var(--paper);border-radius:12px;padding:18px;border:1.5px solid var(--line)">
                     <div style="text-align:center">
-                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">السعر الفردي</div>
-                        <div style="font-size:1.2rem;font-weight:700;text-decoration:line-through;color:var(--muted)">@Model.IndividualPrice.ToString("N2") د.أ</div>
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">@T["السعر الفردي"]</div>
+                        <div style="font-size:1.2rem;font-weight:700;text-decoration:line-through;color:var(--muted)">@T["{0} د.أ", Model.IndividualPrice.ToString("N2")]</div>
                     </div>
                     <div style="text-align:center;border-inline:1px solid var(--line)">
-                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">سعر المجموعة</div>
-                        <div style="font-size:1.5rem;font-weight:800;color:var(--amber)">@Model.GroupPrice.ToString("N2") د.أ</div>
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">@T["سعر المجموعة"]</div>
+                        <div style="font-size:1.5rem;font-weight:800;color:var(--amber)">@T["{0} د.أ", Model.GroupPrice.ToString("N2")]</div>
                     </div>
                     <div style="text-align:center">
-                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">توفير</div>
+                        <div style="font-size:.8rem;color:var(--steel);margin-bottom:4px">@T["توفير"]</div>
                         <div style="font-size:1.2rem;font-weight:700;color:var(--green)">@Model.SavingsPercent%</div>
                     </div>
                 </div>
@@ -77,25 +77,25 @@
                     <form asp-action="Join" method="post" style="margin-top:20px;padding:20px;background:var(--paper);border-radius:12px;border:1.5px dashed var(--amber)">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="campaignId" value="@Model.Id" />
-                        <h3 style="margin:0 0 14px;font-size:1rem">انضم لهذه الحملة</h3>
+                        <h3 style="margin:0 0 14px;font-size:1rem">@T["انضم لهذه الحملة"]</h3>
 
                         @{
                             var previewQty    = Model.MinOrderPerManufacturer > 0 ? Model.MinOrderPerManufacturer : 1;
                             var previewDeposit = Math.Round(Model.GroupPrice * previewQty / 2, 2);
                         }
                         <div style="margin-bottom:14px;padding:12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;font-size:.88rem;color:#78350f">
-                            💡 عند الانضمام ستُطلب منك دفع <strong>نصف المبلغ عربوناً</strong> لتأكيد مشاركتك.
-                            يمكنك الانسحاب واسترجاع العربون خلال <strong>48 ساعة</strong> وقبل اكتمال النصاب.
-                            بعد اكتمال النصاب تدفع المبلغ المتبقي.
+                            @T["💡 عند الانضمام ستُطلب منك دفع"] <strong>@T["نصف المبلغ عربوناً"]</strong> @T["لتأكيد مشاركتك."]
+                            @T["يمكنك الانسحاب واسترجاع العربون خلال"] <strong>@T["48 ساعة"]</strong> @T["وقبل اكتمال النصاب."]
+                            @T["بعد اكتمال النصاب تدفع المبلغ المتبقي."]
                         </div>
 
                         <div class="form-row">
                             <div class="form-group" style="margin:0">
                                 <label style="font-size:.85rem">
-                                    الكمية التي تريدها
+                                    @T["الكمية التي تريدها"]
                                     @if (Model.MinOrderPerManufacturer > 0)
                                     {
-                                        <span style="color:var(--amber);font-size:.8rem">(الحد الأدنى: @Model.MinOrderPerManufacturer وحدة)</span>
+                                        <span style="color:var(--amber);font-size:.8rem">@T["(الحد الأدنى: {0} وحدة)", Model.MinOrderPerManufacturer]</span>
                                     }
                                 </label>
                                 <input type="number" name="quantity" id="qtyInput"
@@ -104,49 +104,49 @@
                                        class="form-control" required />
                             </div>
                             <div class="form-group" style="margin:0">
-                                <label style="font-size:.85rem">تفضيلات (لون، مواصفات...)</label>
-                                <input type="text" name="preferences" class="form-control" placeholder="اختياري" />
+                                <label style="font-size:.85rem">@T["تفضيلات (لون، مواصفات...)"]</label>
+                                <input type="text" name="preferences" class="form-control" placeholder="@T["اختياري"]" />
                             </div>
                         </div>
 
                         <div id="depositPreview" style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border-radius:8px;border:1px solid #86efac;font-size:.9rem;color:#166534">
-                            العربون المطلوب (نصف المبلغ):
-                            <strong id="depositAmt">@previewDeposit.ToString("N2")</strong> د.أ
-                            &nbsp;|&nbsp; المبلغ الكلي: <strong id="totalAmt">@(Math.Round(Model.GroupPrice * previewQty, 2).ToString("N2"))</strong> د.أ
+                            @T["العربون المطلوب (نصف المبلغ):"]
+                            <strong id="depositAmt">@previewDeposit.ToString("N2")</strong> @T["د.أ"]
+                            &nbsp;|&nbsp; @T["المبلغ الكلي:"] <strong id="totalAmt">@(Math.Round(Model.GroupPrice * previewQty, 2).ToString("N2"))</strong> @T["د.أ"]
                         </div>
 
                         <div class="consent-box" style="margin-top:14px">
                             <label class="consent-label">
                                 <input type="checkbox" name="consent" value="true" id="consentCheck" required />
                                 <span>
-                                    أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً بدفع <strong>العربون فوراً</strong> ثم المبلغ الكامل عند اكتمال النصاب.
-                                    يحق لي الانسحاب خلال <strong>48 ساعة</strong> فقط وقبل اكتمال الكمية المطلوبة.
+                                    @T["أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً بدفع"] <strong>@T["العربون فوراً"]</strong> @T["ثم المبلغ الكامل عند اكتمال النصاب."]
+                                    @T["يحق لي الانسحاب خلال"] <strong>@T["48 ساعة"]</strong> @T["فقط وقبل اكتمال الكمية المطلوبة."]
                                 </span>
                             </label>
                         </div>
                         <button class="btn btn-primary" id="joinBtn" style="margin-top:12px;width:100%" type="submit" disabled>
-                            📦 انضم والتزم بدفع العربون
+                            @T["📦 انضم والتزم بدفع العربون"]
                         </button>
                     </form>
                 }
                 else if (!SignInManager.IsSignedIn(User) && Model.IsActive)
                 {
                     <div style="margin-top:18px;text-align:center;padding:16px;background:var(--paper);border-radius:12px">
-                        <p style="color:var(--steel);font-size:.9rem;margin-bottom:10px">هذه الحملة مخصصة للمصنّعين المسجّلين</p>
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary">سجّل الدخول للانضمام</a>
+                        <p style="color:var(--steel);font-size:.9rem;margin-bottom:10px">@T["هذه الحملة مخصصة للمصنّعين المسجّلين"]</p>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary">@T["سجّل الدخول للانضمام"]</a>
                     </div>
                 }
                 else if (SignInManager.IsSignedIn(User) && !isManufacturer && !isAdmin && Model.IsActive)
                 {
                     <div style="margin-top:18px;padding:16px;background:#fffbeb;border-radius:12px;border:1.5px solid #fde68a">
-                        <p style="margin:0;color:#92400e;font-size:.9rem">⚠️ الشراء الجماعي مخصص للمصنّعين فقط.</p>
+                        <p style="margin:0;color:#92400e;font-size:.9rem">@T["⚠️ الشراء الجماعي مخصص للمصنّعين فقط."]</p>
                     </div>
                 }
 
                 <!-- ===================== حالة المشارك ===================== -->
                 @if (alreadyJoined && myPart != null)
                 {
-                    <div class="alert alert-success" style="margin-top:16px">✓ أنت منضم لهذه الحملة — @myPart.Quantity وحدة</div>
+                    <div class="alert alert-success" style="margin-top:16px">@T["✓ أنت منضم لهذه الحملة — {0} وحدة", myPart.Quantity]</div>
 
                     var totalDue   = Model.GroupPrice * myPart.Quantity;
                     var depositDue = Math.Round(totalDue / 2, 2);
@@ -156,28 +156,28 @@
                     @if (myPart.PaymentStatus == ParticipantPaymentStatus.NotPaid)
                     {
                         <div style="margin-top:16px;padding:20px;background:#fffbeb;border-radius:12px;border:2px solid var(--amber)">
-                            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">💳 الخطوة 1: ادفع العربون لتأكيد مشاركتك</div>
+                            <div style="font-weight:800;font-size:1rem;margin-bottom:4px">@T["💳 الخطوة 1: ادفع العربون لتأكيد مشاركتك"]</div>
                             <div style="font-size:.88rem;color:#92400e;margin-bottom:14px">
-                                المبلغ: <strong>@depositDue.ToString("N2") د.أ</strong>
-                                (نصف إجمالي @totalDue.ToString("N2") د.أ)
+                                @T["المبلغ:"] <strong>@T["{0} د.أ", depositDue.ToString("N2")]</strong>
+                                @T["(نصف إجمالي {0} د.أ)", totalDue.ToString("N2")]
                             </div>
 
                             <div style="padding:12px;background:white;border-radius:8px;border:1px solid #fde68a;margin-bottom:14px;font-size:.88rem">
-                                <div style="font-weight:700;margin-bottom:6px">تعليمات التحويل عبر CliQ:</div>
-                                <div>📱 رقم الهاتف: <strong dir="ltr">07X-XXX-XXXX</strong></div>
-                                <div style="margin-top:4px">📝 ملاحظة التحويل: <strong>عربون حملة @Model.Id - @myPart.Id</strong></div>
+                                <div style="font-weight:700;margin-bottom:6px">@T["تعليمات التحويل عبر CliQ:"]</div>
+                                <div>@T["📱 رقم الهاتف:"] <strong dir="ltr">07X-XXX-XXXX</strong></div>
+                                <div style="margin-top:4px">@T["📝 ملاحظة التحويل:"] <strong>@T["عربون حملة {0} - {1}", Model.Id, myPart.Id]</strong></div>
                             </div>
 
                             <form asp-action="SubmitDeposit" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="campaignId" value="@Model.Id" />
                                 <div class="form-group" style="margin-bottom:10px">
-                                    <label style="font-size:.85rem;font-weight:600">ارفع إيصال التحويل</label>
+                                    <label style="font-size:.85rem;font-weight:600">@T["ارفع إيصال التحويل"]</label>
                                     <input type="file" name="receiptImage" accept="image/*,.pdf" class="form-control" required />
-                                    <small style="color:var(--steel)">JPG، PNG، PDF — حجم أقصى 5MB</small>
+                                    <small style="color:var(--steel)">@T["JPG، PNG، PDF — حجم أقصى 5MB"]</small>
                                 </div>
                                 <button type="submit" class="btn btn-primary" style="width:100%">
-                                    📤 رفع الإيصال وتأكيد مشاركتي
+                                    @T["📤 رفع الإيصال وتأكيد مشاركتي"]
                                 </button>
                             </form>
                         </div>
@@ -185,9 +185,9 @@
                     else if (myPart.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview)
                     {
                         <div style="margin-top:16px;padding:16px;background:#f0f9ff;border-radius:12px;border:1.5px solid #7dd3fc">
-                            <div style="font-weight:700;color:#0369a1">⏳ إيصال العربون قيد المراجعة</div>
+                            <div style="font-weight:700;color:#0369a1">@T["⏳ إيصال العربون قيد المراجعة"]</div>
                             <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">
-                                المبلغ المرفوع: @myPart.DepositAmount?.ToString("N2") د.أ — سيتم التأكيد خلال 24 ساعة.
+                                @T["المبلغ المرفوع: {0} د.أ — سيتم التأكيد خلال 24 ساعة.", myPart.DepositAmount?.ToString("N2")]
                             </div>
                         </div>
                     }
@@ -196,8 +196,8 @@
                         <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border-radius:12px;border:1.5px solid #86efac;display:flex;align-items:center;gap:12px">
                             <span style="font-size:1.4rem">✅</span>
                             <div>
-                                <div style="font-weight:700;color:#166534">تم قبول العربون</div>
-                                <div style="font-size:.85rem;color:#166534">@myPart.DepositAmount?.ToString("N2") د.أ — @myPart.DepositPaidAt?.ToString("dd/MM/yyyy")</div>
+                                <div style="font-weight:700;color:#166534">@T["تم قبول العربون"]</div>
+                                <div style="font-size:.85rem;color:#166534">@T["{0} د.أ — {1}", myPart.DepositAmount?.ToString("N2"), myPart.DepositPaidAt?.ToString("dd/MM/yyyy")]</div>
                             </div>
                         </div>
 
@@ -205,28 +205,28 @@
                         @if (quorumReached || Model.Status == CampaignStatus.AwaitingPayment)
                         {
                             <div style="margin-top:14px;padding:20px;background:#fffbeb;border-radius:12px;border:2px solid var(--amber)">
-                                <div style="font-weight:800;font-size:1rem;margin-bottom:4px">💳 الخطوة 2: ادفع المبلغ المتبقي</div>
+                                <div style="font-weight:800;font-size:1rem;margin-bottom:4px">@T["💳 الخطوة 2: ادفع المبلغ المتبقي"]</div>
                                 <div style="font-size:.88rem;color:#92400e;margin-bottom:14px">
-                                    اكتمل النصاب! المبلغ المتبقي: <strong>@remainDue.ToString("N2") د.أ</strong>
-                                    (الإجمالي @totalDue.ToString("N2") د.أ − العربون @myPart.DepositAmount?.ToString("N2") د.أ)
+                                    @T["اكتمل النصاب! المبلغ المتبقي:"] <strong>@T["{0} د.أ", remainDue.ToString("N2")]</strong>
+                                    @T["(الإجمالي {0} د.أ − العربون {1} د.أ)", totalDue.ToString("N2"), myPart.DepositAmount?.ToString("N2")]
                                 </div>
 
                                 <div style="padding:12px;background:white;border-radius:8px;border:1px solid #fde68a;margin-bottom:14px;font-size:.88rem">
-                                    <div style="font-weight:700;margin-bottom:6px">تعليمات التحويل عبر CliQ:</div>
-                                    <div>📱 رقم الهاتف: <strong dir="ltr">07X-XXX-XXXX</strong></div>
-                                    <div style="margin-top:4px">📝 ملاحظة التحويل: <strong>دفع كامل حملة @Model.Id - @myPart.Id</strong></div>
+                                    <div style="font-weight:700;margin-bottom:6px">@T["تعليمات التحويل عبر CliQ:"]</div>
+                                    <div>@T["📱 رقم الهاتف:"] <strong dir="ltr">07X-XXX-XXXX</strong></div>
+                                    <div style="margin-top:4px">@T["📝 ملاحظة التحويل:"] <strong>@T["دفع كامل حملة {0} - {1}", Model.Id, myPart.Id]</strong></div>
                                 </div>
 
                                 <form asp-action="SubmitRemainingPayment" method="post" enctype="multipart/form-data">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="campaignId" value="@Model.Id" />
                                     <div class="form-group" style="margin-bottom:10px">
-                                        <label style="font-size:.85rem;font-weight:600">ارفع إيصال التحويل</label>
+                                        <label style="font-size:.85rem;font-weight:600">@T["ارفع إيصال التحويل"]</label>
                                         <input type="file" name="receiptImage" accept="image/*,.pdf" class="form-control" required />
-                                        <small style="color:var(--steel)">JPG، PNG، PDF — حجم أقصى 5MB</small>
+                                        <small style="color:var(--steel)">@T["JPG، PNG، PDF — حجم أقصى 5MB"]</small>
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="width:100%">
-                                        📤 رفع إيصال الدفع الكامل
+                                        @T["📤 رفع إيصال الدفع الكامل"]
                                     </button>
                                 </form>
                             </div>
@@ -234,15 +234,15 @@
                         else
                         {
                             <div style="margin-top:12px;padding:12px;background:var(--paper);border-radius:8px;font-size:.88rem;color:var(--steel)">
-                                ⏳ بانتظار اكتمال النصاب (@Model.CurrentQuantity / @Model.MinQuantity وحدة) لطلب المبلغ المتبقي.
+                                @T["⏳ بانتظار اكتمال النصاب ({0} / {1} وحدة) لطلب المبلغ المتبقي.", Model.CurrentQuantity, Model.MinQuantity]
                             </div>
                         }
                     }
                     else if (myPart.PaymentStatus == ParticipantPaymentStatus.FullUnderReview)
                     {
                         <div style="margin-top:16px;padding:16px;background:#f0f9ff;border-radius:12px;border:1.5px solid #7dd3fc">
-                            <div style="font-weight:700;color:#0369a1">⏳ إيصال الدفع الكامل قيد المراجعة</div>
-                            <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">سيتم التأكيد خلال 24 ساعة.</div>
+                            <div style="font-weight:700;color:#0369a1">@T["⏳ إيصال الدفع الكامل قيد المراجعة"]</div>
+                            <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">@T["سيتم التأكيد خلال 24 ساعة."]</div>
                         </div>
                     }
                     else if (myPart.PaymentStatus == ParticipantPaymentStatus.FullPaid)
@@ -250,11 +250,11 @@
                         <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border-radius:12px;border:1.5px solid #86efac;display:flex;align-items:center;gap:12px">
                             <span style="font-size:1.6rem">✅</span>
                             <div>
-                                <div style="font-weight:800;color:#166534;font-size:1rem">تم الدفع الكامل — مشاركتك مؤكدة</div>
+                                <div style="font-weight:800;color:#166534;font-size:1rem">@T["تم الدفع الكامل — مشاركتك مؤكدة"]</div>
                                 <div style="font-size:.85rem;color:#166534">
-                                    العربون: @myPart.DepositAmount?.ToString("N2") د.أ +
-                                    المتبقي: @myPart.RemainingAmount?.ToString("N2") د.أ =
-                                    الإجمالي: @myPart.TotalPaid.ToString("N2") د.أ
+                                    @T["العربون: {0} د.أ +", myPart.DepositAmount?.ToString("N2")]
+                                    @T["المتبقي: {0} د.أ =", myPart.RemainingAmount?.ToString("N2")]
+                                    @T["الإجمالي: {0} د.أ", myPart.TotalPaid.ToString("N2")]
                                 </div>
                             </div>
                         </div>
@@ -262,8 +262,8 @@
                     else if (myPart.PaymentStatus == ParticipantPaymentStatus.Refunded)
                     {
                         <div style="margin-top:16px;padding:14px 16px;background:#fff1f2;border-radius:12px;border:1.5px solid #fda4af">
-                            <div style="font-weight:700;color:#be123c">↩️ تم طلب الاسترجاع</div>
-                            <div style="font-size:.85rem;color:#9f1239;margin-top:4px">سيتم استرجاع العربون إليك خلال 3 أيام عمل.</div>
+                            <div style="font-weight:700;color:#be123c">@T["↩️ تم طلب الاسترجاع"]</div>
+                            <div style="font-size:.85rem;color:#9f1239;margin-top:4px">@T["سيتم استرجاع العربون إليك خلال 3 أيام عمل."]</div>
                         </div>
                     }
 
@@ -275,22 +275,22 @@
                             <div class="wb-info">
                                 <span class="wb-icon">⏰</span>
                                 <div>
-                                    <div class="wb-title">نافذة الانسحاب مفتوحة</div>
+                                    <div class="wb-title">@T["نافذة الانسحاب مفتوحة"]</div>
                                     <div class="wb-sub">
-                                        يمكنك الانسحاب خلال <strong>@hoursLeft ساعة</strong>
+                                        @T["يمكنك الانسحاب خلال"] <strong>@T["{0} ساعة", hoursLeft]</strong>
                                         @if (myPart.PaymentStatus == ParticipantPaymentStatus.DepositPaid ||
                                              myPart.PaymentStatus == ParticipantPaymentStatus.DepositUnderReview)
                                         {
-                                            <span> — سيُستعاد العربون تلقائياً</span>
+                                            <span> @T["— سيُستعاد العربون تلقائياً"]</span>
                                         }
                                     </div>
                                 </div>
                             </div>
                             <form asp-action="Leave" method="post"
-                                  onsubmit="return confirm('هل أنت متأكد من الانسحاب؟')">
+                                  onsubmit="return confirm('@T["هل أنت متأكد من الانسحاب؟"]')">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="campaignId" value="@Model.Id" />
-                                <button class="btn btn-sm btn-danger" type="submit">انسحب الآن</button>
+                                <button class="btn btn-sm btn-danger" type="submit">@T["انسحب الآن"]</button>
                             </form>
                         </div>
                     }
@@ -299,8 +299,8 @@
                         <div class="withdraw-box wb-locked" style="margin-top:14px">
                             <span class="wb-icon">🔒</span>
                             <div>
-                                <div class="wb-title">الطلب مؤكد نهائياً</div>
-                                <div class="wb-sub">التزامك بالشراء نهائي</div>
+                                <div class="wb-title">@T["الطلب مؤكد نهائياً"]</div>
+                                <div class="wb-sub">@T["التزامك بالشراء نهائي"]</div>
                             </div>
                         </div>
                     }
@@ -311,8 +311,8 @@
                 {
                     <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
                         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-                            <span style="font-size:.85rem;color:var(--steel);font-weight:600">🛠 أدوات الإدارة</span>
-                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline">✏️ تعديل</a>
+                            <span style="font-size:.85rem;color:var(--steel);font-weight:600">@T["🛠 أدوات الإدارة"]</span>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline">@T["✏️ تعديل"]</a>
                         </div>
 
                         @* إحصاء حالات الدفع *@
@@ -326,19 +326,19 @@
                         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;font-size:.8rem">
                             <div style="padding:8px;background:var(--paper);border-radius:8px">
                                 <div style="font-weight:700;font-size:1.1rem">@Model.Participants.Count</div>
-                                <div style="color:var(--steel)">مشارك</div>
+                                <div style="color:var(--steel)">@T["مشارك"]</div>
                             </div>
                             <div style="padding:8px;background:#fffbeb;border-radius:8px">
                                 <div style="font-weight:700;font-size:1.1rem;color:#d97706">@depositPendingCount</div>
-                                <div style="color:#92400e">عربون بانتظار</div>
+                                <div style="color:#92400e">@T["عربون بانتظار"]</div>
                             </div>
                             <div style="padding:8px;background:#fffbeb;border-radius:8px">
                                 <div style="font-weight:700;font-size:1.1rem;color:#d97706">@fullPendingCount</div>
-                                <div style="color:#92400e">دفع كامل بانتظار</div>
+                                <div style="color:#92400e">@T["دفع كامل بانتظار"]</div>
                             </div>
                             <div style="padding:8px;background:#f0fdf4;border-radius:8px">
                                 <div style="font-weight:700;font-size:1.1rem;color:#16a34a">@fullPaidCount / @Model.Participants.Count</div>
-                                <div style="color:#166534">دفعوا كاملاً</div>
+                                <div style="color:#166534">@T["دفعوا كاملاً"]</div>
                             </div>
                         </div>
 
@@ -356,28 +356,28 @@
                                     <div>
                                         <div style="font-weight:700;font-size:.9rem">
                                             @(p.User?.FullName ?? p.UserId) —
-                                            <span style="color:var(--amber)">@(isDepositReview ? "إيصال عربون" : "إيصال دفع كامل")</span>
+                                            <span style="color:var(--amber)">@(isDepositReview ? T["إيصال عربون"] : T["إيصال دفع كامل"])</span>
                                         </div>
                                         <div style="font-size:.82rem;color:#92400e">
-                                            @p.Quantity وحدة | المبلغ: @amount?.ToString("N2") د.أ
+                                            @T["{0} وحدة | المبلغ: {1} د.أ", p.Quantity, amount?.ToString("N2")]
                                         </div>
                                     </div>
                                     @if (!string.IsNullOrEmpty(receiptPath))
                                     {
-                                        <a href="@receiptPath" target="_blank" class="btn btn-sm btn-outline">👁 عرض الإيصال</a>
+                                        <a href="@receiptPath" target="_blank" class="btn btn-sm btn-outline">@T["👁 عرض الإيصال"]</a>
                                     }
                                 </div>
                                 <div style="display:flex;gap:8px;flex-wrap:wrap">
                                     <form asp-action="@(isDepositReview ? "ApproveDeposit" : "ApproveFullPayment")" method="post">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="participantId" value="@p.Id" />
-                                        <button type="submit" class="btn btn-sm" style="background:#16a34a;color:white">✅ قبول</button>
+                                        <button type="submit" class="btn btn-sm" style="background:#16a34a;color:white">@T["✅ قبول"]</button>
                                     </form>
                                     <form asp-action="RejectParticipantPayment" method="post" style="display:flex;gap:6px;align-items:center">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="participantId" value="@p.Id" />
-                                        <input type="text" name="reviewNote" placeholder="سبب الرفض..." class="form-control" style="height:32px;font-size:.82rem;width:160px" />
-                                        <button type="submit" class="btn btn-sm btn-danger">❌ رفض</button>
+                                        <input type="text" name="reviewNote" placeholder="@T["سبب الرفض..."]" class="form-control" style="height:32px;font-size:.82rem;width:160px" />
+                                        <button type="submit" class="btn btn-sm btn-danger">@T["❌ رفض"]</button>
                                     </form>
                                 </div>
                             </div>
@@ -387,16 +387,16 @@
                         @if (Model.Status == CampaignStatus.Active && quorumReached)
                         {
                             <form asp-action="RequestPayment" method="post" style="margin-bottom:10px"
-                                  onsubmit="return confirm('سيتم إرسال إشعار للمشاركين لدفع المبلغ المتبقي. تأكيد؟')">
+                                  onsubmit="return confirm('@T["سيتم إرسال إشعار للمشاركين لدفع المبلغ المتبقي. تأكيد؟"]')">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@Model.Id" />
                                 <button type="submit" class="btn btn-primary" style="width:100%">
-                                    📣 اكتمل النصاب — أرسل إشعار الدفع المتبقي للمشاركين
+                                    @T["📣 اكتمل النصاب — أرسل إشعار الدفع المتبقي للمشاركين"]
                                 </button>
                             </form>
                         }
 
-                        <span style="font-size:.82rem;color:var(--steel);display:block;margin-bottom:6px">تغيير الحالة يدوياً:</span>
+                        <span style="font-size:.82rem;color:var(--steel);display:block;margin-bottom:6px">@T["تغيير الحالة يدوياً:"]</span>
                         <form asp-action="UpdateStatus" method="post" style="display:flex;gap:8px;flex-wrap:wrap">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@Model.Id" />
@@ -415,20 +415,20 @@
 
         <aside>
             <div class="panel">
-                <h2>معلومات الحملة</h2>
+                <h2>@T["معلومات الحملة"]</h2>
                 <ul class="info-list">
-                    <li><span class="k">المشاركون</span><span class="v fw-bold">@Model.Participants.Count شخص</span></li>
-                    <li><span class="k">الكمية الكلية</span><span class="v fw-bold">@Model.CurrentQuantity وحدة</span></li>
-                    <li><span class="k">الحد الأدنى الإجمالي</span><span class="v">@Model.MinQuantity وحدة</span></li>
+                    <li><span class="k">@T["المشاركون"]</span><span class="v fw-bold">@T["{0} شخص", Model.Participants.Count]</span></li>
+                    <li><span class="k">@T["الكمية الكلية"]</span><span class="v fw-bold">@T["{0} وحدة", Model.CurrentQuantity]</span></li>
+                    <li><span class="k">@T["الحد الأدنى الإجمالي"]</span><span class="v">@T["{0} وحدة", Model.MinQuantity]</span></li>
                     @if (Model.MinOrderPerManufacturer > 0)
                     {
-                        <li><span class="k">الحد الأدنى/مصنّع</span><span class="v" style="color:var(--amber);font-weight:700">@Model.MinOrderPerManufacturer وحدة</span></li>
+                        <li><span class="k">@T["الحد الأدنى/مصنّع"]</span><span class="v" style="color:var(--amber);font-weight:700">@T["{0} وحدة", Model.MinOrderPerManufacturer]</span></li>
                     }
                     @if (Model.IsActive)
                     {
-                        <li><span class="k">ينتهي خلال</span><span class="v" style="color:@(days <= 3 ? "var(--red)" : "inherit")">@(days > 0 ? $"{days} يوم" : "اليوم")</span></li>
+                        <li><span class="k">@T["ينتهي خلال"]</span><span class="v" style="color:@(days <= 3 ? "var(--red)" : "inherit")">@(days > 0 ? T["{0} يوم", days] : T["اليوم"])</span></li>
                     }
-                    <li><span class="k">الحالة</span><span class="v">@Model.Status.ToArabic()</span></li>
+                    <li><span class="k">@T["الحالة"]</span><span class="v">@Model.Status.ToArabic()</span></li>
                 </ul>
 
                 @if (alreadyJoined && myPart != null)
@@ -436,27 +436,27 @@
                     var totalDue   = Model.GroupPrice * myPart.Quantity;
                     var depositDue = Math.Round(totalDue / 2, 2);
                     <div style="margin-top:14px;padding:12px;background:var(--paper);border-radius:8px;font-size:.85rem">
-                        <div style="font-weight:700;margin-bottom:8px">ملخص دفعتي</div>
+                        <div style="font-weight:700;margin-bottom:8px">@T["ملخص دفعتي"]</div>
                         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                            <span style="color:var(--steel)">الكمية</span>
-                            <span>@myPart.Quantity وحدة</span>
+                            <span style="color:var(--steel)">@T["الكمية"]</span>
+                            <span>@T["{0} وحدة", myPart.Quantity]</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                            <span style="color:var(--steel)">الإجمالي</span>
-                            <span style="font-weight:700">@totalDue.ToString("N2") د.أ</span>
+                            <span style="color:var(--steel)">@T["الإجمالي"]</span>
+                            <span style="font-weight:700">@T["{0} د.أ", totalDue.ToString("N2")]</span>
                         </div>
                         <div style="border-top:1px solid var(--line);margin:6px 0;padding-top:6px">
                             <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                                <span style="color:var(--steel)">العربون (50%)</span>
+                                <span style="color:var(--steel)">@T["العربون (50%)"]</span>
                                 <span style="color:@(myPart.DepositPaidAt.HasValue ? "#16a34a" : "var(--amber)")">
-                                    @depositDue.ToString("N2") د.أ
+                                    @T["{0} د.أ", depositDue.ToString("N2")]
                                     @if (myPart.DepositPaidAt.HasValue) { <text>✅</text> }
                                 </span>
                             </div>
                             <div style="display:flex;justify-content:space-between">
-                                <span style="color:var(--steel)">المتبقي (50%)</span>
+                                <span style="color:var(--steel)">@T["المتبقي (50%)"]</span>
                                 <span style="color:@(myPart.FullPaidAt.HasValue ? "#16a34a" : "var(--steel)")">
-                                    @Math.Round(totalDue - depositDue, 2).ToString("N2") د.أ
+                                    @T["{0} د.أ", Math.Round(totalDue - depositDue, 2).ToString("N2")]
                                     @if (myPart.FullPaidAt.HasValue) { <text>✅</text> }
                                 </span>
                             </div>
@@ -468,22 +468,22 @@
             @if (Model.Participants.Any())
             {
                 <div class="panel">
-                    <h2>المشاركون (@Model.Participants.Count)</h2>
+                    <h2>@T["المشاركون ({0})", Model.Participants.Count]</h2>
                     @foreach (var p in Model.Participants.OrderByDescending(x => x.JoinedAt))
                     {
                         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper);font-size:.88rem;gap:8px">
-                            <span>@(p.User?.FullName ?? "مشارك")</span>
+                            <span>@(p.User?.FullName ?? T["مشارك"])</span>
                             <div style="display:flex;align-items:center;gap:8px">
                                 <span style="font-weight:700">×@p.Quantity</span>
                                 @{
                                     var badge = p.PaymentStatus switch
                                     {
-                                        ParticipantPaymentStatus.NotPaid            => ("⭕ لم يدفع", "#d97706"),
-                                        ParticipantPaymentStatus.DepositUnderReview => ("⏳ عربون بانتظار", "#d97706"),
-                                        ParticipantPaymentStatus.DepositPaid        => ("💛 عربون ✓", "#ca8a04"),
-                                        ParticipantPaymentStatus.FullUnderReview    => ("⏳ دفع كامل بانتظار", "#d97706"),
-                                        ParticipantPaymentStatus.FullPaid           => ("✅ مكتمل", "#16a34a"),
-                                        ParticipantPaymentStatus.Refunded           => ("↩️ مسترجع", "#be123c"),
+                                        ParticipantPaymentStatus.NotPaid            => (T["⭕ لم يدفع"], "#d97706"),
+                                        ParticipantPaymentStatus.DepositUnderReview => (T["⏳ عربون بانتظار"], "#d97706"),
+                                        ParticipantPaymentStatus.DepositPaid        => (T["💛 عربون ✓"], "#ca8a04"),
+                                        ParticipantPaymentStatus.FullUnderReview    => (T["⏳ دفع كامل بانتظار"], "#d97706"),
+                                        ParticipantPaymentStatus.FullPaid           => (T["✅ مكتمل"], "#16a34a"),
+                                        ParticipantPaymentStatus.Refunded           => (T["↩️ مسترجع"], "#be123c"),
                                         _ => ("", "inherit")
                                     };
                                 }
@@ -494,7 +494,7 @@
                 </div>
             }
 
-            <a class="btn btn-outline btn-block" asp-action="Index">← كل الحملات</a>
+            <a class="btn btn-outline btn-block" asp-action="Index">@T["← كل الحملات"]</a>
         </aside>
     </div>
 </div>

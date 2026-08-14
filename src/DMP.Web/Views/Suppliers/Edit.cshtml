@@ -1,11 +1,11 @@
 @model Supplier
 @{
-    ViewData["Title"] = "تعديل المورد — " + Model.Name;
+    ViewData["Title"] = T["تعديل المورد — {0}", Model.Name];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>✏️ تعديل المورد</h1>
+        <h1>@T["✏️ تعديل المورد"]</h1>
         <p>@Model.Name</p>
     </div>
 </div>
@@ -18,70 +18,70 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>اسم المورد <span style="color:var(--red)">*</span></label>
+                        <label>@T["اسم المورد"] <span style="color:var(--red)">*</span></label>
                         <input asp-for="Name" class="form-control" required />
                     </div>
                     <div class="form-group">
-                        <label>المدينة</label>
+                        <label>@T["المدينة"]</label>
                         <input asp-for="City" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>وصف المورد</label>
+                    <label>@T["وصف المورد"]</label>
                     <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>المواد والمنتجات المتوفرة</label>
+                    <label>@T["المواد والمنتجات المتوفرة"]</label>
                     <input asp-for="Materials" class="form-control" />
-                    <small style="color:var(--steel)">افصل بين المواد بفاصلة</small>
+                    <small style="color:var(--steel)">@T["افصل بين المواد بفاصلة"]</small>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>رقم الهاتف</label>
+                        <label>@T["رقم الهاتف"]</label>
                         <input asp-for="Phone" class="form-control" dir="ltr" />
                     </div>
                     <div class="form-group">
-                        <label>البريد الإلكتروني</label>
+                        <label>@T["البريد الإلكتروني"]</label>
                         <input asp-for="Email" class="form-control" dir="ltr" type="email" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>الموقع الإلكتروني</label>
+                        <label>@T["الموقع الإلكتروني"]</label>
                         <input asp-for="Website" class="form-control" dir="ltr" />
                     </div>
                     <div class="form-group">
-                        <label>العنوان التفصيلي</label>
+                        <label>@T["العنوان التفصيلي"]</label>
                         <input asp-for="Address" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>شعار المورد</label>
+                    <label>@T["شعار المورد"]</label>
                     @if (!string.IsNullOrEmpty(Model.LogoPath))
                     {
                         <div style="margin-bottom:8px">
                             <img src="@Model.LogoPath"
                                  style="max-height:60px;max-width:150px;object-fit:contain;border:1px solid var(--line);border-radius:6px;padding:4px" />
-                            <div style="font-size:.82rem;color:var(--steel);margin-top:4px">الشعار الحالي — ارفع صورة جديدة لاستبداله</div>
+                            <div style="font-size:.82rem;color:var(--steel);margin-top:4px">@T["الشعار الحالي — ارفع صورة جديدة لاستبداله"]</div>
                         </div>
                     }
                     <input type="file" name="logo" accept="image/*" class="form-control" />
-                    <small style="color:var(--steel)">JPG، PNG، WebP — حجم أقصى 5MB</small>
+                    <small style="color:var(--steel)">@T["JPG، PNG، WebP — حجم أقصى 5MB"]</small>
                 </div>
 
                 <div class="form-group" style="display:flex;align-items:center;gap:10px">
                     <input asp-for="IsApproved" type="checkbox" id="isApprovedChk" style="width:18px;height:18px" />
-                    <label for="isApprovedChk" style="margin:0;cursor:pointer">مورد معتمد (ظاهر في الدليل)</label>
+                    <label for="isApprovedChk" style="margin:0;cursor:pointer">@T["مورد معتمد (ظاهر في الدليل)"]</label>
                 </div>
 
                 <div style="display:flex;gap:12px;margin-top:6px">
-                    <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
-                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline">إلغاء</a>
+                    <button type="submit" class="btn btn-primary">@T["💾 حفظ التعديلات"]</button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline">@T["إلغاء"]</a>
                 </div>
             </form>
         </div>

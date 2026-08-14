@@ -16,14 +16,14 @@
             <div class="panel">
                 @if (!string.IsNullOrEmpty(Model.Description))
                 {
-                    <h2>عن المورد</h2>
+                    <h2>@T["عن المورد"]</h2>
                     <p style="color:var(--ink-mid);line-height:1.8">@Model.Description</p>
                 }
 
                 @if (!string.IsNullOrEmpty(Model.Materials))
                 {
                     <div style="margin-top:16px">
-                        <h3 style="font-size:.9rem;margin-bottom:8px">المواد المتوفرة</h3>
+                        <h3 style="font-size:.9rem;margin-bottom:8px">@T["المواد المتوفرة"]</h3>
                         <span class="chip chip-green">@Model.Materials</span>
                     </div>
                 }
@@ -41,41 +41,41 @@
                 <ul class="info-list">
                     @if (!string.IsNullOrEmpty(Model.City))
                     {
-                        <li><span class="k">المدينة</span><span class="v">@Model.City</span></li>
+                        <li><span class="k">@T["المدينة"]</span><span class="v">@Model.City</span></li>
                     }
                     @if (!string.IsNullOrEmpty(Model.Address))
                     {
-                        <li><span class="k">العنوان</span><span class="v">@Model.Address</span></li>
+                        <li><span class="k">@T["العنوان"]</span><span class="v">@Model.Address</span></li>
                     }
                     @if (!string.IsNullOrEmpty(Model.Phone))
                     {
-                        <li><span class="k">الهاتف</span><span class="v" dir="ltr"><a href="tel:@Model.Phone">@Model.Phone</a></span></li>
+                        <li><span class="k">@T["الهاتف"]</span><span class="v" dir="ltr"><a href="tel:@Model.Phone">@Model.Phone</a></span></li>
                     }
                     @if (!string.IsNullOrEmpty(Model.Email))
                     {
-                        <li><span class="k">البريد</span><span class="v" dir="ltr"><a href="mailto:@Model.Email">@Model.Email</a></span></li>
+                        <li><span class="k">@T["البريد"]</span><span class="v" dir="ltr"><a href="mailto:@Model.Email">@Model.Email</a></span></li>
                     }
                     @if (!string.IsNullOrEmpty(Model.Website))
                     {
-                        <li><span class="k">الموقع</span><span class="v"><a href="@Model.Website" target="_blank" style="color:var(--sky)">زيارة الموقع ↗</a></span></li>
+                        <li><span class="k">@T["الموقع"]</span><span class="v"><a href="@Model.Website" target="_blank" style="color:var(--sky)">@T["زيارة الموقع ↗"]</a></span></li>
                     }
                 </ul>
             </div>
-            <a class="btn btn-outline btn-block" asp-controller="Suppliers" asp-action="Index">← كل الموردين</a>
+            <a class="btn btn-outline btn-block" asp-controller="Suppliers" asp-action="Index">@T["← كل الموردين"]</a>
 
             @if (isAdmin)
             {
                 <div style="margin-top:12px;padding-top:14px;border-top:1px solid var(--line)">
-                    <div style="font-size:.8rem;color:var(--steel);margin-bottom:8px;font-weight:600">🛠 أدوات الإدارة</div>
+                    <div style="font-size:.8rem;color:var(--steel);margin-bottom:8px;font-weight:600">@T["🛠 أدوات الإدارة"]</div>
                     <div style="display:flex;flex-direction:column;gap:8px">
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline" style="text-align:center">
-                            ✏️ تعديل المورد
+                            @T["✏️ تعديل المورد"]
                         </a>
                         <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
-                              onsubmit="return confirm('هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع.')">
+                              onsubmit="return confirm('@T["هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع."]')">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-danger" style="width:100%">
-                                🗑 حذف المورد
+                                @T["🗑 حذف المورد"]
                             </button>
                         </form>
                     </div>

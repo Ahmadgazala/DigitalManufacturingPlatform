@@ -1,16 +1,16 @@
 @model List<ManufacturingRequest>
 @{
-    ViewData["Title"] = "طلباتي";
+    ViewData["Title"] = T["طلباتي"];
 }
 
 <div class="page-header">
     <div class="container">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
             <div>
-                <h1>طلباتي</h1>
-                <p>تتبّع طلبات التصنيع الخاصة بك</p>
+                <h1>@T["طلباتي"]</h1>
+                <p>@T["تتبّع طلبات التصنيع الخاصة بك"]</p>
             </div>
-            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">+ طلب جديد</a>
+            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">@T["+ طلب جديد"]</a>
         </div>
     </div>
 </div>
@@ -36,13 +36,13 @@
                             <span class="chip chip-cat">@req.Category.ToArabic()</span>
                         </div>
                         <div class="req-meta">
-                            <span>📦 كمية: @req.Quantity</span>
-                            @if (req.Budget.HasValue) { <span>💰 @req.Budget.Value.ToString("N0") د.أ</span> }
+                            <span>@T["📦 كمية: {0}", req.Quantity]</span>
+                            @if (req.Budget.HasValue) { <span>@T["💰 {0} د.أ", req.Budget.Value.ToString("N0")]</span> }
                             <span class="req-date">@req.CreatedAt.ToString("yyyy/MM/dd")</span>
-                            <span>💬 @req.Quotations.Count عرض</span>
+                            <span>@T["💬 {0} عرض", req.Quotations.Count]</span>
                         </div>
                     </div>
-                    <a class="btn btn-sm btn-outline" asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id">عرض</a>
+                    <a class="btn btn-sm btn-outline" asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id">@T["عرض"]</a>
                 </div>
             }
         </div>
@@ -51,9 +51,9 @@
     {
         <div class="empty-state">
             <div class="ico">📋</div>
-            <h3>لا توجد طلبات بعد</h3>
-            <p>أنشئ طلب تصنيع وسيتواصل معك المصنّعون بعروض أسعار</p>
-            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">+ طلب جديد</a>
+            <h3>@T["لا توجد طلبات بعد"]</h3>
+            <p>@T["أنشئ طلب تصنيع وسيتواصل معك المصنّعون بعروض أسعار"]</p>
+            <a asp-controller="Requests" asp-action="Create" class="btn btn-primary">@T["+ طلب جديد"]</a>
         </div>
     }
 </div>

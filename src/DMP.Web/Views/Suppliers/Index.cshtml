@@ -1,6 +1,6 @@
 @model List<Supplier>
 @{
-    ViewData["Title"] = "دليل الموردين";
+    ViewData["Title"] = T["دليل الموردين"];
     var pageIndex  = (int)(ViewBag.PageIndex  ?? 1);
     var totalPages = (int)(ViewBag.TotalPages ?? 1);
     var totalCount = (int)(ViewBag.TotalCount ?? 0);
@@ -12,12 +12,12 @@
     <div class="container">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
             <div>
-                <h1>دليل الموردين</h1>
-                <p>تصفّح موردي المواد الخام والمعدات في الأردن</p>
+                <h1>@T["دليل الموردين"]</h1>
+                <p>@T["تصفّح موردي المواد الخام والمعدات في الأردن"]</p>
             </div>
             @if (isAdmin)
             {
-                <a asp-action="Create" class="btn btn-primary">➕ إضافة مورد</a>
+                <a asp-action="Create" class="btn btn-primary">@T["➕ إضافة مورد"]</a>
             }
         </div>
     </div>
@@ -25,13 +25,13 @@
 
 <div class="container section">
     <form asp-controller="Suppliers" asp-action="Index" method="get" class="search-bar">
-        <input type="text" name="searchTerm" class="form-control" value="@searchTerm" placeholder="ابحث عن مورد أو مادة..." />
-        <button type="submit" class="btn btn-primary">بحث</button>
+        <input type="text" name="searchTerm" class="form-control" value="@searchTerm" placeholder="@T["ابحث عن مورد أو مادة..."]" />
+        <button type="submit" class="btn btn-primary">@T["بحث"]</button>
     </form>
 
     @if (Model.Any())
     {
-        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@totalCount نتيجة</p>
+        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@T["{0} نتيجة", totalCount]</p>
         <div class="grid grid-3">
             @foreach (var s in Model)
             {
@@ -54,26 +54,26 @@
                     <ul class="info-list" style="font-size:.85rem">
                         @if (!string.IsNullOrEmpty(s.City))
                         {
-                            <li><span class="k">المدينة</span><span class="v">@s.City</span></li>
+                            <li><span class="k">@T["المدينة"]</span><span class="v">@s.City</span></li>
                         }
                         @if (!string.IsNullOrEmpty(s.Phone))
                         {
-                            <li><span class="k">الهاتف</span><span class="v" dir="ltr">@s.Phone</span></li>
+                            <li><span class="k">@T["الهاتف"]</span><span class="v" dir="ltr">@s.Phone</span></li>
                         }
                         @if (!string.IsNullOrEmpty(s.Email))
                         {
-                            <li><span class="k">البريد</span><span class="v" dir="ltr" style="font-size:.8rem">@s.Email</span></li>
+                            <li><span class="k">@T["البريد"]</span><span class="v" dir="ltr" style="font-size:.8rem">@s.Email</span></li>
                         }
                         @if (!string.IsNullOrEmpty(s.Website))
                         {
-                            <li><span class="k">الموقع</span><span class="v"><a href="@s.Website" target="_blank" style="color:var(--sky)">رابط</a></span></li>
+                            <li><span class="k">@T["الموقع"]</span><span class="v"><a href="@s.Website" target="_blank" style="color:var(--sky)">@T["رابط"]</a></span></li>
                         }
                     </ul>
                     <div style="display:flex;gap:8px;margin-top:auto;padding-top:4px">
-                        <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline" style="flex:1;text-align:center">عرض التفاصيل</a>
+                        <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline" style="flex:1;text-align:center">@T["عرض التفاصيل"]</a>
                         @if (isAdmin)
                         {
-                            <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline" title="تعديل">✏️</a>
+                            <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline" title="@T["تعديل"]">✏️</a>
                         }
                     </div>
                 </div>
@@ -85,7 +85,7 @@
             <div class="pagination">
                 @if (pageIndex > 1)
                 {
-                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex-1)" asp-route-searchTerm="@searchTerm" class="page-btn">‹ السابق</a>
+                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex-1)" asp-route-searchTerm="@searchTerm" class="page-btn">@T["‹ السابق"]</a>
                 }
                 @for (int i = 1; i <= totalPages; i++)
                 {
@@ -94,7 +94,7 @@
                 }
                 @if (pageIndex < totalPages)
                 {
-                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex+1)" asp-route-searchTerm="@searchTerm" class="page-btn">التالي ›</a>
+                    <a asp-controller="Suppliers" asp-action="Index" asp-route-page="@(pageIndex+1)" asp-route-searchTerm="@searchTerm" class="page-btn">@T["التالي ›"]</a>
                 }
             </div>
         }
@@ -103,15 +103,15 @@
     {
         <div class="empty-state">
             <div class="ico">🏭</div>
-            <h3>لا يوجد موردون بعد</h3>
+            <h3>@T["لا يوجد موردون بعد"]</h3>
             @if (isAdmin)
             {
-                <p>ابدأ بإضافة أول مورد للدليل</p>
-                <a asp-action="Create" class="btn btn-primary" style="margin-top:12px">➕ إضافة مورد</a>
+                <p>@T["ابدأ بإضافة أول مورد للدليل"]</p>
+                <a asp-action="Create" class="btn btn-primary" style="margin-top:12px">@T["➕ إضافة مورد"]</a>
             }
             else
             {
-                <p>سيتم إضافة قائمة الموردين قريباً</p>
+                <p>@T["سيتم إضافة قائمة الموردين قريباً"]</p>
             }
         </div>
     }

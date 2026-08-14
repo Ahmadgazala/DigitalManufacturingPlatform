@@ -258,7 +258,7 @@
         <div class="mfr-card-chips">
             @if (Model.Delivery != DeliveryOption.PickupOnly)
             {
-                <span class="chip chip-green">توصيل</span>
+                <span class="chip chip-green">@T["توصيل"]</span>
             }
             @if (Model.Machines != null && Model.Machines.Any())
             {

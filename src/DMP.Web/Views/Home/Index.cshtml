@@ -1,6 +1,6 @@
 @{
     ViewData["Title"] = "Jo Maker";
-    ViewData["Description"] = "Jo Maker منصة التصنيع الرقمي في الأردن — اربط فكرتك بورش تصنيع محترفة: CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك، شراء جماعي وموردين موثوقين.";
+    ViewData["Description"] = "Jo Maker " + T["منصة التصنيع الرقمي في الأردن — اربط فكرتك بورش تصنيع محترفة: CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك، شراء جماعي وموردين موثوقين."];
     var latestManufacturers = ViewBag.LatestManufacturers as List<Manufacturer> ?? new List<Manufacturer>();
     var activeCampaigns = ViewBag.ActiveCampaigns as List<GroupBuyingCampaign> ?? new List<GroupBuyingCampaign>();
 }
@@ -16,35 +16,35 @@
             <div class="hero-content">
                 <div class="hero-label">
                     <span class="hero-label-dot"></span>
-                    منصة التصنيع الرقمي في الأردن
+                    @T["منصة التصنيع الرقمي في الأردن"]
                 </div>
 
                 <h1 class="hero-title">
-                    حوّل أفكارك<br/>
-                    إلى <span class="accent">منتجات حقيقية</span>
+                    @T["حوّل أفكارك"]<br/>
+                    @T["إلى"] <span class="accent">@T["منتجات حقيقية"]</span>
                 </h1>
 
                 <p class="hero-sub">
-                    تواصل مع ورش CNC والطباعة ثلاثية الأبعاد وقطع الليزر المعتمدة. احصل على عروض أسعار خلال ساعات.
+                    @T["تواصل مع ورش CNC والطباعة ثلاثية الأبعاد وقطع الليزر المعتمدة. احصل على عروض أسعار خلال ساعات."]
                 </p>
 
                 <div class="hero-btns">
-                    <a asp-controller="Requests" asp-action="Create" class="btn btn-primary btn-lg">اطلب تصنيعاً</a>
-                    <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">استعرض الورش</a>
+                    <a asp-controller="Requests" asp-action="Create" class="btn btn-primary btn-lg">@T["اطلب تصنيعاً"]</a>
+                    <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">@T["استعرض الورش"]</a>
                 </div>
 
                 <div class="hero-stats">
                     <div>
                         <div class="hero-stat-num">5+</div>
-                        <div class="hero-stat-lbl">ورشة معتمدة</div>
+                        <div class="hero-stat-lbl">@T["ورشة معتمدة"]</div>
                     </div>
                     <div>
                         <div class="hero-stat-num">3</div>
-                        <div class="hero-stat-lbl">مدن أردنية</div>
+                        <div class="hero-stat-lbl">@T["مدن أردنية"]</div>
                     </div>
                     <div>
                         <div class="hero-stat-num">24h</div>
-                        <div class="hero-stat-lbl">متوسط الرد</div>
+                        <div class="hero-stat-lbl">@T["متوسط الرد"]</div>
                     </div>
                 </div>
             </div>
@@ -196,17 +196,17 @@
                     <div class="hero-floater hero-floater-1">
                         <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                            <span style="color:var(--green-txt);font-size:.72rem;font-weight:700">طلب منجز</span>
+                            <span style="color:var(--green-txt);font-size:.72rem;font-weight:700">@T["طلب منجز"]</span>
                         </div>
                         <div class="hero-floater-num">47</div>
-                        <div class="hero-floater-lbl">هذا الشهر</div>
+                        <div class="hero-floater-lbl">@T["هذا الشهر"]</div>
                     </div>
                     <div class="hero-floater hero-floater-2">
                         <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            <span style="color:var(--text-2);font-size:.7rem">متوسط التسليم</span>
+                            <span style="color:var(--text-2);font-size:.7rem">@T["متوسط التسليم"]</span>
                         </div>
-                        <div class="hero-floater-num" style="font-size:1.1rem">3 أيام</div>
+                        <div class="hero-floater-num" style="font-size:1.1rem">@T["3 أيام"]</div>
                     </div>
                 </div>
             </div>
@@ -229,8 +229,8 @@
                     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
                     <span class="step-num">1</span>
                 </div>
-                <div class="step-title">ارفع ملف التصميم</div>
-                <div class="step-desc">DXF, STL, PDF أو صف مشروعك بالتفصيل</div>
+                <div class="step-title">@T["ارفع ملف التصميم"]</div>
+                <div class="step-desc">@T["DXF, STL, PDF أو صف مشروعك بالتفصيل"]</div>
             </div>
 
             <!-- Step 2: Receive quotes from workshops -->
@@ -240,8 +240,8 @@
                     <svg viewBox="0 0 24 24"><path d="M2 20V8l7-5 7 5v12H2z"/><path d="M22 20V10l-6-4"/><path d="M2 20h20"/><rect x="6" y="14" width="3" height="6"/><rect x="11" y="14" width="3" height="6"/></svg>
                     <span class="step-num">2</span>
                 </div>
-                <div class="step-title">استقبل عروض الورش</div>
-                <div class="step-desc">ورش متخصصة ترسل عروض أسعار تنافسية</div>
+                <div class="step-title">@T["استقبل عروض الورش"]</div>
+                <div class="step-desc">@T["ورش متخصصة ترسل عروض أسعار تنافسية"]</div>
             </div>
 
             <!-- Step 3: Accept & pay -->
@@ -251,8 +251,8 @@
                     <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     <span class="step-num">3</span>
                 </div>
-                <div class="step-title">اعتمد وادفع بأمان</div>
-                <div class="step-desc">اختر المصنّع وادفع عبر Stripe المحمي</div>
+                <div class="step-title">@T["اعتمد وادفع بأمان"]</div>
+                <div class="step-desc">@T["اختر المصنّع وادفع عبر Stripe المحمي"]</div>
             </div>
 
             <!-- Step 4: Receive product -->
@@ -262,8 +262,8 @@
                     <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                     <span class="step-num">4</span>
                 </div>
-                <div class="step-title">استلم منتجك</div>
-                <div class="step-desc">توصيل إلى بابك أو استلام من الورشة</div>
+                <div class="step-title">@T["استلم منتجك"]</div>
+                <div class="step-desc">@T["توصيل إلى بابك أو استلام من الورشة"]</div>
             </div>
 
         </div>
@@ -276,8 +276,8 @@
 <section class="section">
     <div class="container">
         <div class="section-head">
-            <h2>ورش معتمدة</h2>
-            <p>اكتشف أفضل ورش التصنيع الرقمي في الأردن، كل ورشة مراجعة ومعتمدة من فريقنا</p>
+            <h2>@T["ورش معتمدة"]</h2>
+            <p>@T["اكتشف أفضل ورش التصنيع الرقمي في الأردن، كل ورشة مراجعة ومعتمدة من فريقنا"]</p>
         </div>
 
         @if (latestManufacturers.Any())
@@ -290,7 +290,7 @@
             </div>
             <div style="text-align:center;margin-top:40px">
                 <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">
-                    عرض جميع الورش
+                    @T["عرض جميع الورش"]
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
             </div>
@@ -306,9 +306,9 @@
                         <line x1="10" y1="14" x2="14" y2="14"/>
                     </svg>
                 </div>
-                <h3>لا توجد ورش بعد</h3>
-                <p>سجّل كمصنّع وكن أول من ينضم للمنصة</p>
-                <a asp-controller="Account" asp-action="Register" class="btn btn-primary">سجّل ورشتك</a>
+                <h3>@T["لا توجد ورش بعد"]</h3>
+                <p>@T["سجّل كمصنّع وكن أول من ينضم للمنصة"]</p>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary">@T["سجّل ورشتك"]</a>
             </div>
         }
     </div>
@@ -320,8 +320,8 @@
 <section class="features-bento">
     <div class="container">
         <div class="section-head">
-            <h2>لماذا Jo Maker؟</h2>
-            <p>منصة متكاملة تجمع كل ما تحتاجه لتحويل مشروعك من ملف تصميم إلى منتج مصنوع</p>
+            <h2>@T["لماذا Jo Maker؟"]</h2>
+            <p>@T["منصة متكاملة تجمع كل ما تحتاجه لتحويل مشروعك من ملف تصميم إلى منتج مصنوع"]</p>
         </div>
 
         <div class="bento-grid">
@@ -334,8 +334,8 @@
                         <path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/>
                     </svg>
                 </div>
-                <h3>CNC، طباعة ثلاثية الأبعاد، قطع ليزر</h3>
-                <p>احصل على عروض أسعار من ورش متخصصة في جميع تقنيات التصنيع الرقمي — كل ما تحتاجه في مكان واحد خلال أقل من 24 ساعة.</p>
+                <h3>@T["CNC، طباعة ثلاثية الأبعاد، قطع ليزر"]</h3>
+                <p>@T["احصل على عروض أسعار من ورش متخصصة في جميع تقنيات التصنيع الرقمي — كل ما تحتاجه في مكان واحد خلال أقل من 24 ساعة."]</p>
                 <div class="bento-accent"></div>
                 <!-- Mini tech tags -->
                 <div style="display:flex;gap:6px;margin-top:16px;flex-wrap:wrap">
@@ -355,8 +355,8 @@
                         <polyline points="9 12 11 14 15 10"/>
                     </svg>
                 </div>
-                <h3>ورش معتمدة وموثّقة</h3>
-                <p>كل ورشة تمر بعملية تحقق من الهوية والمعدات والجودة قبل القبول في المنصة.</p>
+                <h3>@T["ورش معتمدة وموثّقة"]</h3>
+                <p>@T["كل ورشة تمر بعملية تحقق من الهوية والمعدات والجودة قبل القبول في المنصة."]</p>
             </div>
 
             <!-- Cell 3: Secure payment -->
@@ -368,8 +368,8 @@
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
                 </div>
-                <h3>دفع محمي بالكامل</h3>
-                <p>أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر Stripe مع ضمان استرداد.</p>
+                <h3>@T["دفع محمي بالكامل"]</h3>
+                <p>@T["أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر Stripe مع ضمان استرداد."]</p>
             </div>
 
             <!-- Cell 4: Order tracking -->
@@ -384,8 +384,8 @@
                         <line x1="12" y1="14" x2="12" y2="17"/>
                     </svg>
                 </div>
-                <h3>تتبع مراحل الإنتاج</h3>
-                <p>تابع طلبك عبر 4 مراحل واضحة: استلام، إنتاج، جاهز، مسلّم.</p>
+                <h3>@T["تتبع مراحل الإنتاج"]</h3>
+                <p>@T["تابع طلبك عبر 4 مراحل واضحة: استلام، إنتاج، جاهز، مسلّم."]</p>
             </div>
 
             <!-- Cell 5: Map -->
@@ -398,8 +398,8 @@
                         <line x1="15" y1="6" x2="15" y2="21"/>
                     </svg>
                 </div>
-                <h3>خريطة الورش التفاعلية</h3>
-                <p>اعثر على أقرب ورشة إليك عبر خريطة تغطي مدن الأردن كاملة.</p>
+                <h3>@T["خريطة الورش التفاعلية"]</h3>
+                <p>@T["اعثر على أقرب ورشة إليك عبر خريطة تغطي مدن الأردن كاملة."]</p>
             </div>
 
         </div>
@@ -414,8 +414,8 @@
     <section class="section">
         <div class="container">
             <div class="section-head">
-                <h2>الشراء الجماعي</h2>
-                <p>انضم مع مصنّعين آخرين واحصل على سعر الجملة</p>
+                <h2>@T["الشراء الجماعي"]</h2>
+                <p>@T["انضم مع مصنّعين آخرين واحصل على سعر الجملة"]</p>
             </div>
             <div class="grid grid-3">
                 @foreach (var c in activeCampaigns)
@@ -434,7 +434,7 @@
                                     <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                                 </svg>
-                                <span style="color:var(--text-2);font-size:.8rem;margin-top:8px">شراء جماعي</span>
+                                <span style="color:var(--text-2);font-size:.8rem;margin-top:8px">@T["شراء جماعي"]</span>
                             </div>
                         }
                         <div style="padding:18px 20px 20px">
@@ -443,15 +443,15 @@
                                 <div class="progress-bar-fill" style="width:@(c.ProgressPercent)%"></div>
                             </div>
                             <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-2);margin:8px 0 14px">
-                                <span>@c.CurrentQuantity / @c.MinQuantity وحدة</span>
+                                <span>@T["{0} / {1} وحدة", c.CurrentQuantity, c.MinQuantity]</span>
                                 <span style="color:var(--amber-txt);font-weight:700">@c.ProgressPercent%</span>
                             </div>
                             <div style="display:flex;justify-content:space-between;align-items:center">
                                 <div>
                                     <span style="color:var(--sky);font-weight:900;font-size:1.1rem">@c.GroupPrice.ToString("N0")</span>
-                                    <span style="font-size:.75rem;color:var(--text-2);margin-inline-start:3px">د.أ</span>
+                                    <span style="font-size:.75rem;color:var(--text-2);margin-inline-start:3px">@T["د.أ"]</span>
                                 </div>
-                                <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">انضم الآن</a>
+                                <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">@T["انضم الآن"]</a>
                             </div>
                         </div>
                     </div>
@@ -466,11 +466,11 @@
 ═══════════════════════════════════════════════ -->
 <section class="cta-section">
     <div class="container">
-        <h2>هل تمتلك ورشة تصنيع؟</h2>
-        <p>انضم إلى Jo Maker وابدأ باستقبال طلبات من عملاء جدد في جميع أنحاء الأردن مجاناً.</p>
+        <h2>@T["هل تمتلك ورشة تصنيع؟"]</h2>
+        <p>@T["انضم إلى Jo Maker وابدأ باستقبال طلبات من عملاء جدد في جميع أنحاء الأردن مجاناً."]</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-            <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">سجّل ورشتك مجاناً</a>
-            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">استعرض الورش</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">@T["سجّل ورشتك مجاناً"]</a>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-lg">@T["استعرض الورش"]</a>
         </div>
     </div>
 </section>

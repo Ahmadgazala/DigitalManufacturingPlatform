@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -14,15 +15,18 @@ public class RequestsController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public RequestsController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IFileService fileService)
+        IFileService fileService,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _fileService = fileService;
+        _T = T;
     }
 
     // GET: /Requests
@@ -94,7 +98,7 @@ public class RequestsController : Controller
             await _db.SaveChangesAsync();
         }
 
-        TempData["Success"] = "تم إرسال طلبك بنجاح. ستصلك عروض الأسعار قريباً.";
+        TempData["Success"] = _T["تم إرسال طلبك بنجاح. ستصلك عروض الأسعار قريباً."].Value;
         return RedirectToAction(nameof(Details), new { id = model.Id });
     }
 
@@ -137,12 +141,12 @@ public class RequestsController : Controller
         {
             RequestId = request.Id,
             Stage     = TrackingStage.Delivered,
-            Note      = "تم تأكيد الاستلام من قِبل العميل"
+            Note      = _T["تم تأكيد الاستلام من قِبل العميل"].Value
         });
 
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم تحديد الطلب كمكتمل.";
+        TempData["Success"] = _T["تم تحديد الطلب كمكتمل."].Value;
         return RedirectToAction(nameof(Details), new { id });
     }
 
@@ -173,14 +177,14 @@ public class RequestsController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId  = request.CustomerId,
-            Message = $"تحديث على طلبك \"{request.Title}\": {stage.ToArabic()}",
+            Message = _T["تحديث على طلبك \"{0}\": {1}", request.Title, stage.ToArabic()].Value,
             Link    = Url.Action("Details", "Requests", new { id = requestId }),
             IsRead  = false
         });
 
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = $"تم تحديث حالة الطلب إلى: {stage.ToArabic()}";
+        TempData["Success"] = _T["تم تحديث حالة الطلب إلى: {0}", stage.ToArabic()].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 }

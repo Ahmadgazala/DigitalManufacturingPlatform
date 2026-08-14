@@ -7,10 +7,10 @@
     @{
         var rawTitle = ViewData["Title"] as string;
         var seoTitle = string.IsNullOrWhiteSpace(rawTitle) || rawTitle == "Jo Maker"
-            ? "Jo Maker — منصة التصنيع الرقمي في الأردن"
+            ? "Jo Maker — " + T["منصة التصنيع الرقمي في الأردن"]
             : $"{rawTitle} — Jo Maker";
         var seoDesc = ViewData["Description"] as string
-            ?? "Jo Maker منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد.";
+            ?? "Jo Maker " + T["منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد."];
         var canonical = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
         var siteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     }
@@ -24,7 +24,7 @@
     <meta property="og:description" content="@seoDesc" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@canonical" />
-    <meta property="og:locale" content="ar_JO" />
+    <meta property="og:locale" content="@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en" ? "en_US" : "ar_JO")" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="@seoTitle" />
     <meta name="twitter:description" content="@seoDesc" />
@@ -33,10 +33,10 @@
       "@@context": "https://schema.org",
       "@@type": "WebSite",
       "name": "Jo Maker",
-      "alternateName": "منصة التصنيع الرقمي في الأردن",
+      "alternateName": "@T["منصة التصنيع الرقمي في الأردن"]",
       "url": "@siteUrl",
-      "inLanguage": "ar",
-      "description": "@(ViewData["Description"] as string ?? "Jo Maker منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد.")"
+      "inLanguage": "@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName",
+      "description": "@(ViewData["Description"] as string ?? T["منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد."].Value)"
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,14 +66,14 @@
             <span>Jo Maker</span>
         </a>
 
-        <button class="nav-toggle" id="navToggle" aria-label="القائمة" aria-expanded="false">
+        <button class="nav-toggle" id="navToggle" aria-label="@T["القائمة"]" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
 
         <ul class="nav-links" id="navLinks">
             <li><a asp-controller="Home" asp-action="Index">@T["Nav_Home"]</a></li>
             <li><a asp-controller="Manufacturers" asp-action="Index">@T["Nav_Manufacturers"]</a></li>
-            <li><a asp-controller="Manufacturers" asp-action="Map">الخريطة</a></li>
+            <li><a asp-controller="Manufacturers" asp-action="Map">@T["الخريطة"]</a></li>
             <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
@@ -89,7 +89,7 @@
         <div class="nav-actions">
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <a class="nav-bell" asp-controller="Notifications" asp-action="Index" title="الإشعارات">
+                <a class="nav-bell" asp-controller="Notifications" asp-action="Index" title="@T["الإشعارات"]">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -118,7 +118,7 @@
                 var isAr = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("ar");
             }
             <!-- Theme Toggle -->
-            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="@T["تبديل الوضع"]">
                 <!-- Sun: shown in dark mode -->
                 <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"/>
@@ -140,7 +140,7 @@
             <a asp-controller="Lang" asp-action="SetLanguage"
                asp-route-culture="@(isAr ? "en" : "ar")"
                asp-route-returnUrl="@Context.Request.Path"
-               class="btn btn-ghost btn-sm lang-btn">@(isAr ? "EN" : "ع")</a>
+               class="btn btn-ghost btn-sm lang-btn">@(isAr ? "EN" : T["ع"])</a>
         </div>
     </div>
 </nav>
@@ -180,50 +180,50 @@
                     </span>
                     Jo Maker
                 </div>
-                <p>منصة التصنيع الرقمي في الأردن — نربط أصحاب الأفكار بورش التصنيع المحترفة.</p>
+                <p>@T["منصة التصنيع الرقمي في الأردن — نربط أصحاب الأفكار بورش التصنيع المحترفة."]</p>
             </div>
             <!-- Platform links -->
             <div>
-                <div class="footer-col-title">المنصة</div>
+                <div class="footer-col-title">@T["المنصة"]</div>
                 <div class="footer-col-links">
-                    <a asp-controller="Manufacturers" asp-action="Index">دليل الورش</a>
-                    <a asp-controller="Manufacturers" asp-action="Map">خريطة الورش</a>
-                    <a asp-controller="Suppliers" asp-action="Index">الموردون</a>
-                    <a asp-controller="GroupBuying" asp-action="Index">الشراء الجماعي</a>
+                    <a asp-controller="Manufacturers" asp-action="Index">@T["دليل الورش"]</a>
+                    <a asp-controller="Manufacturers" asp-action="Map">@T["خريطة الورش"]</a>
+                    <a asp-controller="Suppliers" asp-action="Index">@T["الموردون"]</a>
+                    <a asp-controller="GroupBuying" asp-action="Index">@T["الشراء الجماعي"]</a>
                 </div>
             </div>
             <!-- Services links -->
             <div>
-                <div class="footer-col-title">الخدمات</div>
+                <div class="footer-col-title">@T["الخدمات"]</div>
                 <div class="footer-col-links">
-                    <a asp-controller="Requests" asp-action="Create">اطلب تصنيعاً</a>
-                    <a asp-controller="Account" asp-action="Register">سجّل ورشتك</a>
-                    <a asp-controller="Manufacturers" asp-action="Index">قطع CNC</a>
-                    <a asp-controller="Manufacturers" asp-action="Index">طباعة ثلاثية الأبعاد</a>
+                    <a asp-controller="Requests" asp-action="Create">@T["اطلب تصنيعاً"]</a>
+                    <a asp-controller="Account" asp-action="Register">@T["سجّل ورشتك"]</a>
+                    <a asp-controller="Manufacturers" asp-action="Index">@T["قطع CNC"]</a>
+                    <a asp-controller="Manufacturers" asp-action="Index">@T["طباعة ثلاثية الأبعاد"]</a>
                 </div>
             </div>
             <!-- Account links -->
             <div>
-                <div class="footer-col-title">الحساب</div>
+                <div class="footer-col-title">@T["الحساب"]</div>
                 <div class="footer-col-links">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a asp-controller="Requests" asp-action="Index">طلباتي</a>
-                        <a asp-controller="Messages" asp-action="Inbox">الرسائل</a>
-                        <a asp-controller="Notifications" asp-action="Index">الإشعارات</a>
+                        <a asp-controller="Requests" asp-action="Index">@T["طلباتي"]</a>
+                        <a asp-controller="Messages" asp-action="Inbox">@T["الرسائل"]</a>
+                        <a asp-controller="Notifications" asp-action="Index">@T["الإشعارات"]</a>
                     }
                     else
                     {
-                        <a asp-controller="Account" asp-action="Login">تسجيل الدخول</a>
-                        <a asp-controller="Account" asp-action="Register">إنشاء حساب</a>
+                        <a asp-controller="Account" asp-action="Login">@T["تسجيل الدخول"]</a>
+                        <a asp-controller="Account" asp-action="Register">@T["إنشاء حساب"]</a>
                     }
-                    <a asp-controller="Home" asp-action="Privacy">الخصوصية</a>
+                    <a asp-controller="Home" asp-action="Privacy">@T["الخصوصية"]</a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© @DateTime.Now.Year Jo Maker. جميع الحقوق محفوظة.</p>
-            <p style="color:var(--text-3);font-size:.8rem">صُنع في الأردن</p>
+            <p>© @DateTime.Now.Year Jo Maker. @T["جميع الحقوق محفوظة."]</p>
+            <p style="color:var(--text-3);font-size:.8rem">@T["صُنع في الأردن"]</p>
         </div>
     </div>
 </footer>

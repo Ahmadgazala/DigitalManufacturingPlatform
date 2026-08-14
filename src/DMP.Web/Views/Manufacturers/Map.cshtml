@@ -1,6 +1,6 @@
 @model List<Manufacturer>
 @{
-    ViewData["Title"] = "خريطة الورش";
+    ViewData["Title"] = T["خريطة الورش"];
     var cities    = ViewBag.Cities   as List<string> ?? new();
     var selCat    = ViewBag.Category as MachineCategory?;
     var selCity   = ViewBag.City     as string;
@@ -133,11 +133,11 @@
 <div class="page-header">
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
         <div>
-            <h1>🗺️ خريطة الورش</h1>
-            <p>@allCount ورشة معتمدة في الأردن — @Model.Count ظاهرة على الخريطة</p>
+            <h1>@T["🗺️ خريطة الورش"]</h1>
+            <p>@T["{0} ورشة معتمدة في الأردن — {1} ظاهرة على الخريطة", allCount, Model.Count]</p>
         </div>
         <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline btn-sm">
-            ☰ عرض القائمة
+            @T["☰ عرض القائمة"]
         </a>
     </div>
 </div>
@@ -148,21 +148,21 @@
     <!-- Sidebar -->
     <div class="map-sidebar">
         <div class="map-sidebar-head">
-            <h2>🏭 الورش (@Model.Count)</h2>
-            <p>انقر على ورشة للانتقال إليها</p>
+            <h2>@T["🏭 الورش ({0})", Model.Count]</h2>
+            <p>@T["انقر على ورشة للانتقال إليها"]</p>
         </div>
 
         <!-- Filters -->
         <form class="map-filters" asp-controller="Manufacturers" asp-action="Map" method="get">
             <select name="category" class="form-control" onchange="this.form.submit()">
-                <option value="">كل التخصصات</option>
+                <option value="">@T["كل التخصصات"]</option>
                 @foreach (MachineCategory cat in Enum.GetValues<MachineCategory>())
                 {
                     <option value="@((int)cat)" selected="@(selCat == cat)">@cat.ToArabic()</option>
                 }
             </select>
             <select name="city" class="form-control" onchange="this.form.submit()">
-                <option value="">كل المدن</option>
+                <option value="">@T["كل المدن"]</option>
                 @foreach (var city in cities)
                 {
                     <option value="@city" selected="@(selCity == city)">@city</option>
@@ -171,7 +171,7 @@
             @if (selCat.HasValue || !string.IsNullOrEmpty(selCity))
             {
                 <a asp-controller="Manufacturers" asp-action="Map"
-                   class="btn btn-ghost btn-sm" style="text-align:center">✕ مسح الفلتر</a>
+                   class="btn btn-ghost btn-sm" style="text-align:center">@T["✕ مسح الفلتر"]</a>
             }
         </form>
 
@@ -181,8 +181,8 @@
             {
                 <div class="map-empty">
                     <span>📍</span>
-                    <p>لا توجد ورش بموقع جغرافي محدد</p>
-                    <p style="font-size:.8rem">المصنّعون يحددون موقعهم من لوحة التحكم</p>
+                    <p>@T["لا توجد ورش بموقع جغرافي محدد"]</p>
+                    <p style="font-size:.8rem">@T["المصنّعون يحددون موقعهم من لوحة التحكم"]</p>
                 </div>
             }
             else
@@ -228,6 +228,7 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        const viewShopText = @Html.Raw(Json.Serialize(T["عرض الورشة"].Value));
         // بيانات الورش
         const workshops = [
             @foreach (var m in Model)
@@ -293,7 +294,7 @@
                         ${w.cats  ? `<div style="font-size:.78rem;color:#64748b;margin-bottom:4px">🔧 ${w.cats}</div>` : ''}
                         ${w.rating? `<div style="font-size:.78rem;margin-bottom:4px">${w.rating}</div>` : ''}
                     </div>
-                    <a href="${w.url}" class="popup-btn">عرض الورشة ←</a>
+                    <a href="${w.url}" class="popup-btn">${viewShopText} ←</a>
                 `, { maxWidth: 220 });
 
             marker.on('click', () => highlightCard(w.id));

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Helpers;
@@ -12,11 +13,14 @@ public class SuppliersController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly IFileService _fileService;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
-    public SuppliersController(ApplicationDbContext db, IFileService fileService)
+    public SuppliersController(ApplicationDbContext db, IFileService fileService,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _fileService = fileService;
+        _T = T;
     }
 
     // GET: /Suppliers
@@ -91,7 +95,7 @@ public class SuppliersController : Controller
             _db.Suppliers.Add(model);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = $"تم إنشاء المورد «{model.Name}» بنجاح.";
+            TempData["Success"] = _T["تم إنشاء المورد «{0}» بنجاح.", model.Name].Value;
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
         catch (Exception ex)
@@ -148,7 +152,7 @@ public class SuppliersController : Controller
                 }
 
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "تم تحديث بيانات المورد بنجاح.";
+                TempData["Success"] = _T["تم تحديث بيانات المورد بنجاح."].Value;
                 return RedirectToAction(nameof(Details), new { id });
             }
             catch (Exception ex)
@@ -158,7 +162,7 @@ public class SuppliersController : Controller
         }
         else
         {
-            TempData["Error"] = "اسم المورد مطلوب.";
+            TempData["Error"] = _T["اسم المورد مطلوب."].Value;
         }
 
         return View(supplier);
@@ -182,7 +186,7 @@ public class SuppliersController : Controller
         _db.Suppliers.Remove(supplier);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = $"تم حذف المورد «{supplier.Name}» بنجاح.";
+        TempData["Success"] = _T["تم حذف المورد «{0}» بنجاح.", supplier.Name].Value;
         return RedirectToAction(nameof(Index));
     }
 }

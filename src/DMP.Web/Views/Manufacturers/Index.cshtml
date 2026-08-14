@@ -1,6 +1,6 @@
 @model DirectoryViewModel
 @{
-    ViewData["Title"] = "دليل الورش";
+    ViewData["Title"] = T["دليل الورش"];
     var pageIndex  = (int)(ViewBag.PageIndex  ?? 1);
     var totalPages = (int)(ViewBag.TotalPages ?? 1);
     var totalCount = (int)(ViewBag.TotalCount ?? 0);
@@ -9,11 +9,11 @@
 <div class="page-header">
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
         <div>
-            <h1>دليل الورش</h1>
-            <p>تصفّح ورش التصنيع المعتمدة في الأردن</p>
+            <h1>@T["دليل الورش"]</h1>
+            <p>@T["تصفّح ورش التصنيع المعتمدة في الأردن"]</p>
         </div>
         <a asp-controller="Manufacturers" asp-action="Map" class="btn btn-outline btn-sm">
-            🗺️ عرض على الخريطة
+            @T["🗺️ عرض على الخريطة"]
         </a>
     </div>
 </div>
@@ -21,9 +21,9 @@
 <div class="container section">
     <form asp-controller="Manufacturers" asp-action="Index" method="get" class="search-bar">
         <input type="text" name="searchTerm" class="form-control" value="@Model.SearchTerm"
-               placeholder="ابحث عن ورشة أو خدمة..." />
+               placeholder="@T["ابحث عن ورشة أو خدمة..."]" />
         <select name="category" class="form-control" style="width:auto">
-            <option value="">كل التخصصات</option>
+            <option value="">@T["كل التخصصات"]</option>
             @foreach (MachineCategory cat in Enum.GetValues(typeof(MachineCategory)))
             {
                 if (Model.Category == cat)
@@ -37,7 +37,7 @@
             }
         </select>
         <select name="city" class="form-control" style="width:auto">
-            <option value="">كل المدن</option>
+            <option value="">@T["كل المدن"]</option>
             @foreach (var city in Model.Cities)
             {
                 if (Model.City == city)
@@ -50,16 +50,16 @@
                 }
             }
         </select>
-        <button type="submit" class="btn btn-primary">بحث</button>
+        <button type="submit" class="btn btn-primary">@T["بحث"]</button>
         @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.Category.HasValue || !string.IsNullOrEmpty(Model.City))
         {
-            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">مسح</a>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">@T["مسح"]</a>
         }
     </form>
 
     @if (Model.Manufacturers.Any())
     {
-        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@totalCount ورشة</p>
+        <p style="color:var(--steel);font-size:.88rem;margin-bottom:16px">@T["{0} ورشة", totalCount]</p>
         <div class="grid grid-3">
             @foreach (var m in Model.Manufacturers)
             {
@@ -74,7 +74,7 @@
                     <a asp-controller="Manufacturers" asp-action="Index"
                        asp-route-page="@(pageIndex-1)" asp-route-searchTerm="@Model.SearchTerm"
                        asp-route-category="@((int?)Model.Category)" asp-route-city="@Model.City"
-                       class="page-btn">‹ السابق</a>
+                       class="page-btn">@T["‹ السابق"]</a>
                 }
                 @for (int i = 1; i <= totalPages; i++)
                 {
@@ -88,7 +88,7 @@
                     <a asp-controller="Manufacturers" asp-action="Index"
                        asp-route-page="@(pageIndex+1)" asp-route-searchTerm="@Model.SearchTerm"
                        asp-route-category="@((int?)Model.Category)" asp-route-city="@Model.City"
-                       class="page-btn">التالي ›</a>
+                       class="page-btn">@T["التالي ›"]</a>
                 }
             </div>
         }
@@ -97,9 +97,9 @@
     {
         <div class="empty-state">
             <div class="ico">🔍</div>
-            <h3>لا توجد نتائج</h3>
-            <p>جرّب تعديل معايير البحث</p>
-            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">عرض الكل</a>
+            <h3>@T["لا توجد نتائج"]</h3>
+            <p>@T["جرّب تعديل معايير البحث"]</p>
+            <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-outline">@T["عرض الكل"]</a>
         </div>
     }
 </div>

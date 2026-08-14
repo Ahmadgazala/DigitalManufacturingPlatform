@@ -1,6 +1,6 @@
 @model List<ManufacturingRequest>
 @{
-    ViewData["Title"] = "إدارة الطلبات";
+    ViewData["Title"] = T["إدارة الطلبات"];
     string? statusFilter = ViewBag.StatusFilter;
     string? search       = ViewBag.Search;
 }
@@ -8,10 +8,10 @@
 <div class="page-header">
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
         <div>
-            <h1>إدارة الطلبات</h1>
-            <p style="margin:0;color:var(--steel)">@Model.Count طلب</p>
+            <h1>@T["إدارة الطلبات"]</h1>
+            <p style="margin:0;color:var(--steel)">@T["{0} طلب", Model.Count]</p>
         </div>
-        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">← لوحة التحكم</a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">@T["← لوحة التحكم"]</a>
     </div>
 </div>
 
@@ -19,26 +19,26 @@
 
     @* فلترة وبحث *@
     <form method="get" action="/Admin/Requests" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
-        <input name="search" value="@search" class="input" placeholder="ابحث باسم الطلب أو العميل…" style="flex:1;min-width:200px" />
+        <input name="search" value="@search" class="input" placeholder="@T["ابحث باسم الطلب أو العميل…"]" style="flex:1;min-width:200px" />
         <select name="status" class="input" style="width:180px">
-            <option value="">كل الحالات</option>
+            <option value="">@T["كل الحالات"]</option>
             @foreach (var s in Enum.GetValues<RequestStatus>())
             {
                 <option value="@s" selected="@(statusFilter == s.ToString())">@s.ToArabic()</option>
             }
         </select>
-        <button type="submit" class="btn btn-primary">بحث</button>
+        <button type="submit" class="btn btn-primary">@T["بحث"]</button>
         @if (!string.IsNullOrEmpty(search) || !string.IsNullOrEmpty(statusFilter))
         {
-            <a href="/Admin/Requests" class="btn btn-ghost">مسح</a>
+            <a href="/Admin/Requests" class="btn btn-ghost">@T["مسح"]</a>
         }
     </form>
 
     @if (!Model.Any())
     {
         <div class="empty-state">
-            <h3>لا توجد طلبات</h3>
-            <p>لم يتم إيجاد طلبات تطابق الفلتر المحدد.</p>
+            <h3>@T["لا توجد طلبات"]</h3>
+            <p>@T["لم يتم إيجاد طلبات تطابق الفلتر المحدد."]</p>
         </div>
     }
     else
@@ -48,14 +48,14 @@
                 <thead>
                     <tr style="background:var(--paper);border-bottom:2px solid var(--line)">
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">#</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">الطلب</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">العميل</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">المصنّع</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">الحالة</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">الدفع</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">العروض</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">التاريخ</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">إجراء</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الطلب"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["العميل"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["المصنّع"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الحالة"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الدفع"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["العروض"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["التاريخ"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["إجراء"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,11 +83,11 @@
                                         _                         => "chip-blue"
                                     };
                                     var payLabel = req.PaymentStatus switch {
-                                        PaymentStatus.Paid        => "مدفوع",
-                                        PaymentStatus.UnderReview => "قيد المراجعة",
-                                        PaymentStatus.NotPaid     => "غير مدفوع",
-                                        PaymentStatus.Pending     => "معلّق",
-                                        PaymentStatus.Refunded    => "مُسترد",
+                                        PaymentStatus.Paid        => T["مدفوع"],
+                                        PaymentStatus.UnderReview => T["قيد المراجعة"],
+                                        PaymentStatus.NotPaid     => T["غير مدفوع"],
+                                        PaymentStatus.Pending     => T["معلّق"],
+                                        PaymentStatus.Refunded    => T["مُسترد"],
                                         _                         => req.PaymentStatus.ToString()
                                     };
                                 }
@@ -99,7 +99,7 @@
                             </td>
                             <td style="padding:12px 16px">
                                 <a asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id"
-                                   class="btn btn-ghost btn-sm">عرض</a>
+                                   class="btn btn-ghost btn-sm">@T["عرض"]</a>
                             </td>
                         </tr>
                     }

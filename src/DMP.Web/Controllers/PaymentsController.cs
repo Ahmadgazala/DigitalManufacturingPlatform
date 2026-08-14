@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -13,15 +14,18 @@ public class PaymentsController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IWebHostEnvironment _env;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public PaymentsController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IWebHostEnvironment env)
+        IWebHostEnvironment env,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _env = env;
+        _T = T;
     }
 
     // GET: /Payments/Checkout/5
@@ -38,20 +42,20 @@ public class PaymentsController : Controller
 
         if (request.PaymentStatus == PaymentStatus.Paid)
         {
-            TempData["Error"] = "تم الدفع مسبقاً لهذا الطلب.";
+            TempData["Error"] = _T["تم الدفع مسبقاً لهذا الطلب."].Value;
             return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
         if (request.PaymentStatus == PaymentStatus.UnderReview)
         {
-            TempData["Error"] = "إيصال الدفع قيد المراجعة من المدير.";
+            TempData["Error"] = _T["إيصال الدفع قيد المراجعة من المدير."].Value;
             return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
         var accepted = request.Quotations.FirstOrDefault(q => q.Status == QuotationStatus.Accepted);
         if (accepted == null)
         {
-            TempData["Error"] = "لا يوجد عرض مقبول لهذا الطلب.";
+            TempData["Error"] = _T["لا يوجد عرض مقبول لهذا الطلب."].Value;
             return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
@@ -75,7 +79,7 @@ public class PaymentsController : Controller
 
         if (receiptImage == null || receiptImage.Length == 0)
         {
-            TempData["Error"] = "يرجى رفع صورة إيصال الدفع.";
+            TempData["Error"] = _T["يرجى رفع صورة إيصال الدفع."].Value;
             return RedirectToAction("Checkout", new { requestId });
         }
 
@@ -84,7 +88,7 @@ public class PaymentsController : Controller
         var ext = Path.GetExtension(receiptImage.FileName).ToLowerInvariant();
         if (!allowed.Contains(ext))
         {
-            TempData["Error"] = "صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط.";
+            TempData["Error"] = _T["صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط."].Value;
             return RedirectToAction("Checkout", new { requestId });
         }
 
@@ -110,14 +114,14 @@ public class PaymentsController : Controller
             _db.Notifications.Add(new Notification
             {
                 UserId    = adminUser.Id,
-                Message   = $"إيصال دفع جديد بانتظار مراجعتك — طلب رقم #{requestId}",
+                Message   = _T["إيصال دفع جديد بانتظار مراجعتك — طلب رقم #{0}", requestId].Value,
                 Link      = $"/Admin/Payments",
                 CreatedAt = DateTime.UtcNow
             });
         }
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم رفع إيصال الدفع بنجاح. سيتم مراجعته من المدير وتأكيده خلال 24 ساعة.";
+        TempData["Success"] = _T["تم رفع إيصال الدفع بنجاح. سيتم مراجعته من المدير وتأكيده خلال 24 ساعة."].Value;
         return RedirectToAction("Details", "Requests", new { id = requestId });
     }
 
@@ -125,7 +129,7 @@ public class PaymentsController : Controller
     [HttpGet]
     public IActionResult Cancel(int requestId)
     {
-        TempData["Error"] = "تم إلغاء عملية الدفع.";
+        TempData["Error"] = _T["تم إلغاء عملية الدفع."].Value;
         return RedirectToAction("Details", "Requests", new { id = requestId });
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -13,11 +14,14 @@ public class MachinesController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
-    public MachinesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public MachinesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
+        _T = T;
     }
 
     private async Task<Manufacturer?> GetCurrentManufacturerAsync()
@@ -37,7 +41,7 @@ public class MachinesController : Controller
         var manufacturer = await GetCurrentManufacturerAsync();
         if (manufacturer == null)
         {
-            TempData["Error"] = "يرجى إنشاء ملف الورشة أولاً.";
+            TempData["Error"] = _T["يرجى إنشاء ملف الورشة أولاً."].Value;
             return RedirectToAction("Edit", "Manufacturers");
         }
 
@@ -70,7 +74,7 @@ public class MachinesController : Controller
         });
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم إضافة الماكينة بنجاح.";
+        TempData["Success"] = _T["تم إضافة الماكينة بنجاح."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 
@@ -125,7 +129,7 @@ public class MachinesController : Controller
         machine.PricingNote = vm.PricingNote;
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم تحديث بيانات الماكينة.";
+        TempData["Success"] = _T["تم تحديث بيانات الماكينة."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 
@@ -145,7 +149,7 @@ public class MachinesController : Controller
         _db.Machines.Remove(machine);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم حذف الماكينة.";
+        TempData["Success"] = _T["تم حذف الماكينة."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 }

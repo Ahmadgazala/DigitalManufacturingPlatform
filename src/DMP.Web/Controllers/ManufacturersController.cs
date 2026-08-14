@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Helpers;
@@ -15,15 +16,18 @@ public class ManufacturersController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public ManufacturersController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IFileService fileService)
+        IFileService fileService,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _fileService = fileService;
+        _T = T;
     }
 
     // GET: /Manufacturers
@@ -90,7 +94,7 @@ public class ManufacturersController : Controller
 
         if (manufacturer == null)
         {
-            TempData["Info"] = "يرجى إكمال ملف الورشة أولاً.";
+            TempData["Info"] = _T["يرجى إكمال ملف الورشة أولاً."].Value;
             return RedirectToAction(nameof(Edit));
         }
 
@@ -266,7 +270,7 @@ public class ManufacturersController : Controller
             }
 
             await _db.SaveChangesAsync();
-            TempData["Success"] = "تم حفظ بيانات الورشة بنجاح.";
+            TempData["Success"] = _T["تم حفظ بيانات الورشة بنجاح."].Value;
             return RedirectToAction(nameof(Dashboard));
         }
         catch (Exception ex)
@@ -287,13 +291,13 @@ public class ManufacturersController : Controller
 
         if (manufacturer == null)
         {
-            TempData["Error"] = "يرجى إنشاء ملف الورشة أولاً.";
+            TempData["Error"] = _T["يرجى إنشاء ملف الورشة أولاً."].Value;
             return RedirectToAction(nameof(Edit));
         }
 
         if (photo == null || photo.Length == 0)
         {
-            TempData["Error"] = "لم يتم اختيار صورة.";
+            TempData["Error"] = _T["لم يتم اختيار صورة."].Value;
             return RedirectToAction(nameof(Dashboard));
         }
 
@@ -308,7 +312,7 @@ public class ManufacturersController : Controller
                     FilePath = path
                 });
                 await _db.SaveChangesAsync();
-                TempData["Success"] = "تم رفع الصورة بنجاح.";
+                TempData["Success"] = _T["تم رفع الصورة بنجاح."].Value;
             }
         }
         catch (Exception ex)
@@ -341,7 +345,7 @@ public class ManufacturersController : Controller
         _db.WorkshopPhotos.Remove(photo);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم حذف الصورة.";
+        TempData["Success"] = _T["تم حذف الصورة."].Value;
         return RedirectToAction(nameof(Dashboard));
     }
 
@@ -357,7 +361,7 @@ public class ManufacturersController : Controller
         var isOwner = await _db.Manufacturers.AnyAsync(m => m.Id == id && m.UserId == userId);
         if (isOwner)
         {
-            TempData["Error"] = "لا يمكنك تقييم ورشتك الخاصة.";
+            TempData["Error"] = _T["لا يمكنك تقييم ورشتك الخاصة."].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -365,13 +369,13 @@ public class ManufacturersController : Controller
         var alreadyReviewed = await _db.Reviews.AnyAsync(r => r.ManufacturerId == id && r.CustomerUserId == userId);
         if (alreadyReviewed)
         {
-            TempData["Error"] = "لقد قيّمت هذه الورشة من قبل.";
+            TempData["Error"] = _T["لقد قيّمت هذه الورشة من قبل."].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
         if (rating < 1 || rating > 5)
         {
-            TempData["Error"] = "التقييم يجب أن يكون بين 1 و 5.";
+            TempData["Error"] = _T["التقييم يجب أن يكون بين 1 و 5."].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -381,13 +385,13 @@ public class ManufacturersController : Controller
         {
             ManufacturerId = id,
             CustomerUserId = userId,
-            CustomerName = user?.FullName ?? "مستخدم",
+            CustomerName = user?.FullName ?? _T["مستخدم"].Value,
             Rating = rating,
             Comment = comment
         });
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "شكراً! تم إضافة تقييمك.";
+        TempData["Success"] = _T["شكراً! تم إضافة تقييمك."].Value;
         return RedirectToAction(nameof(Details), new { id });
     }
 }

@@ -1,17 +1,17 @@
 @model List<Notification>
 @{
-    ViewData["Title"] = "الإشعارات";
+    ViewData["Title"] = T["الإشعارات"];
 }
 
 <div class="page-header">
     <div class="container">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-            <h1>الإشعارات</h1>
+            <h1>@T["الإشعارات"]</h1>
             @if (Model.Any(n => !n.IsRead))
             {
                 <form asp-controller="Notifications" asp-action="MarkAllRead" method="post">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-outline btn-sm">✓ قراءة الكل</button>
+                    <button type="submit" class="btn btn-outline btn-sm">@T["✓ قراءة الكل"]</button>
                 </form>
             }
         </div>
@@ -48,7 +48,7 @@
                     {
                         <form asp-controller="Notifications" asp-action="MarkRead" asp-route-id="@n.Id" method="post">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-ghost" title="تأشير كمقروء">✓</button>
+                            <button type="submit" class="btn btn-sm btn-ghost" title="@T["تأشير كمقروء"]">✓</button>
                         </form>
                     }
                 </div>
@@ -59,8 +59,8 @@
     {
         <div class="empty-state">
             <div class="ico">🔔</div>
-            <h3>لا توجد إشعارات</h3>
-            <p>ستظهر الإشعارات هنا عند وصول عروض أسعار أو رسائل جديدة</p>
+            <h3>@T["لا توجد إشعارات"]</h3>
+            <p>@T["ستظهر الإشعارات هنا عند وصول عروض أسعار أو رسائل جديدة"]</p>
         </div>
     }
 </div>

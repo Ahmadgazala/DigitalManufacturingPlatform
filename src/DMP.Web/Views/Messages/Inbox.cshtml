@@ -1,10 +1,10 @@
 @{
-    ViewData["Title"] = "صندوق الرسائل";
+    ViewData["Title"] = T["صندوق الرسائل"];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>صندوق الرسائل</h1>
+        <h1>@T["صندوق الرسائل"]</h1>
     </div>
 </div>
 
@@ -21,7 +21,7 @@
                 var otherUser = conv.OtherUser as ApplicationUser;
                 var lastMsg = conv.LastMessage as Message;
                 int unread = (int)conv.UnreadCount;
-                string name = otherUser?.FullName ?? "مستخدم";
+                string name = otherUser?.FullName ?? T["مستخدم"].Value;
                 string initial = name.Length > 0 ? name[..1] : "?";
                 <div class="msg-row @(unread > 0 ? "unread" : "")">
                     <div class="msg-avatar">@initial</div>
@@ -36,7 +36,7 @@
                     }
                     <a asp-controller="Messages" asp-action="Conversation"
                        asp-route-otherUserId="@otherUserId"
-                       class="btn btn-outline btn-sm">فتح</a>
+                       class="btn btn-outline btn-sm">@T["فتح"]</a>
                 </div>
             }
         </div>
@@ -44,8 +44,8 @@
         {
             <div class="empty-state">
                 <div class="ico">💬</div>
-                <h3>لا توجد محادثات</h3>
-                <p>يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة</p>
+                <h3>@T["لا توجد محادثات"]</h3>
+                <p>@T["يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة"]</p>
             </div>
         }
     }
@@ -53,8 +53,8 @@
     {
         <div class="empty-state">
             <div class="ico">💬</div>
-            <h3>لا توجد رسائل</h3>
-            <p>يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة</p>
+            <h3>@T["لا توجد رسائل"]</h3>
+            <p>@T["يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة"]</p>
         </div>
     }
 </div>

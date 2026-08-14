@@ -69,15 +69,15 @@
                             <div style="background:var(--amber);height:100%;width:@(c.ProgressPercent)%;border-radius:100px"></div>
                         </div>
                         <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--steel);margin-bottom:10px">
-                            <span>@c.CurrentQuantity وحدة</span>
-                            <span>الهدف: @c.MinQuantity</span>
+                            <span>@T["{0} وحدة", c.CurrentQuantity]</span>
+                            <span>@T["الهدف: {0}", c.MinQuantity]</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div>
-                                <span style="text-decoration:line-through;color:var(--steel);font-size:.85rem">@c.IndividualPrice.ToString("N0") د.أ</span>
-                                <span style="color:var(--amber);font-weight:800;font-size:1.1rem;margin-inline-start:8px">@c.GroupPrice.ToString("N0") د.أ</span>
+                                <span style="text-decoration:line-through;color:var(--steel);font-size:.85rem">@T["{0} د.أ", c.IndividualPrice.ToString("N0")]</span>
+                                <span style="color:var(--amber);font-weight:800;font-size:1.1rem;margin-inline-start:8px">@T["{0} د.أ", c.GroupPrice.ToString("N0")]</span>
                             </div>
-                            <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">التفاصيل</a>
+                            <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-primary">@T["التفاصيل"]</a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                         <span class="@c.Status.StatusColor()">@c.Status.ToArabic()</span>
                     </div>
                     <p style="font-size:.85rem;color:var(--steel)">📦 @c.ItemName</p>
-                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline" style="margin-top:10px">عرض</a>
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline" style="margin-top:10px">@T["عرض"]</a>
                 </div>
             }
         </div>

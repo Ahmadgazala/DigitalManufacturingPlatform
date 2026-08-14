@@ -1,12 +1,12 @@
 @model Supplier
 @{
-    ViewData["Title"] = "إضافة مورد جديد";
+    ViewData["Title"] = T["إضافة مورد جديد"];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>➕ إضافة مورد جديد</h1>
-        <p>أضف مورداً للمواد الخام أو المعدات إلى الدليل</p>
+        <h1>@T["➕ إضافة مورد جديد"]</h1>
+        <p>@T["أضف مورداً للمواد الخام أو المعدات إلى الدليل"]</p>
     </div>
 </div>
 
@@ -18,60 +18,60 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>اسم المورد <span style="color:var(--red)">*</span></label>
-                        <input asp-for="Name" class="form-control" placeholder="مثال: شركة المواد الصناعية" required />
+                        <label>@T["اسم المورد"] <span style="color:var(--red)">*</span></label>
+                        <input asp-for="Name" class="form-control" placeholder="@T["مثال: شركة المواد الصناعية"]" required />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label>المدينة</label>
-                        <input asp-for="City" class="form-control" placeholder="عمّان، إربد، الزرقاء..." />
+                        <label>@T["المدينة"]</label>
+                        <input asp-for="City" class="form-control" placeholder="@T["عمّان، إربد، الزرقاء..."]" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>وصف المورد</label>
+                    <label>@T["وصف المورد"]</label>
                     <textarea asp-for="Description" class="form-control" rows="4"
-                              placeholder="اكتب وصفاً للمورد وما يقدمه..."></textarea>
+                              placeholder="@T["اكتب وصفاً للمورد وما يقدمه..."]"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>المواد والمنتجات المتوفرة</label>
+                    <label>@T["المواد والمنتجات المتوفرة"]</label>
                     <input asp-for="Materials" class="form-control"
-                           placeholder="مثال: ألمنيوم، بلاستيك، فولاذ، خشب..." />
-                    <small style="color:var(--steel)">افصل بين المواد بفاصلة</small>
+                           placeholder="@T["مثال: ألمنيوم، بلاستيك، فولاذ، خشب..."]" />
+                    <small style="color:var(--steel)">@T["افصل بين المواد بفاصلة"]</small>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>رقم الهاتف</label>
+                        <label>@T["رقم الهاتف"]</label>
                         <input asp-for="Phone" class="form-control" dir="ltr" placeholder="07X-XXX-XXXX" />
                     </div>
                     <div class="form-group">
-                        <label>البريد الإلكتروني</label>
+                        <label>@T["البريد الإلكتروني"]</label>
                         <input asp-for="Email" class="form-control" dir="ltr" type="email" placeholder="info@supplier.jo" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>الموقع الإلكتروني</label>
+                        <label>@T["الموقع الإلكتروني"]</label>
                         <input asp-for="Website" class="form-control" dir="ltr" placeholder="https://www.supplier.jo" />
                     </div>
                     <div class="form-group">
-                        <label>العنوان التفصيلي</label>
-                        <input asp-for="Address" class="form-control" placeholder="الشارع، المنطقة..." />
+                        <label>@T["العنوان التفصيلي"]</label>
+                        <input asp-for="Address" class="form-control" placeholder="@T["الشارع، المنطقة..."]" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>شعار المورد (Logo)</label>
+                    <label>@T["شعار المورد"] (Logo)</label>
                     <input type="file" name="logo" accept="image/*" class="form-control" />
-                    <small style="color:var(--steel)">JPG، PNG، WebP — حجم أقصى 5MB</small>
+                    <small style="color:var(--steel)">@T["JPG، PNG، WebP — حجم أقصى 5MB"]</small>
                 </div>
 
                 <div style="display:flex;gap:12px;margin-top:6px">
-                    <button type="submit" class="btn btn-primary">💾 حفظ المورد</button>
-                    <a asp-action="Index" class="btn btn-outline">إلغاء</a>
+                    <button type="submit" class="btn btn-primary">@T["💾 حفظ المورد"]</button>
+                    <a asp-action="Index" class="btn btn-outline">@T["إلغاء"]</a>
                 </div>
             </form>
         </div>

@@ -1,6 +1,6 @@
 @model LoginViewModel
 @{
-    ViewData["Title"] = "تسجيل الدخول";
+    ViewData["Title"] = T["تسجيل الدخول"];
     Layout = null;
 }
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>تسجيل الدخول — Jo Maker</title>
+<title>@T["تسجيل الدخول"] — Jo Maker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -319,16 +319,16 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
         <!-- Caption -->
         <div class="lp-caption">
         <p class="lp-tagline">
-            منصة <strong>التصنيع الرقمي</strong> الأردنية — تواصل مع ورش الطباعة والقطع والتصنيع
+            @T["منصة"] <strong>@T["التصنيع الرقمي"]</strong> @T["الأردنية — تواصل مع ورش الطباعة والقطع والتصنيع"]
         </p>
         <div class="lp-chips">
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                طباعة ثلاثية الأبعاد
+                @T["طباعة ثلاثية الأبعاد"]
             </span>
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                قطع ليزر
+                @T["قطع ليزر"]
             </span>
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
@@ -349,8 +349,8 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
         <div class="lp-card">
 
             <header class="lf-header">
-                <h1>مرحباً بك مجدداً</h1>
-                <p>سجّل دخولك للوصول إلى المنصة</p>
+                <h1>@T["مرحباً بك مجدداً"]</h1>
+                <p>@T["سجّل دخولك للوصول إلى المنصة"]</p>
             </header>
 
             @if (!ViewData.ModelState.IsValid)
@@ -373,7 +373,7 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
                 <input type="hidden" name="returnUrl" value="@(Context.Request.Query["returnUrl"].FirstOrDefault() ?? "")"/>
 
                 <div class="form-group">
-                    <label for="Email">البريد الإلكتروني</label>
+                    <label for="Email">@T["البريد الإلكتروني"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -385,7 +385,7 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
                 </div>
 
                 <div class="form-group">
-                    <label for="Password">كلمة المرور</label>
+                    <label for="Password">@T["كلمة المرور"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -393,7 +393,7 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
                         <input asp-for="Password" id="Password" class="form-control" type="password"
                                placeholder="••••••••" autocomplete="current-password" dir="ltr"/>
                         <button type="button" class="pw-toggle" id="pwToggle"
-                                aria-label="إظهار كلمة المرور" aria-pressed="false">
+                                aria-label="@T["إظهار كلمة المرور"]" aria-pressed="false">
                             <svg id="eyeOpen"  viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg id="eyeClosed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                         </button>
@@ -404,36 +404,36 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
                 <div class="lf-meta">
                     <div class="form-check" style="margin:0">
                         <input asp-for="RememberMe" id="RememberMe" type="checkbox"/>
-                        <label for="RememberMe">تذكّرني</label>
+                        <label for="RememberMe">@T["تذكّرني"]</label>
                     </div>
-                    <a asp-controller="Account" asp-action="ForgotPassword" class="lf-forgot">نسيت كلمة المرور؟</a>
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="lf-forgot">@T["نسيت كلمة المرور؟"]</a>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">
                         <span class="btn-spinner" aria-hidden="true"></span>
-                        <span class="btn-text">تسجيل الدخول</span>
+                        <span class="btn-text">@T["تسجيل الدخول"]</span>
                     </button>
                 </div>
             </form>
 
-            <div class="lf-divider"><span>أو</span></div>
+            <div class="lf-divider"><span>@T["أو"]</span></div>
 
             <div class="lf-register">
-                ليس لديك حساب؟
-                <a asp-controller="Account" asp-action="Register">أنشئ حساباً مجاناً</a>
+                @T["ليس لديك حساب؟"]
+                <a asp-controller="Account" asp-action="Register">@T["أنشئ حساباً مجاناً"]</a>
             </div>
 
             <div style="text-align:center;margin-top:6px;">
                 <a href="/" style="font-size:.78rem;color:var(--text-3);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:color .15s;" onmouseover="this.style.color='var(--sky)'" onmouseout="this.style.color='var(--text-3)'">
                     <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                    العودة للرئيسية
+                    @T["العودة للرئيسية"]
                 </a>
             </div>
 
             <div class="lf-security" role="note">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                اتصال آمن · Jo Maker الأردنية
+                @T["اتصال آمن · Jo Maker الأردنية"]
             </div>
 
         </div>
@@ -520,7 +520,7 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
         var s=pw.type==='text'; pw.type=s?'password':'text';
         op.style.display=s?'':'none'; cl.style.display=s?'none':'';
         btn.setAttribute('aria-pressed',String(!s));
-        btn.setAttribute('aria-label',s?'إظهار كلمة المرور':'إخفاء كلمة المرور');
+        btn.setAttribute('aria-label',s?@Html.Raw(Json.Serialize(T["إظهار كلمة المرور"].Value)):@Html.Raw(Json.Serialize(T["إخفاء كلمة المرور"].Value)));
     });
     var f=document.getElementById('loginForm'),sb=document.getElementById('submitBtn');
     if(f&&sb) f.addEventListener('submit',function(){ sb.classList.add('btn-loading'); });

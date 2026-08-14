@@ -166,4 +166,1760 @@
   <data name="How_ImportDesc" xml:space="preserve"><value>Goods imported at wholesale price</value></data>
   <data name="How_Deliver" xml:space="preserve"><value>Delivery</value></data>
   <data name="How_DeliverDesc" xml:space="preserve"><value>Receive your order at a lower price</value></data>
+  <data name="Milling" xml:space="preserve"><value>Milling</value></data>
+  <data name="PublishImmediately" xml:space="preserve"><value>Publish immediately</value></data>
+  <data name="Turning" xml:space="preserve"><value>Turning</value></data>
+  <data name="Welding" xml:space="preserve"><value>Welding</value></data>
+  <data name="(0 = غير محدد)" xml:space="preserve">
+    <value>(0 = not specified)</value>
+  </data>
+  <data name="+ طلب جديد" xml:space="preserve">
+    <value>+ New Request</value>
+  </data>
+  <data name="3 أيام" xml:space="preserve">
+    <value>3 days</value>
+  </data>
+  <data name="48 ساعة" xml:space="preserve">
+    <value>48 hours</value>
+  </data>
+  <data name="CNC، طباعة ثلاثية الأبعاد، قطع ليزر" xml:space="preserve">
+    <value>CNC, 3D printing, laser cutting</value>
+  </data>
+  <data name="DXF, STL, PDF أو صف مشروعك بالتفصيل" xml:space="preserve">
+    <value>DXF, STL, PDF or describe your project in detail</value>
+  </data>
+  <data name="JPG، PNG، PDF — حتى 10 ميغابايت" xml:space="preserve">
+    <value>JPG, PNG, PDF — up to 10 MB</value>
+  </data>
+  <data name="JPG، PNG، PDF — حجم أقصى 5MB" xml:space="preserve">
+    <value>JPG, PNG, PDF — max size 5 MB</value>
+  </data>
+  <data name="أبحث عن خدمات تصنيع وأطلب عروض أسعار" xml:space="preserve">
+    <value>I am looking for manufacturing services and want to request quotes</value>
+  </data>
+  <data name="أدخل اسمك الكامل" xml:space="preserve">
+    <value>Enter your full name</value>
+  </data>
+  <data name="أدخل المبلغ وأكمل الدفع" xml:space="preserve">
+    <value>Enter the amount and complete the payment</value>
+  </data>
+  <data name="أدخل رقم CliQ أدناه" xml:space="preserve">
+    <value>Enter your CliQ number below</value>
+  </data>
+  <data name="أدمن" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="أضف ماكينة أولاً" xml:space="preserve">
+    <value>Add a machine first</value>
+  </data>
+  <data name="أضف مشاريعك السابقة لتعزيز ثقة العملاء" xml:space="preserve">
+    <value>Add your previous projects to build customer trust</value>
+  </data>
+  <data name="أضف مورداً للمواد الخام أو المعدات إلى الدليل" xml:space="preserve">
+    <value>Add a raw material or equipment supplier to the directory</value>
+  </data>
+  <data name="أكمل الدفع وارفع صورة الإيصال لتأكيد طلبك" xml:space="preserve">
+    <value>Complete the payment and upload a receipt image to confirm your order</value>
+  </data>
+  <data name="أملك ورشة وأقدم خدمات التصنيع" xml:space="preserve">
+    <value>I own a workshop and offer manufacturing services</value>
+  </data>
+  <data name="أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر Stripe مع ضمان استرداد." xml:space="preserve">
+    <value>Your money is held until you receive your order. Secure payment via Stripe with a refund guarantee.</value>
+  </data>
+  <data name="أنت لست مشاركاً في هذه الحملة." xml:space="preserve">
+    <value>You are not a participant in this campaign.</value>
+  </data>
+  <data name="أنت لست منضماً إلى هذه الحملة." xml:space="preserve">
+    <value>You are not joined to this campaign.</value>
+  </data>
+  <data name="أنت منضم إلى هذه الحملة بالفعل." xml:space="preserve">
+    <value>You are already joined to this campaign.</value>
+  </data>
+  <data name="أنشئ حساباً مجاناً" xml:space="preserve">
+    <value>Create a free account</value>
+  </data>
+  <data name="أنشئ طلب تصنيع وسيتواصل معك المصنّعون بعروض أسعار" xml:space="preserve">
+    <value>Create a manufacturing request and manufacturers will contact you with quotes</value>
+  </data>
+  <data name="أو" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="أوافق على شروط الشراء الجماعي — انضمامي يُعدّ التزاماً بدفع" xml:space="preserve">
+    <value>I agree to the group buying terms — joining is a commitment to pay</value>
+  </data>
+  <data name="إجراء" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="إدارة الطلبات" xml:space="preserve">
+    <value>Request Management</value>
+  </data>
+  <data name="إدارة المستخدمين" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="إرسال إيصال الدفع للمراجعة" xml:space="preserve">
+    <value>Send payment receipt for review</value>
+  </data>
+  <data name="إضافة مشروع للملف الشخصي" xml:space="preserve">
+    <value>Add project to profile</value>
+  </data>
+  <data name="إضافة مورد جديد" xml:space="preserve">
+    <value>Add New Supplier</value>
+  </data>
+  <data name="إظهار كلمة المرور" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="إلغاء" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="إلى" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="إنشاء حساب" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="إنشاء حساب جديد" xml:space="preserve">
+    <value>Create New Account</value>
+  </data>
+  <data name="إنشاء حساب عميل" xml:space="preserve">
+    <value>Create Customer Account</value>
+  </data>
+  <data name="إيصال الدفع" xml:space="preserve">
+    <value>Payment Receipt</value>
+  </data>
+  <data name="إيصال الدفع قيد المراجعة من المدير." xml:space="preserve">
+    <value>Payment receipt is under review by the admin.</value>
+  </data>
+  <data name="إيصال دفع كامل" xml:space="preserve">
+    <value>Full Payment Receipt</value>
+  </data>
+  <data name="إيصال عربون" xml:space="preserve">
+    <value>Deposit Receipt</value>
+  </data>
+  <data name="إيصالات CliQ بانتظار الموافقة" xml:space="preserve">
+    <value>CliQ receipts awaiting approval</value>
+  </data>
+  <data name="ابحث باسم الطلب أو العميل…" xml:space="preserve">
+    <value>Search by request name or customer…</value>
+  </data>
+  <data name="ابحث عن مورد أو مادة..." xml:space="preserve">
+    <value>Search for a supplier or material...</value>
+  </data>
+  <data name="ابحث عن ورشة أو خدمة..." xml:space="preserve">
+    <value>Search for a workshop or service...</value>
+  </data>
+  <data name="ابدأ بإضافة أول مورد للدليل" xml:space="preserve">
+    <value>Start by adding your first supplier to the directory</value>
+  </data>
+  <data name="اتصال آمن · Jo Maker الأردنية" xml:space="preserve">
+    <value>Secure connection · Jo Maker Jordan</value>
+  </data>
+  <data name="احصل على عروض أسعار من ورش متخصصة في جميع تقنيات التصنيع الرقمي — كل ما تحتاجه في مكان واحد خلال أقل من 24 ساعة." xml:space="preserve">
+    <value>Get quotes from workshops specialized in all digital manufacturing technologies — everything you need in one place in under 24 hours.</value>
+  </data>
+  <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
+    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+  </data>
+  <data name="اختر المصنّع وادفع عبر Stripe المحمي" xml:space="preserve">
+    <value>Choose the manufacturer and pay via secure Stripe</value>
+  </data>
+  <data name="اختر نوع حسابك وابدأ رحلتك مع Jo Maker" xml:space="preserve">
+    <value>Choose your account type and start your journey with Jo Maker</value>
+  </data>
+  <data name="اختياري" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="ارفع إيصال التحويل" xml:space="preserve">
+    <value>Upload Transfer Receipt</value>
+  </data>
+  <data name="ارفع إيصال الدفع" xml:space="preserve">
+    <value>Upload Payment Receipt</value>
+  </data>
+  <data name="ارفع ملف التصميم" xml:space="preserve">
+    <value>Upload design file</value>
+  </data>
+  <data name="استعرض الورش" xml:space="preserve">
+    <value>Browse workshops</value>
+  </data>
+  <data name="استقبل عروض الورش" xml:space="preserve">
+    <value>Receive workshop quotes</value>
+  </data>
+  <data name="استلم منتجك" xml:space="preserve">
+    <value>Receive your product</value>
+  </data>
+  <data name="اسم المنتج / المادة" xml:space="preserve">
+    <value>Product / material name</value>
+  </data>
+  <data name="اسم المورد" xml:space="preserve">
+    <value>Supplier name</value>
+  </data>
+  <data name="اسم المورد مطلوب." xml:space="preserve">
+    <value>Supplier name is required.</value>
+  </data>
+  <data name="اضغط لرفع صورة الإيصال" xml:space="preserve">
+    <value>Click to upload receipt image</value>
+  </data>
+  <data name="اضغط لرفع صورة جديدة" xml:space="preserve">
+    <value>Click to upload a new image</value>
+  </data>
+  <data name="اطلب تصنيعاً" xml:space="preserve">
+    <value>Request Manufacturing</value>
+  </data>
+  <data name="اعتمد وادفع بأمان" xml:space="preserve">
+    <value>Approve and pay securely</value>
+  </data>
+  <data name="اعثر على أقرب ورشة إليك عبر خريطة تغطي مدن الأردن كاملة." xml:space="preserve">
+    <value>Find the closest workshop to you via a map covering all Jordanian cities.</value>
+  </data>
+  <data name="افتح تطبيق البنك الخاص بك" xml:space="preserve">
+    <value>Open your bank app</value>
+  </data>
+  <data name="افصل بين المواد بفاصلة" xml:space="preserve">
+    <value>Separate materials with a comma</value>
+  </data>
+  <data name="اكتب وصفاً للمورد وما يقدمه..." xml:space="preserve">
+    <value>Write a description of the supplier and what it offers...</value>
+  </data>
+  <data name="اكتشف أفضل ورش التصنيع الرقمي في الأردن، كل ورشة مراجعة ومعتمدة من فريقنا" xml:space="preserve">
+    <value>Discover the best digital manufacturing workshops in Jordan, each reviewed and approved by our team</value>
+  </data>
+  <data name="اكتمل النصاب! المبلغ المتبقي:" xml:space="preserve">
+    <value>Quorum reached! Remaining amount:</value>
+  </data>
+  <data name="الأردني — سواء كنت تبحث عن خدمات أو تقدّمها" xml:space="preserve">
+    <value>Jordanian — whether you are looking for services or offering them</value>
+  </data>
+  <data name="الأردنية — تواصل مع ورش الطباعة والقطع والتصنيع" xml:space="preserve">
+    <value>Jordanian — connect with printing, cutting and manufacturing workshops</value>
+  </data>
+  <data name="الإجمالي" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="الإشعارات" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="الاسم" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="الاسم الكامل" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="البريد" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="البريد الإلكتروني" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="البريد الإلكتروني أو كلمة المرور غير صحيحة." xml:space="preserve">
+    <value>Email or password is incorrect.</value>
+  </data>
+  <data name="التاريخ" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="التالي ›" xml:space="preserve">
+    <value>Next ›</value>
+  </data>
+  <data name="التخصص" xml:space="preserve">
+    <value>Specialty</value>
+  </data>
+  <data name="التزامك بالشراء نهائي" xml:space="preserve">
+    <value>Your purchase commitment is final</value>
+  </data>
+  <data name="التصنيع الرقمي" xml:space="preserve">
+    <value>Digital Manufacturing</value>
+  </data>
+  <data name="التفاصيل" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="التقدم نحو الحد الأدنى" xml:space="preserve">
+    <value>Progress toward minimum</value>
+  </data>
+  <data name="التقييم يجب أن يكون بين 1 و 5." xml:space="preserve">
+    <value>Rating must be between 1 and 5.</value>
+  </data>
+  <data name="الحالة" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="الحد الأدنى الإجمالي" xml:space="preserve">
+    <value>Overall minimum</value>
+  </data>
+  <data name="الحد الأدنى لكل مصنّع" xml:space="preserve">
+    <value>Minimum per manufacturer</value>
+  </data>
+  <data name="الحد الأدنى للكمية الإجمالية" xml:space="preserve">
+    <value>Minimum total quantity</value>
+  </data>
+  <data name="الحد الأدنى من الوحدات الذي يجب أن يطلبه كل مصنّع عند الانضمام" xml:space="preserve">
+    <value>Minimum units each manufacturer must order when joining</value>
+  </data>
+  <data name="الحد الأدنى من الوحدات لكل مصنّع عند الانضمام" xml:space="preserve">
+    <value>Minimum units per manufacturer when joining</value>
+  </data>
+  <data name="الحد الأدنى/مصنّع" xml:space="preserve">
+    <value>Minimum/manufacturer</value>
+  </data>
+  <data name="الحساب" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="الحملة غير متاحة للانضمام." xml:space="preserve">
+    <value>This campaign is not available to join.</value>
+  </data>
+  <data name="الخدمات" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="الخريطة" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="الخصوصية" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="الدفع" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="الدفع عبر CliQ" xml:space="preserve">
+    <value>Pay via CliQ</value>
+  </data>
+  <data name="الدور" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="الرئيسية" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="الرسائل" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="السعر الفردي" xml:space="preserve">
+    <value>Unit price</value>
+  </data>
+  <data name="السعر الفردي (د.أ)" xml:space="preserve">
+    <value>Unit price (JOD)</value>
+  </data>
+  <data name="الشارع، المنطقة..." xml:space="preserve">
+    <value>Street, area...</value>
+  </data>
+  <data name="الشراء الجماعي" xml:space="preserve">
+    <value>Group Buying</value>
+  </data>
+  <data name="الشعار الحالي — ارفع صورة جديدة لاستبداله" xml:space="preserve">
+    <value>Current logo — upload a new image to replace it</value>
+  </data>
+  <data name="الصورة الحالية" xml:space="preserve">
+    <value>Current image</value>
+  </data>
+  <data name="الصورة الحالية — ارفع صورة جديدة للاستبدال" xml:space="preserve">
+    <value>Current image — upload a new image to replace it</value>
+  </data>
+  <data name="الطلب" xml:space="preserve">
+    <value>Request</value>
+  </data>
+  <data name="الطلب مؤكد نهائياً" xml:space="preserve">
+    <value>Request fully confirmed</value>
+  </data>
+  <data name="الطلبات الواردة" xml:space="preserve">
+    <value>Incoming Requests</value>
+  </data>
+  <data name="العربون" xml:space="preserve">
+    <value>Deposit</value>
+  </data>
+  <data name="العربون (50%)" xml:space="preserve">
+    <value>Deposit (50%)</value>
+  </data>
+  <data name="العربون المطلوب (نصف المبلغ):" xml:space="preserve">
+    <value>Required deposit (half the amount):</value>
+  </data>
+  <data name="العربون فوراً" xml:space="preserve">
+    <value>Deposit now</value>
+  </data>
+  <data name="العروض" xml:space="preserve">
+    <value>Quotes</value>
+  </data>
+  <data name="العميل" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="العنوان" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="العنوان التفصيلي" xml:space="preserve">
+    <value>Detailed address</value>
+  </data>
+  <data name="العودة للرئيسية" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="العودة للطلب" xml:space="preserve">
+    <value>Back to Request</value>
+  </data>
+  <data name="القائمة" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="الكمية" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="الكمية التي تريدها" xml:space="preserve">
+    <value>Quantity you want</value>
+  </data>
+  <data name="الكمية الكلية" xml:space="preserve">
+    <value>Total quantity</value>
+  </data>
+  <data name="الكمية يجب أن تكون 1 على الأقل." xml:space="preserve">
+    <value>Quantity must be at least 1.</value>
+  </data>
+  <data name="المادة" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="المبلغ" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="المبلغ الإجمالي" xml:space="preserve">
+    <value>Total amount</value>
+  </data>
+  <data name="المبلغ الكلي:" xml:space="preserve">
+    <value>Total amount:</value>
+  </data>
+  <data name="المبلغ:" xml:space="preserve">
+    <value>Amount:</value>
+  </data>
+  <data name="المتبقي (50%)" xml:space="preserve">
+    <value>Remaining (50%)</value>
+  </data>
+  <data name="المدينة" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="المرحلة الحالية:" xml:space="preserve">
+    <value>Current stage:</value>
+  </data>
+  <data name="المشاركون" xml:space="preserve">
+    <value>Participants</value>
+  </data>
+  <data name="المصنّع" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="المصنّعون يحددون موقعهم من لوحة التحكم" xml:space="preserve">
+    <value>Manufacturers set their location from the dashboard</value>
+  </data>
+  <data name="الملفات المرفقة" xml:space="preserve">
+    <value>Attached files</value>
+  </data>
+  <data name="المنصة" xml:space="preserve">
+    <value>Platform</value>
+  </data>
+  <data name="المواد المتوفرة" xml:space="preserve">
+    <value>Available materials</value>
+  </data>
+  <data name="المواد والمنتجات المتوفرة" xml:space="preserve">
+    <value>Available materials and products</value>
+  </data>
+  <data name="الموردون" xml:space="preserve">
+    <value>Suppliers</value>
+  </data>
+  <data name="الموقع" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="الموقع الإلكتروني" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="الميزانية" xml:space="preserve">
+    <value>Budget</value>
+  </data>
+  <data name="الهاتف" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="الورشة" xml:space="preserve">
+    <value>Workshop</value>
+  </data>
+  <data name="الوصف" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="اليوم" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="انتهت مهلة الانسحاب (48 ساعة من وقت الانضمام)." xml:space="preserve">
+    <value>Withdrawal window has ended (48 hours from joining).</value>
+  </data>
+  <data name="انسحب الآن" xml:space="preserve">
+    <value>Withdraw now</value>
+  </data>
+  <data name="انضم إلى" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="انضم إلى Jo Maker وابدأ باستقبال طلبات من عملاء جدد في جميع أنحاء الأردن مجاناً." xml:space="preserve">
+    <value>Join Jo Maker and start receiving requests from new customers across Jordan for free.</value>
+  </data>
+  <data name="انضم الآن" xml:space="preserve">
+    <value>Join now</value>
+  </data>
+  <data name="انضم لهذه الحملة" xml:space="preserve">
+    <value>Join this campaign</value>
+  </data>
+  <data name="انضم مع مصنّعين آخرين واحصل على سعر الجملة" xml:space="preserve">
+    <value>Join other manufacturers and get a wholesale price</value>
+  </data>
+  <data name="انقر على ورشة للانتقال إليها" xml:space="preserve">
+    <value>Click a workshop to go to it</value>
+  </data>
+  <data name="انقر لرفع صورة" xml:space="preserve">
+    <value>Click to upload image</value>
+  </data>
+  <data name="بانتظار الدفع" xml:space="preserve">
+    <value>Awaiting payment</value>
+  </data>
+  <data name="بحث" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="بعد إتمام التحويل، ارفع لقطة شاشة أو صورة إيصال الدفع. سيراجعها المدير ويؤكد طلبك خلال 24 ساعة." xml:space="preserve">
+    <value>After completing the transfer, upload a screenshot or image of the payment receipt. The admin will review and confirm your order within 24 hours.</value>
+  </data>
+  <data name="بعد اكتمال النصاب تدفع المبلغ المتبقي." xml:space="preserve">
+    <value>Once the quorum is reached you pay the remaining amount.</value>
+  </data>
+  <data name="تأشير كمقروء" xml:space="preserve">
+    <value>Mark as read</value>
+  </data>
+  <data name="تأكد من إدخال المبلغ الصحيح:" xml:space="preserve">
+    <value>Make sure you entered the correct amount:</value>
+  </data>
+  <data name="تأكيد كلمة المرور" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="تابع طلبك عبر 4 مراحل واضحة: استلام، إنتاج، جاهز، مسلّم." xml:space="preserve">
+    <value>Track your request through 4 clear stages: Received, Producing, Ready, Delivered.</value>
+  </data>
+  <data name="تاريخ الإنجاز" xml:space="preserve">
+    <value>Completion date</value>
+  </data>
+  <data name="تاريخ التسجيل" xml:space="preserve">
+    <value>Registration date</value>
+  </data>
+  <data name="تاريخ الطلب" xml:space="preserve">
+    <value>Request date</value>
+  </data>
+  <data name="تاريخ القبول" xml:space="preserve">
+    <value>Acceptance date</value>
+  </data>
+  <data name="تاريخ انتهاء الحملة" xml:space="preserve">
+    <value>Campaign end date</value>
+  </data>
+  <data name="تبديل الوضع" xml:space="preserve">
+    <value>Toggle mode</value>
+  </data>
+  <data name="تتبع مراحل الإنتاج" xml:space="preserve">
+    <value>Track production stages</value>
+  </data>
+  <data name="تتبّع طلبات التصنيع الخاصة بك" xml:space="preserve">
+    <value>Track your manufacturing requests</value>
+  </data>
+  <data name="تحديث" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="تحقق لاحقاً — ستظهر هنا الطلبات المناسبة لتخصصات ورشتك" xml:space="preserve">
+    <value>Check back later — requests matching your workshop specialties will appear here</value>
+  </data>
+  <data name="تذكّرني" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="تسجيل الدخول" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="تسجيل الدخول بحساب آخر" xml:space="preserve">
+    <value>Sign in with another account</value>
+  </data>
+  <data name="تصفّح موردي المواد الخام والمعدات في الأردن" xml:space="preserve">
+    <value>Browse raw material and equipment suppliers in Jordan</value>
+  </data>
+  <data name="تصفّح ورش التصنيع المعتمدة في الأردن" xml:space="preserve">
+    <value>Browse approved manufacturing workshops in Jordan</value>
+  </data>
+  <data name="تعديل" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="تعديل الحملة" xml:space="preserve">
+    <value>Edit campaign</value>
+  </data>
+  <data name="تعديل المشروع" xml:space="preserve">
+    <value>Edit project</value>
+  </data>
+  <data name="تعليمات التحويل عبر CliQ:" xml:space="preserve">
+    <value>CliQ transfer instructions:</value>
+  </data>
+  <data name="تغيير الحالة يدوياً:" xml:space="preserve">
+    <value>Change status manually:</value>
+  </data>
+  <data name="تغيير الصورة (اختياري)" xml:space="preserve">
+    <value>Change image (optional)</value>
+  </data>
+  <data name="تفاصيل الطلب" xml:space="preserve">
+    <value>Request details</value>
+  </data>
+  <data name="تفضيلات (لون، مواصفات...)" xml:space="preserve">
+    <value>Preferences (color, specifications...)</value>
+  </data>
+  <data name="تم إرسال طلبك بنجاح. ستصلك عروض الأسعار قريباً." xml:space="preserve">
+    <value>Your request was submitted successfully. You will receive quotes soon.</value>
+  </data>
+  <data name="تم إرسال عرض السعر بنجاح." xml:space="preserve">
+    <value>Quote submitted successfully.</value>
+  </data>
+  <data name="تم إضافة الماكينة بنجاح." xml:space="preserve">
+    <value>Machine added successfully.</value>
+  </data>
+  <data name="تم إضافة المشروع للملف الشخصي." xml:space="preserve">
+    <value>Project added to profile.</value>
+  </data>
+  <data name="تم إلغاء عملية الدفع." xml:space="preserve">
+    <value>Payment cancelled.</value>
+  </data>
+  <data name="تم إنشاء الحملة بنجاح." xml:space="preserve">
+    <value>Campaign created successfully.</value>
+  </data>
+  <data name="تم إنشاء حسابك بنجاح. يمكنك الآن إكمال ملف الورشة." xml:space="preserve">
+    <value>Your account was created successfully. You can now complete your workshop profile.</value>
+  </data>
+  <data name="تم اعتماد الورشة بنجاح." xml:space="preserve">
+    <value>Workshop approved successfully.</value>
+  </data>
+  <data name="تم الدفع الكامل — مشاركتك مؤكدة" xml:space="preserve">
+    <value>Full payment made — your participation is confirmed</value>
+  </data>
+  <data name="تم الدفع بنجاح" xml:space="preserve">
+    <value>Payment successful</value>
+  </data>
+  <data name="تم الدفع مسبقاً لهذا الطلب." xml:space="preserve">
+    <value>This request has already been paid for.</value>
+  </data>
+  <data name="تم انسحابك من الحملة." xml:space="preserve">
+    <value>You have withdrawn from the campaign.</value>
+  </data>
+  <data name="تم انسحابك. سيتم استرجاع العربون إليك خلال 3 أيام عمل." xml:space="preserve">
+    <value>You have withdrawn. Your deposit will be refunded to you within 3 business days.</value>
+  </data>
+  <data name="تم انضمامك إلى الحملة! يرجى دفع العربون (نصف المبلغ) لتأكيد مشاركتك." xml:space="preserve">
+    <value>You joined the campaign! Please pay the deposit (half the amount) to confirm your participation.</value>
+  </data>
+  <data name="تم تأكيد الاستلام من قِبل العميل" xml:space="preserve">
+    <value>Delivery confirmed by the customer</value>
+  </data>
+  <data name="تم تحديث الحملة بنجاح." xml:space="preserve">
+    <value>Campaign updated successfully.</value>
+  </data>
+  <data name="تم تحديث المشروع." xml:space="preserve">
+    <value>Project updated.</value>
+  </data>
+  <data name="تم تحديث بيانات الماكينة." xml:space="preserve">
+    <value>Machine data updated.</value>
+  </data>
+  <data name="تم تحديث بيانات المورد بنجاح." xml:space="preserve">
+    <value>Supplier data updated successfully.</value>
+  </data>
+  <data name="تم تحديث حالة الحملة." xml:space="preserve">
+    <value>Campaign status updated.</value>
+  </data>
+  <data name="تم تحديد الطلب كمكتمل." xml:space="preserve">
+    <value>Request marked as completed.</value>
+  </data>
+  <data name="تم حذف الصورة." xml:space="preserve">
+    <value>Image deleted.</value>
+  </data>
+  <data name="تم حذف الماكينة." xml:space="preserve">
+    <value>Machine deleted.</value>
+  </data>
+  <data name="تم حذف المشروع." xml:space="preserve">
+    <value>Project deleted.</value>
+  </data>
+  <data name="تم حفظ بيانات الورشة بنجاح." xml:space="preserve">
+    <value>Workshop data saved successfully.</value>
+  </data>
+  <data name="تم رفض الإيصال وإشعار المشارك." xml:space="preserve">
+    <value>Receipt rejected and participant notified.</value>
+  </data>
+  <data name="تم رفض العرض." xml:space="preserve">
+    <value>Quote rejected.</value>
+  </data>
+  <data name="تم رفض الورشة." xml:space="preserve">
+    <value>Workshop rejected.</value>
+  </data>
+  <data name="تم رفع إيصال الدفع المتبقي. سيتم التحقق منه خلال 24 ساعة." xml:space="preserve">
+    <value>Remaining payment receipt uploaded. It will be verified within 24 hours.</value>
+  </data>
+  <data name="تم رفع إيصال الدفع بنجاح. سيتم مراجعته من المدير وتأكيده خلال 24 ساعة." xml:space="preserve">
+    <value>Payment receipt uploaded successfully. It will be reviewed by the admin and confirmed within 24 hours.</value>
+  </data>
+  <data name="تم رفع إيصال العربون. سيتم التحقق منه خلال 24 ساعة." xml:space="preserve">
+    <value>Deposit receipt uploaded. It will be verified within 24 hours.</value>
+  </data>
+  <data name="تم رفع الإيصال مسبقاً." xml:space="preserve">
+    <value>Receipt already uploaded.</value>
+  </data>
+  <data name="تم رفع الصورة بنجاح." xml:space="preserve">
+    <value>Image uploaded successfully.</value>
+  </data>
+  <data name="تم قبول الدفع الكامل بنجاح." xml:space="preserve">
+    <value>Full payment accepted successfully.</value>
+  </data>
+  <data name="تم قبول العربون" xml:space="preserve">
+    <value>Deposit accepted</value>
+  </data>
+  <data name="تم قبول العربون بنجاح." xml:space="preserve">
+    <value>Deposit accepted successfully.</value>
+  </data>
+  <data name="تم قبول العرض وبدء التنفيذ" xml:space="preserve">
+    <value>Quote accepted and production started</value>
+  </data>
+  <data name="تم قبول العرض وسيتواصل معك المصنّع قريباً." xml:space="preserve">
+    <value>Quote accepted. The manufacturer will contact you soon.</value>
+  </data>
+  <data name="تم قبولها" xml:space="preserve">
+    <value>Accepted</value>
+  </data>
+  <data name="تهانينا! تم اعتماد ورشتك على منصة Jo Maker." xml:space="preserve">
+    <value>Congratulations! Your workshop is now approved on Jo Maker.</value>
+  </data>
+  <data name="تواصل مع ورش CNC والطباعة ثلاثية الأبعاد وقطع الليزر المعتمدة. احصل على عروض أسعار خلال ساعات." xml:space="preserve">
+    <value>Connect with approved CNC, 3D printing and laser cutting workshops. Get quotes within hours.</value>
+  </data>
+  <data name="توصيل" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
+  <data name="توصيل إلى بابك أو استلام من الورشة" xml:space="preserve">
+    <value>Delivery to your door or pickup from the workshop</value>
+  </data>
+  <data name="توفير" xml:space="preserve">
+    <value>Savings</value>
+  </data>
+  <data name="ثم المبلغ الكامل عند اكتمال النصاب." xml:space="preserve">
+    <value>Then the full amount once the quorum is reached.</value>
+  </data>
+  <data name="جرّب تعديل معايير البحث" xml:space="preserve">
+    <value>Try adjusting your search criteria</value>
+  </data>
+  <data name="جميع الإيصالات تمت معالجتها" xml:space="preserve">
+    <value>All receipts have been processed</value>
+  </data>
+  <data name="جميع الحقوق محفوظة." xml:space="preserve">
+    <value>All rights reserved.</value>
+  </data>
+  <data name="حتى 5MB" xml:space="preserve">
+    <value>Up to 5 MB</value>
+  </data>
+  <data name="حجم أقصى 5MB" xml:space="preserve">
+    <value>Max size 5 MB</value>
+  </data>
+  <data name="حذف الصورة؟" xml:space="preserve">
+    <value>Delete image?</value>
+  </data>
+  <data name="حسابك محمي وآمن · Jo Maker الأردنية" xml:space="preserve">
+    <value>Your account is protected and secure · Jo Maker Jordan</value>
+  </data>
+  <data name="حوّل أفكارك" xml:space="preserve">
+    <value>Turn your ideas</value>
+  </data>
+  <data name="خدمة الدفع الفوري الأردنية" xml:space="preserve">
+    <value>The Jordanian instant payment service</value>
+  </data>
+  <data name="خريطة الورش" xml:space="preserve">
+    <value>Workshop map</value>
+  </data>
+  <data name="خريطة الورش التفاعلية" xml:space="preserve">
+    <value>Interactive workshop map</value>
+  </data>
+  <data name="د.أ" xml:space="preserve">
+    <value>JOD</value>
+  </data>
+  <data name="دفع كامل بانتظار" xml:space="preserve">
+    <value>Full payment pending</value>
+  </data>
+  <data name="دفع محمي بالكامل" xml:space="preserve">
+    <value>Fully secure payment</value>
+  </data>
+  <data name="دفعوا كاملاً" xml:space="preserve">
+    <value>Paid in full</value>
+  </data>
+  <data name="دليل الموردين" xml:space="preserve">
+    <value>Suppliers Directory</value>
+  </data>
+  <data name="دليل الورش" xml:space="preserve">
+    <value>Workshops Directory</value>
+  </data>
+  <data name="رابط" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="رفض" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="رفض الدفع" xml:space="preserve">
+    <value>Reject payment</value>
+  </data>
+  <data name="رفع" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="رقم CliQ" xml:space="preserve">
+    <value>CliQ number</value>
+  </data>
+  <data name="رقم الهاتف" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="روابط سريعة" xml:space="preserve">
+    <value>Quick links</value>
+  </data>
+  <data name="زيارة الموقع ↗" xml:space="preserve">
+    <value>Visit website ↗</value>
+  </data>
+  <data name="سبب الرفض" xml:space="preserve">
+    <value>Rejection reason</value>
+  </data>
+  <data name="سبب الرفض..." xml:space="preserve">
+    <value>Rejection reason...</value>
+  </data>
+  <data name="ستظهر الإشعارات هنا عند وصول عروض أسعار أو رسائل جديدة" xml:space="preserve">
+    <value>Notifications will appear here when you receive new quotes or messages</value>
+  </data>
+  <data name="سجّل الدخول للانضمام" xml:space="preserve">
+    <value>Sign in to join</value>
+  </data>
+  <data name="سجّل دخولك" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="سجّل دخولك للوصول إلى المنصة" xml:space="preserve">
+    <value>Sign in to access the platform</value>
+  </data>
+  <data name="سجّل كمصنّع وكن أول من ينضم للمنصة" xml:space="preserve">
+    <value>Register as a manufacturer and be the first to join the platform</value>
+  </data>
+  <data name="سجّل ورشتك" xml:space="preserve">
+    <value>Register your workshop</value>
+  </data>
+  <data name="سجّل ورشتك مجاناً" xml:space="preserve">
+    <value>Register your workshop for free</value>
+  </data>
+  <data name="سعر المجموعة" xml:space="preserve">
+    <value>Group price</value>
+  </data>
+  <data name="سعر المجموعة (د.أ)" xml:space="preserve">
+    <value>Group price (JOD)</value>
+  </data>
+  <data name="سيتم إضافة قائمة الموردين قريباً" xml:space="preserve">
+    <value>The suppliers list will be added soon</value>
+  </data>
+  <data name="سيتم استرجاع العربون إليك خلال 3 أيام عمل." xml:space="preserve">
+    <value>The deposit will be refunded to you within 3 business days.</value>
+  </data>
+  <data name="سيتم التأكيد خلال 24 ساعة." xml:space="preserve">
+    <value>Will be confirmed within 24 hours.</value>
+  </data>
+  <data name="شراء جماعي" xml:space="preserve">
+    <value>Group buying</value>
+  </data>
+  <data name="شعار المورد" xml:space="preserve">
+    <value>Supplier logo</value>
+  </data>
+  <data name="شكراً! تم إضافة تقييمك." xml:space="preserve">
+    <value>Thank you! Your rating has been added.</value>
+  </data>
+  <data name="صف المواد المستخدمة، التحديات، والنتيجة..." xml:space="preserve">
+    <value>Describe the materials used, challenges, and the result...</value>
+  </data>
+  <data name="صندوق الرسائل" xml:space="preserve">
+    <value>Inbox</value>
+  </data>
+  <data name="صورة الحملة" xml:space="preserve">
+    <value>Campaign image</value>
+  </data>
+  <data name="صورة المشروع" xml:space="preserve">
+    <value>Project image</value>
+  </data>
+  <data name="صورة الورشة" xml:space="preserve">
+    <value>Workshop image</value>
+  </data>
+  <data name="صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط." xml:space="preserve">
+    <value>File format not supported. Only JPG, PNG, PDF are allowed.</value>
+  </data>
+  <data name="صُنع في الأردن" xml:space="preserve">
+    <value>Made in Jordan</value>
+  </data>
+  <data name="طباعة ثلاثية الأبعاد" xml:space="preserve">
+    <value>3D printing</value>
+  </data>
+  <data name="طلب" xml:space="preserve">
+    <value>Request</value>
+  </data>
+  <data name="طلب منجز" xml:space="preserve">
+    <value>Completed request</value>
+  </data>
+  <data name="طلبات مفتوحة تناسب تخصصات ورشتك" xml:space="preserve">
+    <value>Open requests matching your workshop specialties</value>
+  </data>
+  <data name="طلبات مكتملة" xml:space="preserve">
+    <value>Completed requests</value>
+  </data>
+  <data name="طلبات واردة" xml:space="preserve">
+    <value>Incoming requests</value>
+  </data>
+  <data name="طلباتي" xml:space="preserve">
+    <value>My Requests</value>
+  </data>
+  <data name="ع" xml:space="preserve">
+    <value>Q</value>
+  </data>
+  <data name="عدد العروض" xml:space="preserve">
+    <value>Number of quotes</value>
+  </data>
+  <data name="عربون بانتظار" xml:space="preserve">
+    <value>Deposit pending</value>
+  </data>
+  <data name="عرض" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="عرض التفاصيل" xml:space="preserve">
+    <value>View details</value>
+  </data>
+  <data name="عرض الطلبات" xml:space="preserve">
+    <value>View requests</value>
+  </data>
+  <data name="عرض الكل" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="عرض جميع الورش" xml:space="preserve">
+    <value>View all workshops</value>
+  </data>
+  <data name="عروض معلقة" xml:space="preserve">
+    <value>Pending quotes</value>
+  </data>
+  <data name="عروض مقبولة" xml:space="preserve">
+    <value>Accepted quotes</value>
+  </data>
+  <data name="عميل" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="عميل / شركة" xml:space="preserve">
+    <value>Customer / company</value>
+  </data>
+  <data name="عمّان، إربد، الزرقاء..." xml:space="preserve">
+    <value>Amman, Irbid, Zarqa...</value>
+  </data>
+  <data name="عن المورد" xml:space="preserve">
+    <value>About the supplier</value>
+  </data>
+  <data name="عنوان الحملة" xml:space="preserve">
+    <value>Campaign title</value>
+  </data>
+  <data name="عنوان الحملة مطلوب." xml:space="preserve">
+    <value>Campaign title is required.</value>
+  </data>
+  <data name="عنوان المشروع" xml:space="preserve">
+    <value>Project title</value>
+  </data>
+  <data name="غير مدفوع" xml:space="preserve">
+    <value>Unpaid</value>
+  </data>
+  <data name="غير مصرح" xml:space="preserve">
+    <value>Unauthorized</value>
+  </data>
+  <data name="غير مصرح لك بالوصول" xml:space="preserve">
+    <value>You are not authorized to access</value>
+  </data>
+  <data name="فتح" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="فتح PDF" xml:space="preserve">
+    <value>Open PDF</value>
+  </data>
+  <data name="فقط وقبل اكتمال الكمية المطلوبة." xml:space="preserve">
+    <value>only and before the required quantity is reached.</value>
+  </data>
+  <data name="قبول" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="قبول الدفع" xml:space="preserve">
+    <value>Accept payment</value>
+  </data>
+  <data name="قدّم عرضاً" xml:space="preserve">
+    <value>Submit a quote</value>
+  </data>
+  <data name="قطع CNC" xml:space="preserve">
+    <value>CNC cutting</value>
+  </data>
+  <data name="قطع ليزر" xml:space="preserve">
+    <value>Laser cutting</value>
+  </data>
+  <data name="قيد المراجعة" xml:space="preserve">
+    <value>Under review</value>
+  </data>
+  <data name="كل التخصصات" xml:space="preserve">
+    <value>All specialties</value>
+  </data>
+  <data name="كل الحالات" xml:space="preserve">
+    <value>All statuses</value>
+  </data>
+  <data name="كل المدن" xml:space="preserve">
+    <value>All cities</value>
+  </data>
+  <data name="كل ورشة تمر بعملية تحقق من الهوية والمعدات والجودة قبل القبول في المنصة." xml:space="preserve">
+    <value>Every workshop goes through identity, equipment and quality verification before being accepted on the platform.</value>
+  </data>
+  <data name="كلمة المرور" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="لا توجد إشعارات" xml:space="preserve">
+    <value>No notifications</value>
+  </data>
+  <data name="لا توجد رسائل" xml:space="preserve">
+    <value>No messages</value>
+  </data>
+  <data name="لا توجد صورة" xml:space="preserve">
+    <value>No image</value>
+  </data>
+  <data name="لا توجد طلبات" xml:space="preserve">
+    <value>No requests</value>
+  </data>
+  <data name="لا توجد طلبات بعد" xml:space="preserve">
+    <value>No requests yet</value>
+  </data>
+  <data name="لا توجد طلبات مفتوحة تناسب تخصصاتك حالياً" xml:space="preserve">
+    <value>There are no open requests matching your specialties at the moment</value>
+  </data>
+  <data name="لا توجد طلبات مفتوحة حالياً" xml:space="preserve">
+    <value>There are no open requests at the moment</value>
+  </data>
+  <data name="لا توجد عروض أسعار بعد. سيتواصل معك المصنّعون قريباً." xml:space="preserve">
+    <value>No quotes yet. Manufacturers will contact you soon.</value>
+  </data>
+  <data name="لا توجد محادثات" xml:space="preserve">
+    <value>No conversations</value>
+  </data>
+  <data name="لا توجد مدفوعات قيد المراجعة" xml:space="preserve">
+    <value>No payments under review</value>
+  </data>
+  <data name="لا توجد نتائج" xml:space="preserve">
+    <value>No results</value>
+  </data>
+  <data name="لا توجد ورش بعد" xml:space="preserve">
+    <value>No workshops yet</value>
+  </data>
+  <data name="لا توجد ورش بموقع جغرافي محدد" xml:space="preserve">
+    <value>No workshops with a set location</value>
+  </data>
+  <data name="لا يمكن إرسال رسالة فارغة." xml:space="preserve">
+    <value>Cannot send an empty message.</value>
+  </data>
+  <data name="لا يمكن الانسحاب بعد اكتمال النصاب." xml:space="preserve">
+    <value>Cannot withdraw after the quorum is reached.</value>
+  </data>
+  <data name="لا يمكن الانسحاب بعد تأكيد الحملة." xml:space="preserve">
+    <value>Cannot withdraw after the campaign is confirmed.</value>
+  </data>
+  <data name="لا يمكنك تقييم ورشتك الخاصة." xml:space="preserve">
+    <value>You cannot rate your own workshop.</value>
+  </data>
+  <data name="لا يوجد عرض مقبول لهذا الطلب." xml:space="preserve">
+    <value>There is no accepted quote for this request.</value>
+  </data>
+  <data name="لا يوجد مستخدمون" xml:space="preserve">
+    <value>No users</value>
+  </data>
+  <data name="لا يوجد موردون بعد" xml:space="preserve">
+    <value>No suppliers yet</value>
+  </data>
+  <data name="لتأكيد مشاركتك." xml:space="preserve">
+    <value>to confirm your participation.</value>
+  </data>
+  <data name="لديك حساب بالفعل؟" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="لقد أرسلت عرض سعر لهذا الطلب مسبقاً." xml:space="preserve">
+    <value>You have already submitted a quote for this request.</value>
+  </data>
+  <data name="لقد قيّمت هذه الورشة من قبل." xml:space="preserve">
+    <value>You have already rated this workshop.</value>
+  </data>
+  <data name="لم ترسل أي عروض أسعار بعد." xml:space="preserve">
+    <value>You have not submitted any quotes yet.</value>
+  </data>
+  <data name="لم يتم إيجاد طلبات تطابق الفلتر المحدد." xml:space="preserve">
+    <value>No requests found matching the selected filter.</value>
+  </data>
+  <data name="لم يتم اختيار صورة." xml:space="preserve">
+    <value>No image selected.</value>
+  </data>
+  <data name="لماذا Jo Maker؟" xml:space="preserve">
+    <value>Why Jo Maker?</value>
+  </data>
+  <data name="لوحة التحكم" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="ليس لديك حساب؟" xml:space="preserve">
+    <value>Do not have an account?</value>
+  </data>
+  <data name="ليس لديك صلاحية لعرض هذه الصفحة." xml:space="preserve">
+    <value>You do not have permission to view this page.</value>
+  </data>
+  <data name="متوسط التسليم" xml:space="preserve">
+    <value>Average delivery</value>
+  </data>
+  <data name="متوسط الرد" xml:space="preserve">
+    <value>Average response</value>
+  </data>
+  <data name="مثال: ألمنيوم، بلاستيك، فولاذ، خشب..." xml:space="preserve">
+    <value>Example: aluminum, plastic, steel, wood...</value>
+  </data>
+  <data name="مثال: خيط PLA للطباعة الثلاثية الأبعاد" xml:space="preserve">
+    <value>Example: PLA filament for 3D printing</value>
+  </data>
+  <data name="مثال: شركة المواد الصناعية" xml:space="preserve">
+    <value>Example: Industrial Materials Company</value>
+  </data>
+  <data name="مثال: قطع ليزر لواجهة محل تجاري" xml:space="preserve">
+    <value>Example: laser-cut storefront for a shop</value>
+  </data>
+  <data name="مجتمع التصنيع" xml:space="preserve">
+    <value>Manufacturing community</value>
+  </data>
+  <data name="مدة التنفيذ" xml:space="preserve">
+    <value>Production time</value>
+  </data>
+  <data name="مدفوع" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="مدفوع ✓" xml:space="preserve">
+    <value>Paid ✓</value>
+  </data>
+  <data name="مدن أردنية" xml:space="preserve">
+    <value>Jordanian cities</value>
+  </data>
+  <data name="مراجعة الإيصالات" xml:space="preserve">
+    <value>Receipts review</value>
+  </data>
+  <data name="مراجعة المدفوعات" xml:space="preserve">
+    <value>Payments review</value>
+  </data>
+  <data name="مرحباً بك مجدداً" xml:space="preserve">
+    <value>Welcome back</value>
+  </data>
+  <data name="مرحباً! تم إنشاء حسابك بنجاح." xml:space="preserve">
+    <value>Welcome! Your account was created successfully.</value>
+  </data>
+  <data name="مرحلة التتبع" xml:space="preserve">
+    <value>Tracking stage</value>
+  </data>
+  <data name="مستخدم" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="مسح" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="مشارك" xml:space="preserve">
+    <value>Participant</value>
+  </data>
+  <data name="مصنّع" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="مصنّع / ورشة" xml:space="preserve">
+    <value>Manufacturer / workshop</value>
+  </data>
+  <data name="معاينة الإيصال" xml:space="preserve">
+    <value>Receipt preview</value>
+  </data>
+  <data name="معلومات الحملة" xml:space="preserve">
+    <value>Campaign info</value>
+  </data>
+  <data name="معلّق" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="ملاحظات المصنّع" xml:space="preserve">
+    <value>Manufacturer notes</value>
+  </data>
+  <data name="ملاحظة (اختياري)" xml:space="preserve">
+    <value>Note (optional)</value>
+  </data>
+  <data name="ملخص الطلب" xml:space="preserve">
+    <value>Request summary</value>
+  </data>
+  <data name="ملخص دفعتي" xml:space="preserve">
+    <value>My payment summary</value>
+  </data>
+  <data name="ملف PDF" xml:space="preserve">
+    <value>PDF file</value>
+  </data>
+  <data name="منتجات حقيقية" xml:space="preserve">
+    <value>Real products</value>
+  </data>
+  <data name="منصة" xml:space="preserve">
+    <value>Platform</value>
+  </data>
+  <data name="منصة التصنيع الرقمي في الأردن" xml:space="preserve">
+    <value>Digital Manufacturing Platform in Jordan</value>
+  </data>
+  <data name="منصة التصنيع الرقمي في الأردن — اربط فكرتك بورش تصنيع محترفة: CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك، شراء جماعي وموردين موثوقين." xml:space="preserve">
+    <value>Jordan digital manufacturing platform — connect your idea with professional manufacturing workshops: CNC, 3D printing, laser, plastic, group buying and trusted suppliers.</value>
+  </data>
+  <data name="منصة التصنيع الرقمي في الأردن — نربط أصحاب الأفكار بورش التصنيع المحترفة." xml:space="preserve">
+    <value>Jordan digital manufacturing platform — connecting idea owners with professional manufacturing workshops.</value>
+  </data>
+  <data name="منصة التصنيع الرقمي في الأردن: اربط فكرتك بورش تصنيع محترفة — CNC، طباعة ثلاثية الأبعاد، ليزر، بلاستيك والمزيد." xml:space="preserve">
+    <value>Jordan digital manufacturing platform: connect your idea with professional manufacturing workshops — CNC, 3D printing, laser, plastic and more.</value>
+  </data>
+  <data name="منصة متكاملة تجمع كل ما تحتاجه لتحويل مشروعك من ملف تصميم إلى منتج مصنوع" xml:space="preserve">
+    <value>An all-in-one platform with everything you need to turn your project from a design file into a manufactured product</value>
+  </data>
+  <data name="مورد معتمد (ظاهر في الدليل)" xml:space="preserve">
+    <value>Verified supplier (shown in directory)</value>
+  </data>
+  <data name="مُسترد" xml:space="preserve">
+    <value>Refunded</value>
+  </data>
+  <data name="نأسف، لم يتم اعتماد ورشتك. يرجى مراجعة البيانات والتواصل مع الدعم." xml:space="preserve">
+    <value>We are sorry, your workshop was not approved. Please review the data and contact support.</value>
+  </data>
+  <data name="نافذة الانسحاب مفتوحة" xml:space="preserve">
+    <value>Withdrawal window open</value>
+  </data>
+  <data name="نسخ" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="نسيت كلمة المرور؟" xml:space="preserve">
+    <value>Forgot password?</value>
+  </data>
+  <data name="نصف المبلغ عربوناً" xml:space="preserve">
+    <value>Half the amount as a deposit</value>
+  </data>
+  <data name="نوع التصنيع" xml:space="preserve">
+    <value>Manufacturing type</value>
+  </data>
+  <data name="نوع الحساب" xml:space="preserve">
+    <value>Account type</value>
+  </data>
+  <data name="هذا الشهر" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="هذه الحملة مخصصة للمصنّعين المسجّلين" xml:space="preserve">
+    <value>This campaign is for registered manufacturers only</value>
+  </data>
+  <data name="هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع." xml:space="preserve">
+    <value>Are you sure you want to delete this supplier? This cannot be undone.</value>
+  </data>
+  <data name="هل استلمت طلبك وتريد تأشيره كمكتمل؟" xml:space="preserve">
+    <value>Did you receive your request and want to mark it as completed?</value>
+  </data>
+  <data name="هل تؤكد قبول هذه الدفعة؟" xml:space="preserve">
+    <value>Do you confirm accepting this payment?</value>
+  </data>
+  <data name="هل تريد رفض هذه الدفعة؟" xml:space="preserve">
+    <value>Do you want to reject this payment?</value>
+  </data>
+  <data name="هل تمتلك ورشة تصنيع؟" xml:space="preserve">
+    <value>Do you own a manufacturing workshop?</value>
+  </data>
+  <data name="ورش متخصصة ترسل عروض أسعار تنافسية" xml:space="preserve">
+    <value>Specialized workshops send competitive quotes</value>
+  </data>
+  <data name="ورش معتمدة" xml:space="preserve">
+    <value>Approved workshops</value>
+  </data>
+  <data name="ورش معتمدة وموثّقة" xml:space="preserve">
+    <value>Approved and verified workshops</value>
+  </data>
+  <data name="ورشة معتمدة" xml:space="preserve">
+    <value>Approved workshop</value>
+  </data>
+  <data name="وصف الحملة" xml:space="preserve">
+    <value>Campaign description</value>
+  </data>
+  <data name="وصف المشروع" xml:space="preserve">
+    <value>Project description</value>
+  </data>
+  <data name="وصف المورد" xml:space="preserve">
+    <value>Supplier description</value>
+  </data>
+  <data name="وقبل اكتمال النصاب." xml:space="preserve">
+    <value>and before the quorum is reached.</value>
+  </data>
+  <data name="يجب أن يكون العربون مؤكداً قبل دفع المبلغ المتبقي." xml:space="preserve">
+    <value>The deposit must be confirmed before paying the remaining amount.</value>
+  </data>
+  <data name="يجب الموافقة على الشروط والأحكام للانضمام إلى الحملة." xml:space="preserve">
+    <value>You must accept the terms and conditions to join the campaign.</value>
+  </data>
+  <data name="يحق لي الانسحاب خلال" xml:space="preserve">
+    <value>I may withdraw within</value>
+  </data>
+  <data name="يرجى إكمال ملف الورشة أولاً." xml:space="preserve">
+    <value>Please complete your workshop profile first.</value>
+  </data>
+  <data name="يرجى إنشاء ملف الورشة أولاً." xml:space="preserve">
+    <value>Please create your workshop profile first.</value>
+  </data>
+  <data name="يرجى التواصل مع الإدارة" xml:space="preserve">
+    <value>Please contact administration</value>
+  </data>
+  <data name="يرجى رفع صورة إيصال التحويل." xml:space="preserve">
+    <value>Please upload a transfer receipt image.</value>
+  </data>
+  <data name="يرجى رفع صورة إيصال الدفع." xml:space="preserve">
+    <value>Please upload a payment receipt image.</value>
+  </data>
+  <data name="يمكنك الانسحاب خلال" xml:space="preserve">
+    <value>You can withdraw within</value>
+  </data>
+  <data name="يمكنك الانسحاب واسترجاع العربون خلال" xml:space="preserve">
+    <value>You can withdraw and get your deposit back within</value>
+  </data>
+  <data name="يمكنك مراسلة المصنّعين من صفحة تفاصيل الورشة" xml:space="preserve">
+    <value>You can message manufacturers from the workshop details page</value>
+  </data>
+  <data name="ينتهي خلال" xml:space="preserve">
+    <value>Ends in</value>
+  </data>
+  <data name="— اختر التخصص —" xml:space="preserve">
+    <value>— Select specialty —</value>
+  </data>
+  <data name="— سيُستعاد العربون تلقائياً" xml:space="preserve">
+    <value>— the deposit is refunded automatically</value>
+  </data>
+  <data name="— عبر Stripe (آمن ومشفّر)" xml:space="preserve">
+    <value>— via Stripe (secure and encrypted)</value>
+  </data>
+  <data name="‹ السابق" xml:space="preserve">
+    <value>‹ Previous</value>
+  </data>
+  <data name="← رجوع" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+  <data name="← طلباتي" xml:space="preserve">
+    <value>← My Requests</value>
+  </data>
+  <data name="← كل الحملات" xml:space="preserve">
+    <value>← All campaigns</value>
+  </data>
+  <data name="← كل الموردين" xml:space="preserve">
+    <value>← All suppliers</value>
+  </data>
+  <data name="← لوحة التحكم" xml:space="preserve">
+    <value>← Dashboard</value>
+  </data>
+  <data name="↩️ تم طلب الاسترجاع" xml:space="preserve">
+    <value>↩️ Refund requested</value>
+  </data>
+  <data name="↩️ مسترجع" xml:space="preserve">
+    <value>↩️ Refunded</value>
+  </data>
+  <data name="⏳ إيصال الدفع الكامل قيد المراجعة" xml:space="preserve">
+    <value>⏳ Full payment receipt under review</value>
+  </data>
+  <data name="⏳ إيصال العربون قيد المراجعة" xml:space="preserve">
+    <value>⏳ Deposit receipt under review</value>
+  </data>
+  <data name="⏳ بانتظار الاعتماد" xml:space="preserve">
+    <value>⏳ Awaiting approval</value>
+  </data>
+  <data name="⏳ دفع كامل بانتظار" xml:space="preserve">
+    <value>⏳ Full payment pending</value>
+  </data>
+  <data name="⏳ عربون بانتظار" xml:space="preserve">
+    <value>⏳ Deposit pending</value>
+  </data>
+  <data name="☰ عرض القائمة" xml:space="preserve">
+    <value>☰ Show menu</value>
+  </data>
+  <data name="⚙️ طلبات قيد التنفيذ" xml:space="preserve">
+    <value>⚙️ Requests in progress</value>
+  </data>
+  <data name="⚠️ الشراء الجماعي مخصص للمصنّعين فقط." xml:space="preserve">
+    <value>⚠️ Group buying is for manufacturers only.</value>
+  </data>
+  <data name="✅ إضافة المشروع" xml:space="preserve">
+    <value>✅ Add project</value>
+  </data>
+  <data name="✅ تأكيد الاستلام" xml:space="preserve">
+    <value>✅ Confirm delivery</value>
+  </data>
+  <data name="✅ قبول" xml:space="preserve">
+    <value>✅ Accept</value>
+  </data>
+  <data name="✅ مكتمل" xml:space="preserve">
+    <value>✅ Completed</value>
+  </data>
+  <data name="✏️ تعديل" xml:space="preserve">
+    <value>✏️ Edit</value>
+  </data>
+  <data name="✏️ تعديل الحملة" xml:space="preserve">
+    <value>✏️ Edit campaign</value>
+  </data>
+  <data name="✏️ تعديل المشروع" xml:space="preserve">
+    <value>✏️ Edit project</value>
+  </data>
+  <data name="✏️ تعديل الملف" xml:space="preserve">
+    <value>✏️ Edit profile</value>
+  </data>
+  <data name="✏️ تعديل المورد" xml:space="preserve">
+    <value>✏️ Edit supplier</value>
+  </data>
+  <data name="✓ أرسلت عرضاً" xml:space="preserve">
+    <value>✓ Quote sent</value>
+  </data>
+  <data name="✓ قراءة الكل" xml:space="preserve">
+    <value>✓ Mark all as read</value>
+  </data>
+  <data name="✓ ورشة معتمدة" xml:space="preserve">
+    <value>✓ Approved workshop</value>
+  </data>
+  <data name="✕ مسح الفلتر" xml:space="preserve">
+    <value>✕ Clear filter</value>
+  </data>
+  <data name="❌ رفض" xml:space="preserve">
+    <value>❌ Reject</value>
+  </data>
+  <data name="➕ إضافة ماكينة" xml:space="preserve">
+    <value>➕ Add machine</value>
+  </data>
+  <data name="➕ إضافة مورد" xml:space="preserve">
+    <value>➕ Add supplier</value>
+  </data>
+  <data name="➕ إضافة مورد جديد" xml:space="preserve">
+    <value>➕ Add new supplier</value>
+  </data>
+  <data name="⭕ لم يدفع" xml:space="preserve">
+    <value>⭕ Not paid</value>
+  </data>
+  <data name="👁 عرض الإيصال" xml:space="preserve">
+    <value>👁 View receipt</value>
+  </data>
+  <data name="👁 عرض الملف العام" xml:space="preserve">
+    <value>👁 View public profile</value>
+  </data>
+  <data name="💛 عربون ✓" xml:space="preserve">
+    <value>💛 Deposit ✓</value>
+  </data>
+  <data name="💡 عند الانضمام ستُطلب منك دفع" xml:space="preserve">
+    <value>💡 When joining you will be asked to pay</value>
+  </data>
+  <data name="💬 الرسائل" xml:space="preserve">
+    <value>💬 Messages</value>
+  </data>
+  <data name="💬 عروض الأسعار المرسلة" xml:space="preserve">
+    <value>💬 Sent quotes</value>
+  </data>
+  <data name="💳 ادفع الآن" xml:space="preserve">
+    <value>💳 Pay now</value>
+  </data>
+  <data name="💳 ادفع الآن لبدء التصنيع" xml:space="preserve">
+    <value>💳 Pay now to start production</value>
+  </data>
+  <data name="💳 الخطوة 1: ادفع العربون لتأكيد مشاركتك" xml:space="preserve">
+    <value>💳 Step 1: Pay the deposit to confirm your participation</value>
+  </data>
+  <data name="💳 الخطوة 2: ادفع المبلغ المتبقي" xml:space="preserve">
+    <value>💳 Step 2: Pay the remaining amount</value>
+  </data>
+  <data name="💳 مدفوع" xml:space="preserve">
+    <value>💳 Paid</value>
+  </data>
+  <data name="💾 حفظ التعديلات" xml:space="preserve">
+    <value>💾 Save changes</value>
+  </data>
+  <data name="💾 حفظ المورد" xml:space="preserve">
+    <value>💾 Save supplier</value>
+  </data>
+  <data name="📋 آخر الطلبات المناسبة لورشتك" xml:space="preserve">
+    <value>📋 Latest requests matching your workshop</value>
+  </data>
+  <data name="📋 الطلبات الواردة" xml:space="preserve">
+    <value>📋 Incoming requests</value>
+  </data>
+  <data name="📍 تتبع الطلب" xml:space="preserve">
+    <value>📍 Track request</value>
+  </data>
+  <data name="📝 ملاحظة التحويل:" xml:space="preserve">
+    <value>📝 Transfer note:</value>
+  </data>
+  <data name="📣 اكتمل النصاب — أرسل إشعار الدفع المتبقي للمشاركين" xml:space="preserve">
+    <value>📣 Quorum reached — send remaining payment notification to participants</value>
+  </data>
+  <data name="📤 رفع إيصال الدفع الكامل" xml:space="preserve">
+    <value>📤 Upload full payment receipt</value>
+  </data>
+  <data name="📤 رفع الإيصال وتأكيد مشاركتي" xml:space="preserve">
+    <value>📤 Upload receipt and confirm participation</value>
+  </data>
+  <data name="📦 الشراء الجماعي" xml:space="preserve">
+    <value>📦 Group buying</value>
+  </data>
+  <data name="📦 انضم والتزم بدفع العربون" xml:space="preserve">
+    <value>📦 Join and commit to the deposit</value>
+  </data>
+  <data name="📱 رقم الهاتف:" xml:space="preserve">
+    <value>📱 Phone number:</value>
+  </data>
+  <data name="🗂️ إضافة مشروع" xml:space="preserve">
+    <value>🗂️ Add project</value>
+  </data>
+  <data name="🗂️ إضافة مشروع لملفي" xml:space="preserve">
+    <value>🗂️ Add project to my profile</value>
+  </data>
+  <data name="🗑 حذف المورد" xml:space="preserve">
+    <value>🗑 Delete supplier</value>
+  </data>
+  <data name="🗺️ خريطة الورش" xml:space="preserve">
+    <value>🗺️ Workshop map</value>
+  </data>
+  <data name="🗺️ عرض على الخريطة" xml:space="preserve">
+    <value>🗺️ View on map</value>
+  </data>
+  <data name="🛠 أدوات الإدارة" xml:space="preserve">
+    <value>🛠 Admin tools</value>
+  </data>
+  <data name="Portfolio" xml:space="preserve">
+    <value>Portfolio</value>
+  </data>
+  <data name="JPG، PNG، WebP — حجم أقصى 5MB" xml:space="preserve">
+    <value>JPG, PNG, WebP — max size 5 MB</value>
+  </data>
+  <data name="إخفاء كلمة المرور" xml:space="preserve">
+    <value>Hide password</value>
+  </data>
+  <data name="إنشاء حساب مصنّع" xml:space="preserve">
+    <value>Create Manufacturer Account</value>
+  </data>
+  <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
+    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+  </data>
+  <data name="تم النسخ!" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="سيتم إرسال إشعار للمشاركين لدفع المبلغ المتبقي. تأكيد؟" xml:space="preserve">
+    <value>A notification will be sent to participants to pay the remaining amount. Confirm?</value>
+  </data>
+  <data name="عرض الورشة" xml:space="preserve">
+    <value>View workshop</value>
+  </data>
+  <data name="كيلوبايت" xml:space="preserve">
+    <value>KB</value>
+  </data>
+  <data name="هل أنت متأكد من الانسحاب؟" xml:space="preserve">
+    <value>Are you sure you want to withdraw?</value>
+  </data>
+  <data name=" السبب: {0}" xml:space="preserve">
+    <value> Reason: {0}</value>
+  </data>
+  <data name="(الإجمالي {0} د.أ − العربون {1} د.أ)" xml:space="preserve">
+    <value>(Total {0} JOD − Deposit {1} JOD)</value>
+  </data>
+  <data name="(الحد الأدنى: {0} وحدة)" xml:space="preserve">
+    <value>(Minimum: {0} units)</value>
+  </data>
+  <data name="(نصف إجمالي {0} د.أ)" xml:space="preserve">
+    <value>(Half of total {0} JOD)</value>
+  </data>
+  <data name="+{0} ماكينة أخرى" xml:space="preserve">
+    <value>+{0} more machines</value>
+  </data>
+  <data name="{0} / {1} وحدة" xml:space="preserve">
+    <value>{0} / {1} units</value>
+  </data>
+  <data name="{0} د.أ" xml:space="preserve">
+    <value>{0} JOD</value>
+  </data>
+  <data name="{0} د.أ — {1}" xml:space="preserve">
+    <value>{0} JOD — {1}</value>
+  </data>
+  <data name="{0} ساعة" xml:space="preserve">
+    <value>{0} hours</value>
+  </data>
+  <data name="{0} شخص" xml:space="preserve">
+    <value>{0} people</value>
+  </data>
+  <data name="{0} طلب" xml:space="preserve">
+    <value>{0} requests</value>
+  </data>
+  <data name="{0} مستخدم مسجّل" xml:space="preserve">
+    <value>{0} registered users</value>
+  </data>
+  <data name="{0} نتيجة" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
+  <data name="{0} وحدة" xml:space="preserve">
+    <value>{0} units</value>
+  </data>
+  <data name="{0} وحدة | المبلغ: {1} د.أ" xml:space="preserve">
+    <value>{0} units | Amount: {1} JOD</value>
+  </data>
+  <data name="{0} وحدة منضمة" xml:space="preserve">
+    <value>{0} units joined</value>
+  </data>
+  <data name="{0} ورشة" xml:space="preserve">
+    <value>{0} workshops</value>
+  </data>
+  <data name="{0} ورشة معتمدة في الأردن — {1} ظاهرة على الخريطة" xml:space="preserve">
+    <value>{0} approved workshops in Jordan — {1} shown on the map</value>
+  </data>
+  <data name="{0} يوم" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="إيصال دفع جديد بانتظار مراجعتك — طلب رقم #{0}" xml:space="preserve">
+    <value>New payment receipt awaiting your review — request #{0}</value>
+  </data>
+  <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
+    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+  </data>
+  <data name="الإجمالي: {0} د.أ" xml:space="preserve">
+    <value>Total: {0} JOD</value>
+  </data>
+  <data name="الحد الأدنى للطلب في هذه الحملة هو {0} وحدة لكل مصنّع." xml:space="preserve">
+    <value>The minimum order for this campaign is {0} units per manufacturer.</value>
+  </data>
+  <data name="العربون: {0} د.أ +" xml:space="preserve">
+    <value>Deposit: {0} JOD +</value>
+  </data>
+  <data name="العميل: {0}" xml:space="preserve">
+    <value>Customer: {0}</value>
+  </data>
+  <data name="المبلغ المرفوع: {0} د.أ — سيتم التأكيد خلال 24 ساعة." xml:space="preserve">
+    <value>Uploaded amount: {0} JOD — will be confirmed within 24 hours.</value>
+  </data>
+  <data name="المبلغ: {0} $ — {1}" xml:space="preserve">
+    <value>Amount: {0} $ — {1}</value>
+  </data>
+  <data name="المتبقي: {0} د.أ =" xml:space="preserve">
+    <value>Remaining: {0} JOD =</value>
+  </data>
+  <data name="المشاركون ({0})" xml:space="preserve">
+    <value>Participants ({0})</value>
+  </data>
+  <data name="الهدف: {0}" xml:space="preserve">
+    <value>Target: {0}</value>
+  </data>
+  <data name="الهدف: {0} وحدة" xml:space="preserve">
+    <value>Target: {0} units</value>
+  </data>
+  <data name="الورشة: {0}" xml:space="preserve">
+    <value>Workshop: {0}</value>
+  </data>
+  <data name="تحديث على طلبك &quot;{0}&quot;: {1}" xml:space="preserve">
+    <value>Update on your request &quot;{0}&quot;: {1}</value>
+  </data>
+  <data name="تعديل المورد — {0}" xml:space="preserve">
+    <value>Edit supplier — {0}</value>
+  </data>
+  <data name="تم إرسال إشعار الدفع لـ {0} مشارك." xml:space="preserve">
+    <value>Payment notification sent to {0} participants.</value>
+  </data>
+  <data name="تم إنشاء المورد «{0}» بنجاح." xml:space="preserve">
+    <value>Supplier &quot;{0}&quot; created successfully.</value>
+  </data>
+  <data name="تم تأكيد دفعك لطلب رقم #{0}. سيبدأ المصنّع بالعمل قريباً." xml:space="preserve">
+    <value>Your payment for request #{0} is confirmed. The manufacturer will start work soon.</value>
+  </data>
+  <data name="تم تحديث حالة الطلب إلى: {0}" xml:space="preserve">
+    <value>Request status updated to: {0}</value>
+  </data>
+  <data name="تم حذف المورد «{0}» بنجاح." xml:space="preserve">
+    <value>Supplier &quot;{0}&quot; deleted successfully.</value>
+  </data>
+  <data name="تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع الإيصال الصحيح." xml:space="preserve">
+    <value>Payment receipt for request #{0} was rejected. Please pay again and upload the correct receipt.</value>
+  </data>
+  <data name="تم رفض الدفع للطلب #{0}." xml:space="preserve">
+    <value>Payment for request #{0} was rejected.</value>
+  </data>
+  <data name="تم قبول الدفع للطلب #{0}." xml:space="preserve">
+    <value>Payment for request #{0} was accepted.</value>
+  </data>
+  <data name="تم قبول عرض سعرك على طلب: {0}" xml:space="preserve">
+    <value>Your quote for request: {0} was accepted</value>
+  </data>
+  <data name="دفع كامل حملة {0} - {1}" xml:space="preserve">
+    <value>Full payment for campaign {0} - {1}</value>
+  </data>
+  <data name="صور الورشة ({0})" xml:space="preserve">
+    <value>Workshop photos ({0})</value>
+  </data>
+  <data name="عربون حملة {0} - {1}" xml:space="preserve">
+    <value>Deposit for campaign {0} - {1}</value>
+  </data>
+  <data name="عروض الأسعار ({0})" xml:space="preserve">
+    <value>Quotes ({0})</value>
+  </data>
+  <data name="لم يكتمل النصاب بعد ({0}/{1})." xml:space="preserve">
+    <value>Quorum not reached yet ({0}/{1}).</value>
+  </data>
+  <data name="ماكيناتي ({0})" xml:space="preserve">
+    <value>My machines ({0})</value>
+  </data>
+  <data name="وصلك عرض سعر جديد على طلبك: {0}" xml:space="preserve">
+    <value>A new quote arrived for your request: {0}</value>
+  </data>
+  <data name="↩️ طلب استرجاع عربون — المصنّع «{0}» انسحب من حملة «{1}». يرجى استرجاع العربون عبر CliQ." xml:space="preserve">
+    <value>↩️ Deposit refund request — manufacturer &quot;{0}&quot; withdrew from campaign &quot;{1}&quot;. Please refund the deposit via CliQ.</value>
+  </data>
+  <data name="⏱ {0} يوم" xml:space="preserve">
+    <value>⏱ {0} days</value>
+  </data>
+  <data name="⏳ بانتظار اكتمال النصاب ({0} / {1} وحدة) لطلب المبلغ المتبقي." xml:space="preserve">
+    <value>⏳ Waiting for the quorum ({0} / {1} units) to request the remaining amount.</value>
+  </data>
+  <data name="✅ تم تأكيد دفعتك الكاملة لحملة «{0}». شكراً لك!" xml:space="preserve">
+    <value>✅ Your full payment for campaign &quot;{0}&quot; is confirmed. Thank you!</value>
+  </data>
+  <data name="✅ تم قبول عربونك ({0:N2} د.أ) لحملة «{1}». مشاركتك مؤكدة!" xml:space="preserve">
+    <value>✅ Your deposit ({0:N2} JOD) for campaign &quot;{1}&quot; was accepted. Your participation is confirmed!</value>
+  </data>
+  <data name="✅ حملة مؤكدة — اكتملت جميع المدفوعات لحملة «{0}». يمكنك إصدار أمر الشراء." xml:space="preserve">
+    <value>✅ Campaign confirmed — all payments for campaign &quot;{0}&quot; are complete. You can place the purchase order.</value>
+  </data>
+  <data name="✓ أنت منضم لهذه الحملة — {0} وحدة" xml:space="preserve">
+    <value>✓ You joined this campaign — {0} units</value>
+  </data>
+  <data name="❌ تم رفض إيصال {0} لحملة «{1}». السبب: {2}. يرجى رفع الإيصال مجدداً." xml:space="preserve">
+    <value>❌ Receipt {0} for campaign &quot;{1}&quot; was rejected. Reason: {2}. Please upload the receipt again.</value>
+  </data>
+  <data name="🏭 الورش ({0})" xml:space="preserve">
+    <value>🏭 Workshops ({0})</value>
+  </data>
+  <data name="💬 {0} عرض" xml:space="preserve">
+    <value>💬 {0} quotes</value>
+  </data>
+  <data name="💰 {0} د.أ" xml:space="preserve">
+    <value>💰 {0} JOD</value>
+  </data>
+  <data name="💳 إيصال دفع كامل — حملة «{0}» — المبلغ المتبقي: {1:N2} د.أ. يرجى المراجعة." xml:space="preserve">
+    <value>💳 Full payment receipt — campaign &quot;{0}&quot; — remaining amount: {1:N2} JOD. Please review.</value>
+  </data>
+  <data name="💳 إيصال عربون جديد — حملة «{0}» — المبلغ: {1:N2} د.أ. يرجى المراجعة." xml:space="preserve">
+    <value>💳 New deposit receipt — campaign &quot;{0}&quot; — amount: {1:N2} JOD. Please review.</value>
+  </data>
+  <data name="💳 اكتمل النصاب — يرجى دفع المبلغ المتبقي ({0:N2} د.أ) لحملة «{1}»." xml:space="preserve">
+    <value>💳 Quorum reached — please pay the remaining amount ({0:N2} JOD) for campaign &quot;{1}&quot;.</value>
+  </data>
+  <data name="📦 كمية: {0}" xml:space="preserve">
+    <value>📦 Quantity: {0}</value>
+  </data>
+  <data name="👤 {0}" xml:space="preserve">
+    <value>👤 {0}</value>
+  </data>
+  <data name="عنوان الطلب مطلوب" xml:space="preserve">
+    <value>Request title is required.</value>
+  </data>
+  <data name="السعر مطلوب" xml:space="preserve">
+    <value>Price is required.</value>
+  </data>
+  <data name="اسم الورشة مطلوب" xml:space="preserve">
+    <value>Workshop name is required.</value>
+  </data>
+  <data name="المدينة مطلوبة" xml:space="preserve">
+    <value>City is required.</value>
+  </data>
+  <data name="رقم التواصل مطلوب" xml:space="preserve">
+    <value>Contact number is required.</value>
+  </data>
+  <data name="الاسم/الموديل مطلوب" xml:space="preserve">
+    <value>Name/model is required.</value>
+  </data>
+  <data name="عنوان المشروع مطلوب" xml:space="preserve">
+    <value>Project title is required.</value>
+  </data>
+  <data name="اسم المنتج مطلوب" xml:space="preserve">
+    <value>Product name is required.</value>
+  </data>
+  <data name="اسم المورد مطلوب" xml:space="preserve">
+    <value>Supplier name is required.</value>
+  </data>
+  <data name="عنوان الحملة مطلوب" xml:space="preserve">
+    <value>Campaign title is required.</value>
+  </data>
 </root>

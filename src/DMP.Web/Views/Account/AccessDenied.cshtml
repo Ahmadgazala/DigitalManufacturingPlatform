@@ -1,13 +1,13 @@
 @{
-    ViewData["Title"] = "غير مصرح";
+    ViewData["Title"] = T["غير مصرح"];
 }
 
 <div class="container section" style="text-align:center;padding:80px 20px">
     <div style="font-size:4rem;margin-bottom:16px">🚫</div>
-    <h1 style="font-size:2rem;margin-bottom:12px">غير مصرح لك بالوصول</h1>
-    <p style="color:var(--steel);margin-bottom:24px">ليس لديك صلاحية لعرض هذه الصفحة.</p>
+    <h1 style="font-size:2rem;margin-bottom:12px">@T["غير مصرح لك بالوصول"]</h1>
+    <p style="color:var(--steel);margin-bottom:24px">@T["ليس لديك صلاحية لعرض هذه الصفحة."]</p>
     <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">الرئيسية</a>
-        <a asp-controller="Account" asp-action="Login" class="btn btn-outline">تسجيل الدخول بحساب آخر</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">@T["الرئيسية"]</a>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline">@T["تسجيل الدخول بحساب آخر"]</a>
     </div>
 </div>

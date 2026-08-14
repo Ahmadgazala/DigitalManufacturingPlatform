@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -15,17 +16,20 @@ public class GroupBuyingController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
     private readonly IWebHostEnvironment _env;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public GroupBuyingController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
         IFileService fileService,
-        IWebHostEnvironment env)
+        IWebHostEnvironment env,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _fileService = fileService;
         _env = env;
+        _T = T;
     }
 
     // GET: /GroupBuying
@@ -83,13 +87,13 @@ public class GroupBuyingController : Controller
     {
         if (!consent)
         {
-            TempData["Error"] = "يجب الموافقة على الشروط والأحكام للانضمام إلى الحملة.";
+            TempData["Error"] = _T["يجب الموافقة على الشروط والأحكام للانضمام إلى الحملة."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (quantity < 1)
         {
-            TempData["Error"] = "الكمية يجب أن تكون 1 على الأقل.";
+            TempData["Error"] = _T["الكمية يجب أن تكون 1 على الأقل."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -106,19 +110,19 @@ public class GroupBuyingController : Controller
 
         if (!campaign.IsActive)
         {
-            TempData["Error"] = "الحملة غير متاحة للانضمام.";
+            TempData["Error"] = _T["الحملة غير متاحة للانضمام."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (campaign.Participants.Any(p => p.UserId == userId))
         {
-            TempData["Error"] = "أنت منضم إلى هذه الحملة بالفعل.";
+            TempData["Error"] = _T["أنت منضم إلى هذه الحملة بالفعل."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (campaign.MinOrderPerManufacturer > 0 && quantity < campaign.MinOrderPerManufacturer)
         {
-            TempData["Error"] = $"الحد الأدنى للطلب في هذه الحملة هو {campaign.MinOrderPerManufacturer} وحدة لكل مصنّع.";
+            TempData["Error"] = _T["الحد الأدنى للطلب في هذه الحملة هو {0} وحدة لكل مصنّع.", campaign.MinOrderPerManufacturer].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -133,7 +137,7 @@ public class GroupBuyingController : Controller
         campaign.CurrentQuantity += quantity;
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم انضمامك إلى الحملة! يرجى دفع العربون (نصف المبلغ) لتأكيد مشاركتك.";
+        TempData["Success"] = _T["تم انضمامك إلى الحملة! يرجى دفع العربون (نصف المبلغ) لتأكيد مشاركتك."].Value;
         return RedirectToAction(nameof(Details), new { id = campaignId });
     }
 
@@ -155,26 +159,26 @@ public class GroupBuyingController : Controller
         var participation = campaign.Participants.FirstOrDefault(p => p.UserId == userId);
         if (participation == null)
         {
-            TempData["Error"] = "أنت لست منضماً إلى هذه الحملة.";
+            TempData["Error"] = _T["أنت لست منضماً إلى هذه الحملة."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         var withdrawDeadline = participation.JoinedAt.AddHours(48);
         if (DateTime.UtcNow > withdrawDeadline)
         {
-            TempData["Error"] = "انتهت مهلة الانسحاب (48 ساعة من وقت الانضمام).";
+            TempData["Error"] = _T["انتهت مهلة الانسحاب (48 ساعة من وقت الانضمام)."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (campaign.CurrentQuantity >= campaign.MinQuantity)
         {
-            TempData["Error"] = "لا يمكن الانسحاب بعد اكتمال النصاب.";
+            TempData["Error"] = _T["لا يمكن الانسحاب بعد اكتمال النصاب."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (campaign.Status != CampaignStatus.Active)
         {
-            TempData["Error"] = "لا يمكن الانسحاب بعد تأكيد الحملة.";
+            TempData["Error"] = _T["لا يمكن الانسحاب بعد تأكيد الحملة."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -193,7 +197,7 @@ public class GroupBuyingController : Controller
                 _db.Notifications.Add(new Notification
                 {
                     UserId  = admin.Id,
-                    Message = $"↩️ طلب استرجاع عربون — المصنّع «{user?.FullName ?? userId}» انسحب من حملة «{campaign.Title}». يرجى استرجاع العربون عبر CliQ.",
+                    Message = _T["↩️ طلب استرجاع عربون — المصنّع «{0}» انسحب من حملة «{1}». يرجى استرجاع العربون عبر CliQ.", user?.FullName ?? userId, campaign.Title].Value,
                     Link    = $"/GroupBuying/Details/{campaign.Id}"
                 });
             }
@@ -202,7 +206,7 @@ public class GroupBuyingController : Controller
             if (campaign.CurrentQuantity < 0) campaign.CurrentQuantity = 0;
 
             await _db.SaveChangesAsync();
-            TempData["Success"] = "تم انسحابك. سيتم استرجاع العربون إليك خلال 3 أيام عمل.";
+            TempData["Success"] = _T["تم انسحابك. سيتم استرجاع العربون إليك خلال 3 أيام عمل."].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -212,7 +216,7 @@ public class GroupBuyingController : Controller
         _db.CampaignParticipants.Remove(participation);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم انسحابك من الحملة.";
+        TempData["Success"] = _T["تم انسحابك من الحملة."].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -233,19 +237,19 @@ public class GroupBuyingController : Controller
         var participant = campaign.Participants.FirstOrDefault(p => p.UserId == userId);
         if (participant == null)
         {
-            TempData["Error"] = "أنت لست مشاركاً في هذه الحملة.";
+            TempData["Error"] = _T["أنت لست مشاركاً في هذه الحملة."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (participant.PaymentStatus != ParticipantPaymentStatus.NotPaid)
         {
-            TempData["Error"] = "تم رفع الإيصال مسبقاً.";
+            TempData["Error"] = _T["تم رفع الإيصال مسبقاً."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (receiptImage == null || receiptImage.Length == 0)
         {
-            TempData["Error"] = "يرجى رفع صورة إيصال التحويل.";
+            TempData["Error"] = _T["يرجى رفع صورة إيصال التحويل."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -253,7 +257,7 @@ public class GroupBuyingController : Controller
         var ext     = Path.GetExtension(receiptImage.FileName).ToLowerInvariant();
         if (!allowed.Contains(ext))
         {
-            TempData["Error"] = "صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط.";
+            TempData["Error"] = _T["صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -276,13 +280,13 @@ public class GroupBuyingController : Controller
             _db.Notifications.Add(new Notification
             {
                 UserId  = admin.Id,
-                Message = $"💳 إيصال عربون جديد — حملة «{campaign.Title}» — المبلغ: {depositAmount:N2} د.أ. يرجى المراجعة.",
+                Message = _T["💳 إيصال عربون جديد — حملة «{0}» — المبلغ: {1:N2} د.أ. يرجى المراجعة.", campaign.Title, depositAmount].Value,
                 Link    = $"/GroupBuying/Details/{campaignId}"
             });
         }
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم رفع إيصال العربون. سيتم التحقق منه خلال 24 ساعة.";
+        TempData["Success"] = _T["تم رفع إيصال العربون. سيتم التحقق منه خلال 24 ساعة."].Value;
         return RedirectToAction(nameof(Details), new { id = campaignId });
     }
 
@@ -303,19 +307,19 @@ public class GroupBuyingController : Controller
         var participant = campaign.Participants.FirstOrDefault(p => p.UserId == userId);
         if (participant == null)
         {
-            TempData["Error"] = "أنت لست مشاركاً في هذه الحملة.";
+            TempData["Error"] = _T["أنت لست مشاركاً في هذه الحملة."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (participant.PaymentStatus != ParticipantPaymentStatus.DepositPaid)
         {
-            TempData["Error"] = "يجب أن يكون العربون مؤكداً قبل دفع المبلغ المتبقي.";
+            TempData["Error"] = _T["يجب أن يكون العربون مؤكداً قبل دفع المبلغ المتبقي."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
         if (receiptImage == null || receiptImage.Length == 0)
         {
-            TempData["Error"] = "يرجى رفع صورة إيصال التحويل.";
+            TempData["Error"] = _T["يرجى رفع صورة إيصال التحويل."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -323,7 +327,7 @@ public class GroupBuyingController : Controller
         var ext     = Path.GetExtension(receiptImage.FileName).ToLowerInvariant();
         if (!allowed.Contains(ext))
         {
-            TempData["Error"] = "صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط.";
+            TempData["Error"] = _T["صيغة الملف غير مدعومة. يُسمح بـ JPG، PNG، PDF فقط."].Value;
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
@@ -347,13 +351,13 @@ public class GroupBuyingController : Controller
             _db.Notifications.Add(new Notification
             {
                 UserId  = admin.Id,
-                Message = $"💳 إيصال دفع كامل — حملة «{campaign.Title}» — المبلغ المتبقي: {remainingAmount:N2} د.أ. يرجى المراجعة.",
+                Message = _T["💳 إيصال دفع كامل — حملة «{0}» — المبلغ المتبقي: {1:N2} د.أ. يرجى المراجعة.", campaign.Title, remainingAmount].Value,
                 Link    = $"/GroupBuying/Details/{campaignId}"
             });
         }
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم رفع إيصال الدفع المتبقي. سيتم التحقق منه خلال 24 ساعة.";
+        TempData["Success"] = _T["تم رفع إيصال الدفع المتبقي. سيتم التحقق منه خلال 24 ساعة."].Value;
         return RedirectToAction(nameof(Details), new { id = campaignId });
     }
 
@@ -375,12 +379,12 @@ public class GroupBuyingController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId  = participant.UserId,
-            Message = $"✅ تم قبول عربونك ({participant.DepositAmount:N2} د.أ) لحملة «{participant.Campaign!.Title}». مشاركتك مؤكدة!",
+            Message = _T["✅ تم قبول عربونك ({0:N2} د.أ) لحملة «{1}». مشاركتك مؤكدة!", participant.DepositAmount ?? 0, participant.Campaign!.Title].Value,
             Link    = $"/GroupBuying/Details/{participant.CampaignId}"
         });
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم قبول العربون بنجاح.";
+        TempData["Success"] = _T["تم قبول العربون بنجاح."].Value;
         return RedirectToAction(nameof(Details), new { id = participant.CampaignId });
     }
 
@@ -402,7 +406,7 @@ public class GroupBuyingController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId  = participant.UserId,
-            Message = $"✅ تم تأكيد دفعتك الكاملة لحملة «{participant.Campaign!.Title}». شكراً لك!",
+            Message = _T["✅ تم تأكيد دفعتك الكاملة لحملة «{0}». شكراً لك!", participant.Campaign!.Title].Value,
             Link    = $"/GroupBuying/Details/{participant.CampaignId}"
         });
 
@@ -427,7 +431,7 @@ public class GroupBuyingController : Controller
                     _db.Notifications.Add(new Notification
                     {
                         UserId  = admin.Id,
-                        Message = $"✅ حملة مؤكدة — اكتملت جميع المدفوعات لحملة «{campaign.Title}». يمكنك إصدار أمر الشراء.",
+                        Message = _T["✅ حملة مؤكدة — اكتملت جميع المدفوعات لحملة «{0}». يمكنك إصدار أمر الشراء.", campaign.Title].Value,
                         Link    = $"/GroupBuying/Details/{campaign.Id}"
                     });
                 }
@@ -435,7 +439,7 @@ public class GroupBuyingController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم قبول الدفع الكامل بنجاح.";
+        TempData["Success"] = _T["تم قبول الدفع الكامل بنجاح."].Value;
         return RedirectToAction(nameof(Details), new { id = participant.CampaignId });
     }
 
@@ -472,12 +476,15 @@ public class GroupBuyingController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId  = participant.UserId,
-            Message = $"❌ تم رفض إيصال {(wasDeposit ? "العربون" : "الدفع")} لحملة «{participant.Campaign!.Title}». السبب: {reviewNote ?? "يرجى التواصل مع الإدارة"}. يرجى رفع الإيصال مجدداً.",
+            Message = _T["❌ تم رفض إيصال {0} لحملة «{1}». السبب: {2}. يرجى رفع الإيصال مجدداً.",
+                wasDeposit ? _T["العربون"].Value : _T["الدفع"].Value,
+                participant.Campaign!.Title,
+                reviewNote ?? _T["يرجى التواصل مع الإدارة"].Value].Value,
             Link    = $"/GroupBuying/Details/{participant.CampaignId}"
         });
 
         await _db.SaveChangesAsync();
-        TempData["Error"] = "تم رفض الإيصال وإشعار المشارك.";
+        TempData["Error"] = _T["تم رفض الإيصال وإشعار المشارك."].Value;
         return RedirectToAction(nameof(Details), new { id = participant.CampaignId });
     }
 
@@ -496,7 +503,7 @@ public class GroupBuyingController : Controller
 
         if (campaign.CurrentQuantity < campaign.MinQuantity)
         {
-            TempData["Error"] = $"لم يكتمل النصاب بعد ({campaign.CurrentQuantity}/{campaign.MinQuantity}).";
+            TempData["Error"] = _T["لم يكتمل النصاب بعد ({0}/{1}).", campaign.CurrentQuantity, campaign.MinQuantity].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -512,13 +519,13 @@ public class GroupBuyingController : Controller
             _db.Notifications.Add(new Notification
             {
                 UserId  = p.UserId,
-                Message = $"💳 اكتمل النصاب — يرجى دفع المبلغ المتبقي ({remaining:N2} د.أ) لحملة «{campaign.Title}».",
+                Message = _T["💳 اكتمل النصاب — يرجى دفع المبلغ المتبقي ({0:N2} د.أ) لحملة «{1}».", remaining, campaign.Title].Value,
                 Link    = $"/GroupBuying/Details/{campaign.Id}"
             });
         }
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = $"تم إرسال إشعار الدفع لـ {targets.Count()} مشارك.";
+        TempData["Success"] = _T["تم إرسال إشعار الدفع لـ {0} مشارك.", targets.Count()].Value;
         return RedirectToAction(nameof(Details), new { id });
     }
 
@@ -585,7 +592,7 @@ public class GroupBuyingController : Controller
             _db.GroupBuyingCampaigns.Add(model);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "تم إنشاء الحملة بنجاح.";
+            TempData["Success"] = _T["تم إنشاء الحملة بنجاح."].Value;
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
@@ -646,7 +653,7 @@ public class GroupBuyingController : Controller
 
         if (string.IsNullOrWhiteSpace(campaign.Title))
         {
-            TempData["Error"] = "عنوان الحملة مطلوب.";
+            TempData["Error"] = _T["عنوان الحملة مطلوب."].Value;
             return View(campaign);
         }
 
@@ -659,7 +666,7 @@ public class GroupBuyingController : Controller
             }
 
             await _db.SaveChangesAsync();
-            TempData["Success"] = "تم تحديث الحملة بنجاح.";
+            TempData["Success"] = _T["تم تحديث الحملة بنجاح."].Value;
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (Exception ex)
@@ -682,7 +689,7 @@ public class GroupBuyingController : Controller
         campaign.Status = status;
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم تحديث حالة الحملة.";
+        TempData["Success"] = _T["تم تحديث حالة الحملة."].Value;
         return RedirectToAction(nameof(Details), new { id });
     }
 }

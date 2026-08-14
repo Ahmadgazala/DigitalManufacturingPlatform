@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -11,11 +12,14 @@ public class QuotationsController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
-    public QuotationsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public QuotationsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
+        _T = T;
     }
 
     private async Task<Manufacturer?> GetCurrentManufacturerAsync()
@@ -43,7 +47,7 @@ public class QuotationsController : Controller
         var manufacturer = await GetCurrentManufacturerAsync();
         if (manufacturer == null)
         {
-            TempData["Error"] = "يرجى إنشاء ملف الورشة أولاً.";
+            TempData["Error"] = _T["يرجى إنشاء ملف الورشة أولاً."].Value;
             return RedirectToAction("Edit", "Manufacturers");
         }
 
@@ -90,7 +94,7 @@ public class QuotationsController : Controller
 
         if (alreadySubmitted)
         {
-            TempData["Error"] = "لقد أرسلت عرض سعر لهذا الطلب مسبقاً.";
+            TempData["Error"] = _T["لقد أرسلت عرض سعر لهذا الطلب مسبقاً."].Value;
             return RedirectToAction(nameof(IncomingRequests));
         }
 
@@ -128,7 +132,7 @@ public class QuotationsController : Controller
 
         if (alreadySubmitted)
         {
-            TempData["Error"] = "لقد أرسلت عرض سعر لهذا الطلب مسبقاً.";
+            TempData["Error"] = _T["لقد أرسلت عرض سعر لهذا الطلب مسبقاً."].Value;
             return RedirectToAction(nameof(IncomingRequests));
         }
 
@@ -141,11 +145,11 @@ public class QuotationsController : Controller
         {
             await AddNotificationAsync(
                 request.CustomerId,
-                $"وصلك عرض سعر جديد على طلبك: {request.Title}",
+                _T["وصلك عرض سعر جديد على طلبك: {0}", request.Title].Value,
                 Url.Action("Details", "Requests", new { id = request.Id }));
         }
 
-        TempData["Success"] = "تم إرسال عرض السعر بنجاح.";
+        TempData["Success"] = _T["تم إرسال عرض السعر بنجاح."].Value;
         return RedirectToAction(nameof(IncomingRequests));
     }
 
@@ -177,7 +181,7 @@ public class QuotationsController : Controller
         {
             RequestId = quotation.RequestId,
             Stage     = TrackingStage.Received,
-            Note      = "تم قبول العرض وبدء التنفيذ"
+            Note      = _T["تم قبول العرض وبدء التنفيذ"].Value
         });
 
         // رفض باقي العروض تلقائياً
@@ -196,11 +200,11 @@ public class QuotationsController : Controller
         {
             await AddNotificationAsync(
                 manufacturer.UserId,
-                $"تم قبول عرض سعرك على طلب: {quotation.Request.Title}",
+                _T["تم قبول عرض سعرك على طلب: {0}", quotation.Request.Title].Value,
                 Url.Action("Dashboard", "Manufacturers"));
         }
 
-        TempData["Success"] = "تم قبول العرض وسيتواصل معك المصنّع قريباً.";
+        TempData["Success"] = _T["تم قبول العرض وسيتواصل معك المصنّع قريباً."].Value;
         return RedirectToAction("Details", "Requests", new { id = quotation.RequestId });
     }
 
@@ -225,7 +229,7 @@ public class QuotationsController : Controller
         quotation.Status = QuotationStatus.Rejected;
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم رفض العرض.";
+        TempData["Success"] = _T["تم رفض العرض."].Value;
         return RedirectToAction("Details", "Requests", new { id = quotation.RequestId });
     }
 

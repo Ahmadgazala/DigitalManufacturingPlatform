@@ -40,37 +40,66 @@ public static class RequestStatusHelpers
         System.Globalization.CultureInfo.CurrentUICulture.Name
             .StartsWith("en", StringComparison.OrdinalIgnoreCase);
 
-    public static string ToArabic(this RequestStatus s) => s switch
+    public static string ToEnglish(this RequestStatus s) => s switch
     {
-        RequestStatus.Open       => "مفتوح",
-        RequestStatus.InProgress => "جاري التنفيذ",
-        RequestStatus.Completed  => "مكتمل",
-        RequestStatus.Cancelled  => "ملغي",
+        RequestStatus.Open       => "Open",
+        RequestStatus.InProgress => "In Progress",
+        RequestStatus.Completed  => "Completed",
+        RequestStatus.Cancelled  => "Cancelled",
         _ => s.ToString()
     };
+
+    public static string ToArabic(this RequestStatus s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            RequestStatus.Open       => "مفتوح",
+            RequestStatus.InProgress => "جاري التنفيذ",
+            RequestStatus.Completed  => "مكتمل",
+            RequestStatus.Cancelled  => "ملغي",
+            _ => s.ToString()
+        };
 
     public static string ToDisplay(this RequestStatus s) =>
         IsEnglish ? s.ToString() : s.ToArabic();
 
-    public static string ToArabic(this QuotationStatus s) => s switch
+    public static string ToEnglish(this QuotationStatus s) => s switch
     {
-        QuotationStatus.Pending  => "بانتظار الرد",
-        QuotationStatus.Accepted => "مقبول",
-        QuotationStatus.Rejected => "مرفوض",
+        QuotationStatus.Pending  => "Awaiting reply",
+        QuotationStatus.Accepted => "Accepted",
+        QuotationStatus.Rejected => "Rejected",
         _ => s.ToString()
     };
+
+    public static string ToArabic(this QuotationStatus s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            QuotationStatus.Pending  => "بانتظار الرد",
+            QuotationStatus.Accepted => "مقبول",
+            QuotationStatus.Rejected => "مرفوض",
+            _ => s.ToString()
+        };
 
     public static string ToDisplay(this QuotationStatus s) =>
         IsEnglish ? s.ToString() : s.ToArabic();
 
-    public static string ToArabic(this TrackingStage s) => s switch
+    public static string ToEnglish(this TrackingStage s) => s switch
     {
-        TrackingStage.Received        => "تم الاستلام",
-        TrackingStage.InManufacturing => "قيد التصنيع",
-        TrackingStage.ReadyForPickup  => "جاهز للاستلام",
-        TrackingStage.Delivered       => "تم التسليم",
+        TrackingStage.Received        => "Received",
+        TrackingStage.InManufacturing => "In Manufacturing",
+        TrackingStage.ReadyForPickup  => "Ready For Pickup",
+        TrackingStage.Delivered       => "Delivered",
         _ => s.ToString()
     };
+
+    public static string ToArabic(this TrackingStage s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            TrackingStage.Received        => "تم الاستلام",
+            TrackingStage.InManufacturing => "قيد التصنيع",
+            TrackingStage.ReadyForPickup  => "جاهز للاستلام",
+            TrackingStage.Delivered       => "تم التسليم",
+            _ => s.ToString()
+        };
 
     public static string ToIcon(this TrackingStage s) => s switch
     {
@@ -81,15 +110,26 @@ public static class RequestStatusHelpers
         _ => "🔵"
     };
 
-    public static string ToArabic(this PaymentStatus s) => s switch
+    public static string ToEnglish(this PaymentStatus s) => s switch
     {
-        PaymentStatus.NotPaid     => "غير مدفوع",
-        PaymentStatus.Pending     => "بانتظار الدفع",
-        PaymentStatus.Paid        => "مدفوع",
-        PaymentStatus.Refunded    => "مُسترجع",
-        PaymentStatus.UnderReview => "قيد المراجعة",
+        PaymentStatus.NotPaid     => "Not Paid",
+        PaymentStatus.Pending     => "Awaiting Payment",
+        PaymentStatus.Paid        => "Paid",
+        PaymentStatus.Refunded    => "Refunded",
+        PaymentStatus.UnderReview => "Under Review",
         _ => s.ToString()
     };
+
+    public static string ToArabic(this PaymentStatus s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            PaymentStatus.NotPaid     => "غير مدفوع",
+            PaymentStatus.Pending     => "بانتظار الدفع",
+            PaymentStatus.Paid        => "مدفوع",
+            PaymentStatus.Refunded    => "مُسترجع",
+            PaymentStatus.UnderReview => "قيد المراجعة",
+            _ => s.ToString()
+        };
 }
 
 public class ManufacturingRequest

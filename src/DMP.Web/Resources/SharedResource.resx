@@ -191,4 +191,7 @@
   <data name="How_ImportDesc" xml:space="preserve"><value>تُستورد البضاعة بسعر الجملة</value></data>
   <data name="How_Deliver" xml:space="preserve"><value>الاستلام</value></data>
   <data name="How_DeliverDesc" xml:space="preserve"><value>استلم طلبك بسعر أقل</value></data>
+  <data name="Portfolio" xml:space="preserve">
+    <value>أعمالي</value>
+  </data>
 </root>

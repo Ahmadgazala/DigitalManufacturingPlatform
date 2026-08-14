@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -12,11 +13,14 @@ public class AdminController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
-    public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
+        _T = T;
     }
 
     // GET: /Admin
@@ -78,13 +82,13 @@ public class AdminController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId = manufacturer.UserId,
-            Message = "تهانينا! تم اعتماد ورشتك على منصة Jo Maker.",
+            Message = _T["تهانينا! تم اعتماد ورشتك على منصة Jo Maker."].Value,
             Link = "/Manufacturers/Dashboard",
             IsRead = false
         });
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم اعتماد الورشة بنجاح.";
+        TempData["Success"] = _T["تم اعتماد الورشة بنجاح."].Value;
         return RedirectToAction(nameof(Manufacturers));
     }
 
@@ -104,13 +108,13 @@ public class AdminController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId = manufacturer.UserId,
-            Message = "نأسف، لم يتم اعتماد ورشتك. يرجى مراجعة البيانات والتواصل مع الدعم.",
+            Message = _T["نأسف، لم يتم اعتماد ورشتك. يرجى مراجعة البيانات والتواصل مع الدعم."].Value,
             Link = "/Manufacturers/Edit",
             IsRead = false
         });
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم رفض الورشة.";
+        TempData["Success"] = _T["تم رفض الورشة."].Value;
         return RedirectToAction(nameof(Manufacturers));
     }
 
@@ -151,14 +155,14 @@ public class AdminController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId    = request.CustomerId,
-            Message   = $"تم تأكيد دفعك لطلب رقم #{requestId}. سيبدأ المصنّع بالعمل قريباً.",
+            Message   = _T["تم تأكيد دفعك لطلب رقم #{0}. سيبدأ المصنّع بالعمل قريباً.", requestId].Value,
             Link      = $"/Requests/Details/{requestId}",
             IsRead    = false,
             CreatedAt = DateTime.UtcNow
         });
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = $"تم قبول الدفع للطلب #{requestId}.";
+        TempData["Success"] = _T["تم قبول الدفع للطلب #{0}.", requestId].Value;
         return RedirectToAction(nameof(Payments));
     }
 
@@ -179,14 +183,15 @@ public class AdminController : Controller
         _db.Notifications.Add(new Notification
         {
             UserId    = request.CustomerId,
-            Message   = $"تم رفض إيصال الدفع للطلب #{requestId}. يرجى إعادة الدفع ورفع الإيصال الصحيح." + (string.IsNullOrEmpty(note) ? "" : $" السبب: {note}"),
+            Message   = _T["تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع الإيصال الصحيح.", requestId].Value
+                        + (string.IsNullOrEmpty(note) ? "" : _T[" السبب: {0}", note].Value),
             Link      = $"/Payments/Checkout?requestId={requestId}",
             IsRead    = false,
             CreatedAt = DateTime.UtcNow
         });
         await _db.SaveChangesAsync();
 
-        TempData["Error"] = $"تم رفض الدفع للطلب #{requestId}.";
+        TempData["Error"] = _T["تم رفض الدفع للطلب #{0}.", requestId].Value;
         return RedirectToAction(nameof(Payments));
     }
 

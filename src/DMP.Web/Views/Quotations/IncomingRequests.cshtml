@@ -1,12 +1,12 @@
 @model List<ManufacturingRequest>
 @{
-    ViewData["Title"] = "الطلبات الواردة";
+    ViewData["Title"] = T["الطلبات الواردة"];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>الطلبات الواردة</h1>
-        <p>طلبات مفتوحة تناسب تخصصات ورشتك</p>
+        <h1>@T["الطلبات الواردة"]</h1>
+        <p>@T["طلبات مفتوحة تناسب تخصصات ورشتك"]</p>
     </div>
 </div>
 
@@ -24,14 +24,14 @@
                             <span class="chip chip-cat">@req.Category.ToArabic()</span>
                             @if (alreadyQuoted)
                             {
-                                <span class="chip chip-done">✓ أرسلت عرضاً</span>
+                                <span class="chip chip-done">@T["✓ أرسلت عرضاً"]</span>
                             }
                         </div>
                         <div class="req-meta">
                             <span>👤 @req.Customer?.FullName</span>
                             @if (!string.IsNullOrEmpty(req.Material)) { <span>🧱 @req.Material</span> }
-                            <span>📦 كمية: @req.Quantity</span>
-                            @if (req.Budget.HasValue) { <span>💰 @req.Budget.Value.ToString("N0") د.أ</span> }
+                            <span>@T["📦 كمية: {0}", req.Quantity]</span>
+                            @if (req.Budget.HasValue) { <span>@T["💰 {0} د.أ", req.Budget.Value.ToString("N0")]</span> }
                             <span class="req-date">@req.CreatedAt.ToString("yyyy/MM/dd")</span>
                         </div>
                         @if (!string.IsNullOrEmpty(req.Description))
@@ -45,14 +45,14 @@
                     {
                         <a class="btn btn-sm btn-primary"
                            asp-controller="Quotations" asp-action="Submit" asp-route-requestId="@req.Id">
-                            قدّم عرضاً
+                            @T["قدّم عرضاً"]
                         </a>
                     }
                     else
                     {
                         <a class="btn btn-sm btn-outline"
                            asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id">
-                            عرض
+                            @T["عرض"]
                         </a>
                     }
                 </div>
@@ -63,8 +63,8 @@
     {
         <div class="empty-state">
             <div class="ico">📭</div>
-            <h3>لا توجد طلبات مفتوحة حالياً</h3>
-            <p>تحقق لاحقاً — ستظهر هنا الطلبات المناسبة لتخصصات ورشتك</p>
+            <h3>@T["لا توجد طلبات مفتوحة حالياً"]</h3>
+            <p>@T["تحقق لاحقاً — ستظهر هنا الطلبات المناسبة لتخصصات ورشتك"]</p>
         </div>
     }
 </div>

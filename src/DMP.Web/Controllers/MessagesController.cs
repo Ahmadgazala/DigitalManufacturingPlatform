@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -12,11 +13,14 @@ public class MessagesController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
-    public MessagesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public MessagesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
+        _T = T;
     }
 
     // GET: /Messages/Inbox
@@ -91,7 +95,7 @@ public class MessagesController : Controller
 
         if (string.IsNullOrWhiteSpace(body))
         {
-            TempData["Error"] = "لا يمكن إرسال رسالة فارغة.";
+            TempData["Error"] = _T["لا يمكن إرسال رسالة فارغة."].Value;
             return RedirectToAction(nameof(Conversation), new { otherUserId = receiverId });
         }
 

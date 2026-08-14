@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using DMP.Web.Data;
 using DMP.Web.Models;
 using DMP.Web.ViewModels;
@@ -10,13 +11,16 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _T = T;
     }
 
     // GET: /Account/Login
@@ -47,7 +51,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError(string.Empty, "البريد الإلكتروني أو كلمة المرور غير صحيحة.");
+        ModelState.AddModelError(string.Empty, _T["البريد الإلكتروني أو كلمة المرور غير صحيحة."].Value);
         return View(model);
     }
 
@@ -88,12 +92,12 @@ public class AccountController : Controller
 
             if (role == SeedData.ManufacturerRole)
             {
-                TempData["Success"] = "تم إنشاء حسابك بنجاح. يمكنك الآن إكمال ملف الورشة.";
+                TempData["Success"] = _T["تم إنشاء حسابك بنجاح. يمكنك الآن إكمال ملف الورشة."].Value;
                 return RedirectToAction("Edit", "Manufacturers");
             }
             else
             {
-                TempData["Success"] = "مرحباً! تم إنشاء حسابك بنجاح.";
+                TempData["Success"] = _T["مرحباً! تم إنشاء حسابك بنجاح."].Value;
                 return RedirectToAction("Index", "Home");
             }
         }

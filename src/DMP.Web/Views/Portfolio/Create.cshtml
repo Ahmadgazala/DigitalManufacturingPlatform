@@ -1,12 +1,12 @@
 @model PortfolioItem
 @{
-    ViewData["Title"] = "إضافة مشروع للملف الشخصي";
+    ViewData["Title"] = T["إضافة مشروع للملف الشخصي"];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>🗂️ إضافة مشروع</h1>
-        <p>أضف مشاريعك السابقة لتعزيز ثقة العملاء</p>
+        <h1>@T["🗂️ إضافة مشروع"]</h1>
+        <p>@T["أضف مشاريعك السابقة لتعزيز ثقة العملاء"]</p>
     </div>
 </div>
 
@@ -17,15 +17,15 @@
                 @Html.AntiForgeryToken()
 
                 <div class="form-group">
-                    <label asp-for="Title">عنوان المشروع</label>
-                    <input asp-for="Title" class="form-control" placeholder="مثال: قطع ليزر لواجهة محل تجاري" />
+                    <label asp-for="Title">@T["عنوان المشروع"]</label>
+                    <input asp-for="Title" class="form-control" placeholder="@T["مثال: قطع ليزر لواجهة محل تجاري"]" />
                     <span asp-validation-for="Title" class="field-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Category">التخصص</label>
+                    <label asp-for="Category">@T["التخصص"]</label>
                     <select asp-for="Category" class="form-control">
-                        <option value="">— اختر التخصص —</option>
+                        <option value="">@T["— اختر التخصص —"]</option>
                         @foreach (MachineCategory cat in ViewBag.Categories)
                         {
                             <option value="@((int)cat)">@cat.ToArabic()</option>
@@ -34,23 +34,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Description">وصف المشروع</label>
+                    <label asp-for="Description">@T["وصف المشروع"]</label>
                     <textarea asp-for="Description" class="form-control" rows="4"
-                              placeholder="صف المواد المستخدمة، التحديات، والنتيجة..."></textarea>
+                              placeholder="@T["صف المواد المستخدمة، التحديات، والنتيجة..."]"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="CompletedAt">تاريخ الإنجاز</label>
+                    <label asp-for="CompletedAt">@T["تاريخ الإنجاز"]</label>
                     <input asp-for="CompletedAt" class="form-control" type="date"
                            value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
 
                 <div class="form-group">
-                    <label>صورة المشروع</label>
+                    <label>@T["صورة المشروع"]</label>
                     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgInput').click()">
                         <span class="uz-icon">🖼️</span>
-                        <span class="uz-text">انقر لرفع صورة</span>
-                        <span class="uz-hint">JPG, PNG — حتى 5MB</span>
+                        <span class="uz-text">@T["انقر لرفع صورة"]</span>
+                        <span class="uz-hint">JPG, PNG — @T["حتى 5MB"]</span>
                         <span class="uz-selected" id="fileName"></span>
                     </div>
                     <input type="file" id="imgInput" name="image" accept="image/*" style="display:none"
@@ -58,8 +58,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">✅ إضافة المشروع</button>
-                    <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-ghost">إلغاء</a>
+                    <button type="submit" class="btn btn-primary">@T["✅ إضافة المشروع"]</button>
+                    <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-ghost">@T["إلغاء"]</a>
                 </div>
             </form>
         </div>

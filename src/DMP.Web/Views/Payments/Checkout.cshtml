@@ -1,13 +1,13 @@
 @{
-    ViewData["Title"] = "الدفع عبر CliQ";
+    ViewData["Title"] = T["الدفع عبر CliQ"];
     var request   = ViewBag.Request  as ManufacturingRequest;
     var quotation = ViewBag.Quotation as Quotation;
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>الدفع عبر CliQ</h1>
-        <p>أكمل الدفع وارفع صورة الإيصال لتأكيد طلبك</p>
+        <h1>@T["الدفع عبر CliQ"]</h1>
+        <p>@T["أكمل الدفع وارفع صورة الإيصال لتأكيد طلبك"]</p>
     </div>
 </div>
 
@@ -18,32 +18,32 @@
         <div class="panel">
             <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                ملخص الطلب
+                @T["ملخص الطلب"]
             </h2>
             <ul class="info-list">
                 <li>
-                    <span class="k">الطلب</span>
+                    <span class="k">@T["الطلب"]</span>
                     <span class="v fw-bold">@request?.Title</span>
                 </li>
                 <li>
-                    <span class="k">الورشة</span>
+                    <span class="k">@T["الورشة"]</span>
                     <span class="v">@quotation?.Manufacturer?.WorkshopName</span>
                 </li>
                 <li>
-                    <span class="k">مدة التنفيذ</span>
-                    <span class="v">@quotation?.EstimatedDays يوم</span>
+                    <span class="k">@T["مدة التنفيذ"]</span>
+                    <span class="v">@T["{0} يوم", quotation?.EstimatedDays]</span>
                 </li>
                 @if (!string.IsNullOrEmpty(quotation?.Notes))
                 {
                     <li>
-                        <span class="k">ملاحظات المصنّع</span>
+                        <span class="k">@T["ملاحظات المصنّع"]</span>
                         <span class="v">@quotation.Notes</span>
                     </li>
                 }
                 <li style="border-top:1px solid var(--border-sky);padding-top:14px;margin-top:4px">
-                    <span class="k" style="font-size:.95rem;font-weight:700">المبلغ الإجمالي</span>
+                    <span class="k" style="font-size:.95rem;font-weight:700">@T["المبلغ الإجمالي"]</span>
                     <span class="v" style="font-size:1.5rem;font-weight:900;color:var(--sky)">
-                        @quotation?.Price.ToString("N2") د.أ
+                        @T["{0} د.أ", quotation?.Price.ToString("N2")]
                     </span>
                 </li>
             </ul>
@@ -59,45 +59,45 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="cliq-title">الدفع عبر CliQ</div>
-                    <div class="cliq-subtitle">خدمة الدفع الفوري الأردنية</div>
+                    <div class="cliq-title">@T["الدفع عبر CliQ"]</div>
+                    <div class="cliq-subtitle">@T["خدمة الدفع الفوري الأردنية"]</div>
                 </div>
             </div>
 
             <div class="cliq-steps">
                 <div class="cliq-step">
                     <div class="cliq-step-num">1</div>
-                    <div class="cliq-step-text">افتح تطبيق البنك الخاص بك</div>
+                    <div class="cliq-step-text">@T["افتح تطبيق البنك الخاص بك"]</div>
                 </div>
                 <div class="cliq-step">
                     <div class="cliq-step-num">2</div>
-                    <div class="cliq-step-text">اختر "تحويل" ثم "CliQ"</div>
+                    <div class="cliq-step-text">@T["اختر \"تحويل\" ثم \"CliQ\""]</div>
                 </div>
                 <div class="cliq-step">
                     <div class="cliq-step-num">3</div>
-                    <div class="cliq-step-text">أدخل رقم CliQ أدناه</div>
+                    <div class="cliq-step-text">@T["أدخل رقم CliQ أدناه"]</div>
                 </div>
                 <div class="cliq-step">
                     <div class="cliq-step-num">4</div>
-                    <div class="cliq-step-text">أدخل المبلغ وأكمل الدفع</div>
+                    <div class="cliq-step-text">@T["أدخل المبلغ وأكمل الدفع"]</div>
                 </div>
             </div>
 
             <!-- رقم CliQ -->
             <div class="cliq-number-box">
-                <div class="cliq-number-label">رقم CliQ</div>
+                <div class="cliq-number-label">@T["رقم CliQ"]</div>
                 <div class="cliq-number" id="cliqNumber">0785131316</div>
                 <button class="cliq-copy-btn" onclick="copyCliQ()" id="copyBtn" type="button">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    نسخ
+                    @T["نسخ"]
                 </button>
             </div>
 
             <!-- المبلغ -->
             <div class="cliq-amount-reminder">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                تأكد من إدخال المبلغ الصحيح:
-                <strong>@quotation?.Price.ToString("N2") د.أ</strong>
+                @T["تأكد من إدخال المبلغ الصحيح:"]
+                <strong>@T["{0} د.أ", quotation?.Price.ToString("N2")]</strong>
             </div>
         </div>
 
@@ -105,10 +105,10 @@
         <div class="panel">
             <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                ارفع إيصال الدفع
+                @T["ارفع إيصال الدفع"]
             </h2>
             <p style="color:var(--text-2);font-size:.875rem;margin-bottom:20px;line-height:1.7">
-                بعد إتمام التحويل، ارفع لقطة شاشة أو صورة إيصال الدفع. سيراجعها المدير ويؤكد طلبك خلال 24 ساعة.
+                @T["بعد إتمام التحويل، ارفع لقطة شاشة أو صورة إيصال الدفع. سيراجعها المدير ويؤكد طلبك خلال 24 ساعة."]
             </p>
 
             <form asp-controller="Payments" asp-action="SubmitReceipt" method="post"
@@ -123,8 +123,8 @@
                         <circle cx="8.5" cy="8.5" r="1.5"/>
                         <polyline points="21 15 16 10 5 21"/>
                     </svg>
-                    <div class="uz-text">اضغط لرفع صورة الإيصال</div>
-                    <div class="uz-hint">JPG، PNG، PDF — حتى 10 ميغابايت</div>
+                    <div class="uz-text">@T["اضغط لرفع صورة الإيصال"]</div>
+                    <div class="uz-hint">@T["JPG، PNG، PDF — حتى 10 ميغابايت"]</div>
                     <div class="uz-selected" id="fileLabel" style="display:none"></div>
                 </div>
                 <input type="file" id="receiptFile" name="receiptImage"
@@ -134,12 +134,12 @@
 
                 <!-- معاينة الصورة -->
                 <div id="previewBox" style="display:none;margin-top:12px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--border-sky);max-height:260px">
-                    <img id="previewImg" src="" alt="معاينة الإيصال" style="width:100%;max-height:260px;object-fit:contain;background:var(--surface-2)"/>
+                    <img id="previewImg" src="" alt="@T["معاينة الإيصال"]" style="width:100%;max-height:260px;object-fit:contain;background:var(--surface-2)"/>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;padding:13px;font-size:.95rem">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    إرسال إيصال الدفع للمراجعة
+                    @T["إرسال إيصال الدفع للمراجعة"]
                 </button>
             </form>
         </div>
@@ -148,7 +148,7 @@
             <a asp-controller="Requests" asp-action="Details" asp-route-id="@request?.Id"
                class="btn btn-ghost btn-sm">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                العودة للطلب
+                @T["العودة للطلب"]
             </a>
         </div>
 
@@ -161,18 +161,18 @@ function copyCliQ() {
     var num = document.getElementById('cliqNumber').textContent.trim();
     navigator.clipboard.writeText(num).then(function() {
         var btn = document.getElementById('copyBtn');
-        btn.textContent = 'تم النسخ!';
+        btn.textContent = @Html.Raw(Json.Serialize(T["تم النسخ!"].Value));
         btn.style.background = 'var(--green-bg)';
         btn.style.color = 'var(--green-txt)';
         btn.style.borderColor = 'var(--green-bd)';
         setTimeout(function() {
-            btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> نسخ';
+            btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> ' + @Html.Raw(Json.Serialize(T["نسخ"].Value));
             btn.style.background = '';
             btn.style.color = '';
             btn.style.borderColor = '';
         }, 2500);
     }).catch(function() {
-        alert('رقم CliQ: ' + num);
+        alert(@Html.Raw(Json.Serialize(T["رقم CliQ"].Value)) + ': ' + num);
     });
 }
 
@@ -180,7 +180,7 @@ function handleFileSelect(input) {
     if (!input.files || !input.files[0]) return;
     var file = input.files[0];
     var label = document.getElementById('fileLabel');
-    label.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' كيلوبايت)';
+    label.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' ' + @Html.Raw(Json.Serialize(T["كيلوبايت"].Value)) + ')';
     label.style.display = 'block';
 
     // معاينة الصورة

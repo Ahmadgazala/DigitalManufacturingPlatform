@@ -1,11 +1,11 @@
 @model PortfolioItem
 @{
-    ViewData["Title"] = "تعديل المشروع";
+    ViewData["Title"] = T["تعديل المشروع"];
 }
 
 <div class="page-header">
     <div class="container">
-        <h1>✏️ تعديل المشروع</h1>
+        <h1>@T["✏️ تعديل المشروع"]</h1>
     </div>
 </div>
 
@@ -17,15 +17,15 @@
                 @Html.AntiForgeryToken()
 
                 <div class="form-group">
-                    <label asp-for="Title">عنوان المشروع</label>
+                    <label asp-for="Title">@T["عنوان المشروع"]</label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="field-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Category">التخصص</label>
+                    <label asp-for="Category">@T["التخصص"]</label>
                     <select asp-for="Category" class="form-control">
-                        <option value="">— اختر التخصص —</option>
+                        <option value="">@T["— اختر التخصص —"]</option>
                         @foreach (MachineCategory cat in ViewBag.Categories)
                         {
                             <option value="@((int)cat)" selected="@(Model.Category == cat)">@cat.ToArabic()</option>
@@ -34,12 +34,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Description">وصف المشروع</label>
+                    <label asp-for="Description">@T["وصف المشروع"]</label>
                     <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="CompletedAt">تاريخ الإنجاز</label>
+                    <label asp-for="CompletedAt">@T["تاريخ الإنجاز"]</label>
                     <input asp-for="CompletedAt" class="form-control" type="date"
                            value="@Model.CompletedAt.ToString("yyyy-MM-dd")" />
                 </div>
@@ -47,19 +47,19 @@
                 @if (!string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="form-group">
-                        <label>الصورة الحالية</label>
+                        <label>@T["الصورة الحالية"]</label>
                         <img src="@Model.ImagePath" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--r-sm);border:1.5px solid var(--line)" />
                     </div>
                 }
 
                 <div class="form-group">
-                    <label>تغيير الصورة (اختياري)</label>
+                    <label>@T["تغيير الصورة (اختياري)"]</label>
                     <input type="file" name="image" accept="image/*" class="form-control" />
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
-                    <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-ghost">إلغاء</a>
+                    <button type="submit" class="btn btn-primary">@T["💾 حفظ التعديلات"]</button>
+                    <a asp-controller="Manufacturers" asp-action="Dashboard" class="btn btn-ghost">@T["إلغاء"]</a>
                 </div>
             </form>
         </div>

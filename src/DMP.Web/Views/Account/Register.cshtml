@@ -1,6 +1,6 @@
 @model RegisterViewModel
 @{
-    ViewData["Title"] = "إنشاء حساب";
+    ViewData["Title"] = T["إنشاء حساب"];
     Layout = null;
 }
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>إنشاء حساب — Jo Maker</title>
+<title>@T["إنشاء حساب"] — Jo Maker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -351,16 +351,16 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
         <!-- Bottom caption -->
         <div class="lp-bottom">
         <p class="lp-tagline">
-            انضم إلى <strong>مجتمع التصنيع</strong> الأردني — سواء كنت تبحث عن خدمات أو تقدّمها
+            @T["انضم إلى"] <strong>@T["مجتمع التصنيع"]</strong> @T["الأردني — سواء كنت تبحث عن خدمات أو تقدّمها"]
         </p>
         <div class="lp-chips">
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                طباعة ثلاثية الأبعاد
+                @T["طباعة ثلاثية الأبعاد"]
             </span>
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                قطع ليزر
+                @T["قطع ليزر"]
             </span>
             <span class="lp-chip">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
@@ -380,8 +380,8 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
         <div class="lp-card">
 
             <header class="lf-header">
-                <h1>إنشاء حساب جديد</h1>
-                <p>اختر نوع حسابك وابدأ رحلتك مع Jo Maker</p>
+                <h1>@T["إنشاء حساب جديد"]</h1>
+                <p>@T["اختر نوع حسابك وابدأ رحلتك مع Jo Maker"]</p>
             </header>
 
             @if (!ViewData.ModelState.IsValid)
@@ -404,22 +404,22 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
 
                 <!-- Role selection -->
                 <div class="form-group">
-                    <label style="font-weight:700;font-size:.9rem;margin-bottom:10px;display:block">نوع الحساب</label>
+                    <label style="font-weight:700;font-size:.9rem;margin-bottom:10px;display:block">@T["نوع الحساب"]</label>
                     <div class="role-grid">
                         <label class="role-card role-card-active" id="card-customer">
                             <input type="radio" name="Role" value="Customer" checked style="display:none"/>
                             <div class="role-card-inner">
                                 <div class="role-icon">🏢</div>
-                                <div class="role-title">عميل / شركة</div>
-                                <div class="role-desc">أبحث عن خدمات تصنيع وأطلب عروض أسعار</div>
+                                <div class="role-title">@T["عميل / شركة"]</div>
+                                <div class="role-desc">@T["أبحث عن خدمات تصنيع وأطلب عروض أسعار"]</div>
                             </div>
                         </label>
                         <label class="role-card" id="card-manufacturer">
                             <input type="radio" name="Role" value="Manufacturer" style="display:none"/>
                             <div class="role-card-inner">
                                 <div class="role-icon">⚙️</div>
-                                <div class="role-title">مصنّع / ورشة</div>
-                                <div class="role-desc">أملك ورشة وأقدم خدمات التصنيع</div>
+                                <div class="role-title">@T["مصنّع / ورشة"]</div>
+                                <div class="role-desc">@T["أملك ورشة وأقدم خدمات التصنيع"]</div>
                             </div>
                         </label>
                     </div>
@@ -427,19 +427,19 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
 
                 <!-- Full name -->
                 <div class="form-group">
-                    <label asp-for="FullName">الاسم الكامل</label>
+                    <label asp-for="FullName">@T["الاسم الكامل"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </span>
-                        <input asp-for="FullName" class="form-control" placeholder="أدخل اسمك الكامل" autofocus/>
+                        <input asp-for="FullName" class="form-control" placeholder="@T["أدخل اسمك الكامل"]" autofocus/>
                     </div>
                     <span asp-validation-for="FullName" class="field-error" role="alert"></span>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
-                    <label asp-for="Email">البريد الإلكتروني</label>
+                    <label asp-for="Email">@T["البريد الإلكتروني"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -451,14 +451,14 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
 
                 <!-- Password -->
                 <div class="form-group">
-                    <label asp-for="Password">كلمة المرور</label>
+                    <label asp-for="Password">@T["كلمة المرور"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                         </span>
                         <input asp-for="Password" id="pw1" class="form-control" type="password"
                                placeholder="••••••••" autocomplete="new-password" dir="ltr"/>
-                        <button type="button" class="pw-toggle" onclick="togglePw('pw1',this)" aria-label="إظهار كلمة المرور">
+                        <button type="button" class="pw-toggle" onclick="togglePw('pw1',this)" aria-label="@T["إظهار كلمة المرور"]">
                             <svg class="eye-open"   viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg class="eye-closed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                         </button>
@@ -468,14 +468,14 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
 
                 <!-- Confirm password -->
                 <div class="form-group">
-                    <label asp-for="ConfirmPassword">تأكيد كلمة المرور</label>
+                    <label asp-for="ConfirmPassword">@T["تأكيد كلمة المرور"]</label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                         </span>
                         <input asp-for="ConfirmPassword" id="pw2" class="form-control" type="password"
                                placeholder="••••••••" autocomplete="new-password" dir="ltr"/>
-                        <button type="button" class="pw-toggle" onclick="togglePw('pw2',this)" aria-label="إظهار كلمة المرور">
+                        <button type="button" class="pw-toggle" onclick="togglePw('pw2',this)" aria-label="@T["إظهار كلمة المرور"]">
                             <svg class="eye-open"   viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg class="eye-closed" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                         </button>
@@ -486,28 +486,28 @@ html, body { height: 100%; padding-top: 0; margin: 0; overflow: hidden; }
                 <div class="form-actions" style="margin-top:16px">
                     <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">
                         <span class="btn-spinner" aria-hidden="true"></span>
-                        <span class="btn-text">إنشاء حساب عميل</span>
+                        <span class="btn-text">@T["إنشاء حساب عميل"]</span>
                     </button>
                 </div>
             </form>
 
-            <div class="lf-divider"><span>أو</span></div>
+            <div class="lf-divider"><span>@T["أو"]</span></div>
 
             <div class="lf-login">
-                لديك حساب بالفعل؟
-                <a asp-controller="Account" asp-action="Login">سجّل دخولك</a>
+                @T["لديك حساب بالفعل؟"]
+                <a asp-controller="Account" asp-action="Login">@T["سجّل دخولك"]</a>
             </div>
 
             <div style="text-align:center;margin-top:6px;">
                 <a href="/" style="font-size:.78rem;color:var(--text-3);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:color .15s;" onmouseover="this.style.color='var(--sky)'" onmouseout="this.style.color='var(--text-3)'">
                     <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                    العودة للرئيسية
+                    @T["العودة للرئيسية"]
                 </a>
             </div>
 
             <div class="lf-security" role="note">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                حسابك محمي وآمن · Jo Maker الأردنية
+                @T["حسابك محمي وآمن · Jo Maker الأردنية"]
             </div>
 
         </div>
@@ -630,14 +630,14 @@ function togglePw(id, btn) {
     var cards  = document.querySelectorAll('.role-card');
     var radios = document.querySelectorAll('input[name="Role"]');
     var btn    = document.getElementById('submitBtn');
-    var labels = { Customer: 'إنشاء حساب عميل', Manufacturer: 'إنشاء حساب مصنّع' };
+    var labels = { Customer: @Html.Raw(Json.Serialize(T["إنشاء حساب عميل"].Value)), Manufacturer: @Html.Raw(Json.Serialize(T["إنشاء حساب مصنّع"].Value)) };
 
     function update() {
         radios.forEach(function(r) {
             r.closest('.role-card').classList.toggle('role-card-active', r.checked);
         });
         var sel = document.querySelector('input[name="Role"]:checked');
-        if (sel && btn) btn.querySelector('.btn-text').textContent = labels[sel.value] || 'إنشاء حساب';
+        if (sel && btn) btn.querySelector('.btn-text').textContent = labels[sel.value] || @Html.Raw(Json.Serialize(T["إنشاء حساب"].Value));
     }
 
     cards.forEach(function(card) {

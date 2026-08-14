@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
@@ -14,15 +15,18 @@ public class PortfolioController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public PortfolioController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IFileService fileService)
+        IFileService fileService,
+        Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _fileService = fileService;
+        _T = T;
     }
 
     private async Task<Manufacturer?> GetMyManufacturer()
@@ -65,7 +69,7 @@ public class PortfolioController : Controller
         _db.PortfolioItems.Add(model);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم إضافة المشروع للملف الشخصي.";
+        TempData["Success"] = _T["تم إضافة المشروع للملف الشخصي."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 
@@ -111,7 +115,7 @@ public class PortfolioController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Success"] = "تم تحديث المشروع.";
+        TempData["Success"] = _T["تم تحديث المشروع."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 
@@ -130,7 +134,7 @@ public class PortfolioController : Controller
         _db.PortfolioItems.Remove(item);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "تم حذف المشروع.";
+        TempData["Success"] = _T["تم حذف المشروع."].Value;
         return RedirectToAction("Dashboard", "Manufacturers");
     }
 }

@@ -1,6 +1,6 @@
 @model List<ApplicationUser>
 @{
-    ViewData["Title"] = "إدارة المستخدمين";
+    ViewData["Title"] = T["إدارة المستخدمين"];
     var usersWithRoles = ViewBag.UsersWithRoles as List<(ApplicationUser User, IList<string> Roles)>
                          ?? new();
 }
@@ -8,10 +8,10 @@
 <div class="page-header">
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
         <div>
-            <h1>إدارة المستخدمين</h1>
-            <p style="margin:0;color:var(--steel)">@Model.Count مستخدم مسجّل</p>
+            <h1>@T["إدارة المستخدمين"]</h1>
+            <p style="margin:0;color:var(--steel)">@T["{0} مستخدم مسجّل", Model.Count]</p>
         </div>
-        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">← لوحة التحكم</a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">@T["← لوحة التحكم"]</a>
     </div>
 </div>
 
@@ -22,10 +22,10 @@
             <table style="width:100%;border-collapse:collapse">
                 <thead>
                     <tr style="background:var(--paper);border-bottom:2px solid var(--line)">
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">الاسم</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">البريد الإلكتروني</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">الدور</th>
-                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">تاريخ التسجيل</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الاسم"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["البريد الإلكتروني"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الدور"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["تاريخ التسجيل"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +40,7 @@
                                 @foreach (var role in roles)
                                 {
                                     var chipClass = role == "Admin" ? "chip-red" : role == "Manufacturer" ? "chip-blue" : "chip-green";
-                                    var roleAr    = role == "Admin" ? "أدمن" : role == "Manufacturer" ? "مصنّع" : "عميل";
+                                    var roleAr    = role == "Admin" ? T["أدمن"] : role == "Manufacturer" ? T["مصنّع"] : T["عميل"];
                                     <span class="chip @chipClass" style="font-size:.75rem">@roleAr</span>
                                 }
                             </td>
@@ -55,7 +55,7 @@
     {
         <div class="empty-state">
             <div class="ico">👥</div>
-            <h3>لا يوجد مستخدمون</h3>
+            <h3>@T["لا يوجد مستخدمون"]</h3>
         </div>
     }
 </div>
