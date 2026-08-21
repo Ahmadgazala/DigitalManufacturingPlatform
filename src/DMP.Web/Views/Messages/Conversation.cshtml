@@ -7,6 +7,7 @@
     var otherUser   = ViewBag.OtherUser as ApplicationUser;
     var otherUserName = otherUser?.FullName ?? T["User"].Value;
     var currentUserId = UserManager.GetUserId(User);
+    var lastTime = Model.Any() ? Model.Max(m => m.SentAt).ToString("o") : DateTime.UtcNow.ToString("o");
 }
 
 <div class="container">
@@ -43,10 +44,10 @@
             <input type="hidden" name="receiverId" value="@otherUserId" />
             <div class="form-row">
                 <div class="form-group" style="flex:1;">
-                    <input type="text" name="body" id="messageContent" class="form-control" placeholder="@T["TypeMessage"]" required autocomplete="off" />
+                    <input type="text" name="body" id="messageContent" class="form-control" placeholder="@T["TypeMessage"]" required autocomplete="off" maxlength="2000" />
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">@T["Send"]</button>
+                    <button type="submit" class="btn btn-primary" id="sendBtn">@T["Send"]</button>
                 </div>
             </div>
         </form>
@@ -55,15 +56,92 @@
 
 @section Scripts {
     <script>
-        // Scroll to bottom
         (function () {
-            var box = document.getElementById('chatBox');
-            if (box) box.scrollTop = box.scrollHeight;
-        })();
+            var chatBox      = document.getElementById('chatBox');
+            var sendForm     = document.getElementById('sendForm');
+            var msgInput     = document.getElementById('messageContent');
+            var sendBtn      = document.getElementById('sendBtn');
+            var otherUserId  = '@otherUserId';
+            var myId         = '@currentUserId';
+            var lastTime     = '@lastTime';
+            var tokenInput   = sendForm.querySelector('input[name="__RequestVerificationToken"]');
+            var csrfToken    = tokenInput ? tokenInput.value : '';
 
-        // Auto-refresh every 5 seconds
-        setInterval(function () {
-            window.location.reload();
-        }, 5000);
+            function scrollToBottom() {
+                if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            function buildMsgHtml(body, senderId, sentAt) {
+                var isMine = senderId === myId;
+                var d = new Date(sentAt);
+                var dd = String(d.getDate()).padStart(2, '0');
+                var mm = String(d.getMonth() + 1).padStart(2, '0');
+                var hh = String(d.getHours()).padStart(2, '0');
+                var mi = String(d.getMinutes()).padStart(2, '0');
+                var displayTime = dd + '/' + mm + ' ' + hh + ':' + mi;
+                var div = document.createElement('div');
+                div.className = 'chat-msg ' + (isMine ? 'chat-msg-mine' : 'chat-msg-other');
+                div.innerHTML =
+                    '<div class="chat-bubble">' +
+                    '<p>' + escHtml(body) + '</p>' +
+                    '<span class="chat-time">' + displayTime + '</span>' +
+                    '</div>';
+                return div;
+            }
+
+            function escHtml(s) {
+                var d = document.createElement('div');
+                d.textContent = s;
+                return d.innerHTML;
+            }
+
+            // ——— Send via AJAX ———
+            sendForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var body = msgInput.value.trim();
+                if (!body) return;
+
+                sendBtn.disabled = true;
+                var fd = new FormData();
+                fd.append('receiverId', otherUserId);
+                fd.append('body', body);
+                fd.append('__RequestVerificationToken', csrfToken);
+
+                fetch('/Messages/Send', {
+                    method: 'POST',
+                    body: fd
+                }).then(function (r) {
+                    if (r.ok) {
+                        msgInput.value = '';
+                        // Immediately fetch latest messages
+                        pollMessages();
+                    }
+                }).finally(function () {
+                    sendBtn.disabled = false;
+                    msgInput.focus();
+                });
+            });
+
+            // ——— Poll for new messages ———
+            function pollMessages() {
+                fetch('/Messages/NewMessages?otherUserId=' + encodeURIComponent(otherUserId) + '&after=' + encodeURIComponent(lastTime))
+                    .then(function (r) { return r.json(); })
+                    .then(function (msgs) {
+                        if (!msgs || !msgs.length) return;
+                        // Remove empty-state if present
+                        var empty = chatBox.querySelector('.empty-state');
+                        if (empty) empty.remove();
+
+                        msgs.forEach(function (m) {
+                            chatBox.appendChild(buildMsgHtml(m.body, m.senderId, m.sentAt));
+                            lastTime = m.sentAt; // update cursor
+                        });
+                        scrollToBottom();
+                    });
+            }
+
+            scrollToBottom();
+            setInterval(pollMessages, 3000);
+        })();
     </script>
 }

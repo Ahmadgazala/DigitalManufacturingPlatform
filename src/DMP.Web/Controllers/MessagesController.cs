@@ -86,6 +86,31 @@ public class MessagesController : Controller
         return View(messages);
     }
 
+    // GET: /Messages/NewMessages?otherUserId=...&after=...
+    [HttpGet]
+    public async Task<IActionResult> NewMessages(string otherUserId, DateTime after)
+    {
+        var userId = _userManager.GetUserId(User)!;
+
+        var newMsgs = await _db.Messages
+            .Include(m => m.Sender)
+            .Where(m => m.SentAt > after
+                     && ((m.SenderId == userId && m.ReceiverId == otherUserId)
+                      || (m.SenderId == otherUserId && m.ReceiverId == userId)))
+            .OrderBy(m => m.SentAt)
+            .ToListAsync();
+
+        var result = newMsgs.Select(m => new
+        {
+            id = m.Id,
+            body = m.Body,
+            senderId = m.SenderId,
+            sentAt = m.SentAt.ToString("o")
+        });
+
+        return Json(result);
+    }
+
     // POST: /Messages/Send
     [HttpPost]
     [ValidateAntiForgeryToken]
