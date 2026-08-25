@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = T["WhatsApp Group Creator"];
+}
+
+<section class="section">
+    <div class="container" style="max-width:800px">
+        <div class="section-head">
+            <h2>@T["WhatsApp Group Creator"]</h2>
+            <p>@T["Upload an Excel file with phone numbers to create a WhatsApp group"]</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success" style="background:#10b981;color:#fff;padding:12px 16px;border-radius:8px;margin-bottom:20px">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" style="background:#ef4444;color:#fff;padding:12px 16px;border-radius:8px;margin-bottom:20px">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div class="panel" style="padding:32px">
+            <form asp-action="Upload" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div style="margin-bottom:24px">
+                    <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--text-1)">
+                        @T["Excel File (.xlsx, .xls)"]
+                    </label>
+                    <p style="font-size:.85rem;color:var(--text-2);margin-bottom:12px">
+                        @T["The file should contain phone numbers in the first column. Include country code (e.g., +962791234567)"]
+                    </p>
+                    <input type="file" name="excelFile" accept=".xlsx,.xls" required
+                           style="width:100%;padding:12px;border:2px dashed var(--border);border-radius:8px;background:var(--bg-2);color:var(--text-1);cursor:pointer"
+                           onchange="this.nextElementSibling.textContent = this.files[0]?.name || 'No file selected'"/>
+                    <p style="font-size:.85rem;color:var(--text-2);margin-top:8px">No file selected</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-inline-end:8px">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    @T["Upload & Preview"]
+                </button>
+            </form>
+        </div>
+
+        <div style="margin-top:24px;padding:20px;background:var(--bg-2);border-radius:8px">
+            <h3 style="font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--text-1)">
+                @T["How it works"]
+            </h3>
+            <ol style="color:var(--text-2);font-size:.9rem;padding-inline-start:20px;line-height:1.8">
+                <li>@T["Upload an Excel file with phone numbers in the first column"]</li>
+                <li>@T["Preview the phone numbers before creating the group"]</li>
+                <li>@T["Enter a group name and create the WhatsApp group"]</li>
+                <li>@T["All phone numbers will be added as group participants"]</li>
+            </ol>
+        </div>
+    </div>
+</section>
