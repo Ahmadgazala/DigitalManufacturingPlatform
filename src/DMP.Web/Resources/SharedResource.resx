@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:element name="root" msdata:IsDataSet="true" />
-  </xsd:schema>
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:element name="root" ns1:IsDataSet="true" />
+  </xs:schema>
 
-  <!-- Navigation -->
+  
   <data name="Nav_Home" xml:space="preserve"><value>الرئيسية</value></data>
   <data name="Nav_Manufacturers" xml:space="preserve"><value>دليل الورش</value></data>
   <data name="Nav_Suppliers" xml:space="preserve"><value>الموردون</value></data>
@@ -18,7 +18,7 @@
   <data name="Nav_Register" xml:space="preserve"><value>إنشاء حساب</value></data>
   <data name="Nav_Logout" xml:space="preserve"><value>تسجيل الخروج</value></data>
 
-  <!-- Account -->
+  
   <data name="Login" xml:space="preserve"><value>تسجيل الدخول</value></data>
   <data name="LoginSubtitle" xml:space="preserve"><value>أهلاً بك في Jo Maker</value></data>
   <data name="LoginBtn" xml:space="preserve"><value>دخول</value></data>
@@ -39,7 +39,7 @@
   <data name="AlreadyHaveAccount" xml:space="preserve"><value>لديك حساب بالفعل؟</value></data>
   <data name="LoginHere" xml:space="preserve"><value>سجّل الدخول هنا</value></data>
 
-  <!-- Common -->
+  
   <data name="SaveChanges" xml:space="preserve"><value>حفظ التغييرات</value></data>
   <data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
   <data name="Delete" xml:space="preserve"><value>حذف</value></data>
@@ -62,7 +62,7 @@
   <data name="ClickToUpload" xml:space="preserve"><value>اضغط لرفع الملف</value></data>
   <data name="BackToDashboard" xml:space="preserve"><value>← لوحة التحكم</value></data>
 
-  <!-- Manufacturers -->
+  
   <data name="EditWorkshop" xml:space="preserve"><value>تعديل ملف الورشة</value></data>
   <data name="BasicInfo" xml:space="preserve"><value>المعلومات الأساسية</value></data>
   <data name="ContactInfo" xml:space="preserve"><value>معلومات التواصل</value></data>
@@ -102,7 +102,7 @@
   <data name="NoManufacturersFound" xml:space="preserve"><value>لا توجد ورش مطابقة</value></data>
   <data name="PendingApproval" xml:space="preserve"><value>بانتظار الاعتماد</value></data>
 
-  <!-- Machines -->
+  
   <data name="AddMachine" xml:space="preserve"><value>إضافة ماكينة</value></data>
   <data name="EditMachine" xml:space="preserve"><value>تعديل الماكينة</value></data>
   <data name="Category" xml:space="preserve"><value>التخصص / الفئة</value></data>
@@ -123,7 +123,7 @@
   <data name="Milling" xml:space="preserve"><value>فريزة</value></data>
   <data name="Other" xml:space="preserve"><value>أخرى</value></data>
 
-  <!-- Requests -->
+  
   <data name="NewRequest" xml:space="preserve"><value>طلب تصنيع جديد</value></data>
   <data name="NewRequestSubtitle" xml:space="preserve"><value>أرسل طلبك وسيتواصل معك المصنّعون بعروض أسعار</value></data>
   <data name="RequestTitle" xml:space="preserve"><value>عنوان الطلب</value></data>
@@ -138,7 +138,7 @@
   <data name="FilesSelected" xml:space="preserve"><value>ملف(ات) محددة</value></data>
   <data name="SubmitRequest" xml:space="preserve"><value>إرسال الطلب</value></data>
 
-  <!-- Quotations -->
+  
   <data name="SubmitQuotation" xml:space="preserve"><value>تقديم عرض سعر</value></data>
   <data name="ForRequest" xml:space="preserve"><value>للطلب</value></data>
   <data name="Price" xml:space="preserve"><value>السعر</value></data>
@@ -146,14 +146,14 @@
   <data name="Notes" xml:space="preserve"><value>ملاحظات إضافية</value></data>
   <data name="QuotationNotesPlaceholder" xml:space="preserve"><value>أي تفاصيل إضافية تودّ إضافتها...</value></data>
 
-  <!-- Messages -->
+  
   <data name="Conversation" xml:space="preserve"><value>المحادثة</value></data>
   <data name="ConversationWith" xml:space="preserve"><value>محادثة مع</value></data>
   <data name="BackToInbox" xml:space="preserve"><value>← صندوق الرسائل</value></data>
   <data name="TypeMessage" xml:space="preserve"><value>اكتب رسالتك...</value></data>
   <data name="NoMessagesYet" xml:space="preserve"><value>لا توجد رسائل بعد. ابدأ المحادثة!</value></data>
 
-  <!-- Admin -->
+  
   <data name="AdminDashboard" xml:space="preserve"><value>لوحة تحكم الإدارة</value></data>
   <data name="TotalManufacturers" xml:space="preserve"><value>إجمالي المصنّعين</value></data>
   <data name="TotalUsers" xml:space="preserve"><value>إجمالي المستخدمين</value></data>
@@ -165,11 +165,11 @@
   <data name="UsersManagement" xml:space="preserve"><value>إدارة المستخدمين</value></data>
   <data name="ManageUsers" xml:space="preserve"><value>إدارة المستخدمين</value></data>
 
-  <!-- Suppliers -->
+  
   <data name="Suppliers" xml:space="preserve"><value>الموردون</value></data>
   <data name="ViewSuppliers" xml:space="preserve"><value>عرض الموردين</value></data>
 
-  <!-- Group Buying -->
+  
   <data name="GB_Title" xml:space="preserve"><value>الشراء الجماعي</value></data>
   <data name="GB_Sub" xml:space="preserve"><value>اشترِ مع مصنّعين آخرين واحصل على أفضل الأسعار</value></data>
   <data name="Btn_CreateCampaign" xml:space="preserve"><value>إنشاء حملة</value></data>
@@ -194,4 +194,4 @@
   <data name="Portfolio" xml:space="preserve">
     <value>أعمالي</value>
   </data>
-</root>
+<data name="PendingRequests"><value>طلبات بانتظار الاعتماد</value></data></root>

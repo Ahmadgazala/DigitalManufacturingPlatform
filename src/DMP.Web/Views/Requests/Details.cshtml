@@ -15,6 +15,14 @@
             <span class="chip @(isOpen ? "chip-green" : isCompleted ? "chip-steel" : "chip-blue")">
                 @Model.Status.ToArabic()
             </span>
+            @if (!Model.IsApproved)
+            {
+                <span class="chip chip-amber">@T["⏳ بانتظار الاعتماد"]</span>
+            }
+            else
+            {
+                <span class="chip chip-green">@T["✓ معتمد"]</span>
+            }
             @if (Model.PaymentStatus == PaymentStatus.Paid)
             {
                 <span class="chip chip-green">@T["💳 مدفوع"]</span>
@@ -201,6 +209,14 @@
             <div class="panel">
                 <ul class="info-list">
                     <li><span class="k">@T["الحالة"]</span><span class="v">@Model.Status.ToArabic()</span></li>
+                    <li><span class="k">@T["الاعتماد"]</span>
+                        <span class="v">
+                            @if (Model.IsApproved)
+                            { <span class="chip chip-green">@T["✓ معتمد"]</span> }
+                            else
+                            { <span class="chip chip-amber">@T["⏳ بانتظار الاعتماد"]</span> }
+                        </span>
+                    </li>
                     @if (Model.TrackingStage.HasValue)
                     {
                         <li><span class="k">@T["مرحلة التتبع"]</span>

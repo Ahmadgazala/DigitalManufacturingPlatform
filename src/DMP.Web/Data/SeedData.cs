@@ -440,6 +440,7 @@ public static class SeedData
                 Status         = RequestStatus.Completed,
                 TrackingStage  = Models.TrackingStage.Delivered,
                 PaymentStatus  = PaymentStatus.Paid,
+                IsApproved     = true,
                 PaidAmount     = 135,
                 PaidAt         = DateTime.UtcNow.AddDays(-10),
                 CreatedAt      = DateTime.UtcNow.AddDays(-35),
@@ -473,6 +474,7 @@ public static class SeedData
                 Status         = RequestStatus.Completed,
                 TrackingStage  = Models.TrackingStage.Delivered,
                 PaymentStatus  = PaymentStatus.Paid,
+                IsApproved     = true,
                 PaidAmount     = 95,
                 PaidAt         = DateTime.UtcNow.AddDays(-5),
                 CreatedAt      = DateTime.UtcNow.AddDays(-25),
@@ -505,6 +507,7 @@ public static class SeedData
                 Status         = RequestStatus.InProgress,
                 TrackingStage  = Models.TrackingStage.InManufacturing,
                 PaymentStatus  = PaymentStatus.Pending,
+                IsApproved     = true,
                 CreatedAt      = DateTime.UtcNow.AddDays(-12),
             };
             db.ManufacturingRequests.Add(req3);
@@ -534,6 +537,7 @@ public static class SeedData
                 Status         = RequestStatus.InProgress,
                 TrackingStage  = Models.TrackingStage.Received,
                 PaymentStatus  = PaymentStatus.Pending,
+                IsApproved     = true,
                 CreatedAt      = DateTime.UtcNow.AddDays(-6),
             };
             db.ManufacturingRequests.Add(req4);
@@ -557,6 +561,7 @@ public static class SeedData
                 Quantity    = 50,
                 Budget      = 200,
                 Status      = RequestStatus.Open,
+                IsApproved  = true,
                 CreatedAt   = DateTime.UtcNow.AddDays(-4),
             };
             db.ManufacturingRequests.Add(req5);
@@ -586,6 +591,7 @@ public static class SeedData
                 Quantity    = 30,
                 Budget      = 250,
                 Status      = RequestStatus.Open,
+                IsApproved  = true,
                 CreatedAt   = DateTime.UtcNow.AddDays(-2),
             };
             db.ManufacturingRequests.Add(req6);
@@ -605,6 +611,7 @@ public static class SeedData
                 Quantity    = 10,
                 Budget      = 500,
                 Status      = RequestStatus.Open,
+                IsApproved  = true,
                 CreatedAt   = DateTime.UtcNow.AddDays(-8),
             };
             db.ManufacturingRequests.Add(req7);

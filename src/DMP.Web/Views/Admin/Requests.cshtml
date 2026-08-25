@@ -3,6 +3,7 @@
     ViewData["Title"] = T["إدارة الطلبات"];
     string? statusFilter = ViewBag.StatusFilter;
     string? search       = ViewBag.Search;
+    string? approvalFilter = ViewBag.ApprovalFilter;
 }
 
 <div class="page-header">
@@ -20,6 +21,11 @@
     @* فلترة وبحث *@
     <form method="get" action="/Admin/Requests" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
         <input name="search" value="@search" class="input" placeholder="@T["ابحث باسم الطلب أو العميل…"]" style="flex:1;min-width:200px" />
+        <select name="approval" class="input" style="width:180px">
+            <option value="">@T["كل حالات الاعتماد"]</option>
+            <option value="pending" selected="@(approvalFilter == "pending")">@T["بانتظار الاعتماد"]</option>
+            <option value="approved" selected="@(approvalFilter == "approved")">@T["معتمد"]</option>
+        </select>
         <select name="status" class="input" style="width:180px">
             <option value="">@T["كل الحالات"]</option>
             @foreach (var s in Enum.GetValues<RequestStatus>())
@@ -28,7 +34,7 @@
             }
         </select>
         <button type="submit" class="btn btn-primary">@T["بحث"]</button>
-        @if (!string.IsNullOrEmpty(search) || !string.IsNullOrEmpty(statusFilter))
+        @if (!string.IsNullOrEmpty(search) || !string.IsNullOrEmpty(statusFilter) || !string.IsNullOrEmpty(approvalFilter))
         {
             <a href="/Admin/Requests" class="btn btn-ghost">@T["مسح"]</a>
         }
@@ -51,6 +57,7 @@
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الطلب"]</th>
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["العميل"]</th>
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["المصنّع"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الاعتماد"]</th>
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الحالة"]</th>
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الدفع"]</th>
                         <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["العروض"]</th>
@@ -69,6 +76,16 @@
                             </td>
                             <td style="padding:12px 16px;font-size:.88rem">@(req.Customer?.FullName ?? "—")</td>
                             <td style="padding:12px 16px;font-size:.88rem">@(req.Manufacturer?.WorkshopName ?? "—")</td>
+                            <td style="padding:12px 16px">
+                                @if (req.IsApproved)
+                                {
+                                    <span class="chip chip-green">@T["✓ معتمد"]</span>
+                                }
+                                else
+                                {
+                                    <span class="chip chip-red">@T["⏳ بانتظار الاعتماد"]</span>
+                                }
+                            </td>
                             <td style="padding:12px 16px">
                                 <span class="chip @(req.Status == RequestStatus.Open ? "chip-blue" : req.Status == RequestStatus.InProgress ? "chip-amber" : req.Status == RequestStatus.Completed ? "chip-green" : "chip-red")">
                                     @req.Status.ToArabic()
@@ -98,8 +115,33 @@
                                 @req.CreatedAt.ToString("dd/MM/yyyy")
                             </td>
                             <td style="padding:12px 16px">
-                                <a asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id"
-                                   class="btn btn-ghost btn-sm">@T["عرض"]</a>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                    <a asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id"
+                                       class="btn btn-ghost btn-sm">@T["عرض"]</a>
+
+                                    @if (!req.IsApproved)
+                                    {
+                                        <form asp-action="ApproveRequest" asp-route-id="@req.Id" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-primary"
+                                                    onclick="return confirm('@T["هل تريد اعتماد هذا الطلب؟"]')">@T["اعتماد"]</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="RejectRequest" asp-route-id="@req.Id" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline"
+                                                    onclick="return confirm('@T["هل تريد إلغاء اعتماد هذا الطلب؟"]')">@T["إلغاء الاعتماد"]</button>
+                                        </form>
+                                    }
+
+                                    <form asp-action="DeleteRequest" asp-route-id="@req.Id" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('@T["هل تريد حذف هذا الطلب نهائياً؟ لا يمكن التراجع."]')">@T["🗑 حذف"]</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }

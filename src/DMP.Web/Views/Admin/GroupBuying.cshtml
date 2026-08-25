@@ -1,0 +1,85 @@
+@model List<GroupBuyingCampaign>
+@{
+    ViewData["Title"] = T["إدارة حملات الشراء الجماعي"];
+}
+
+<div class="page-header">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h1>@T["إدارة حملات الشراء الجماعي"]</h1>
+            <p style="margin:0;color:var(--steel)">@T["{0} حملة", Model.Count]</p>
+        </div>
+        <div style="display:flex;gap:8px">
+            <a asp-controller="GroupBuying" asp-action="Create" class="btn btn-primary">@T["إنشاء حملة جديدة"]</a>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">@T["← لوحة التحكم"]</a>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">📦</div>
+            <h3>@T["لا توجد حملات"]</h3>
+            <p>@T["لم يتم إنشاء أي حملة شراء جماعي بعد."]</p>
+        </div>
+    }
+    else
+    {
+        <div class="panel" style="padding:0;overflow:hidden">
+            <table style="width:100%;border-collapse:collapse">
+                <thead>
+                    <tr style="background:var(--paper);border-bottom:2px solid var(--line)">
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">#</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الحملة"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["المنتج"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الحالة"]</th>
+                        <th style="padding:12px 16px;text-align:center;font-size:.85rem;color:var(--steel)">@T["المشاركين"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["السعر"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["التاريخ"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["إجراء"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr style="border-bottom:1px solid var(--line)">
+                            <td style="padding:12px 16px;color:var(--steel);font-size:.85rem">#@c.Id</td>
+                            <td style="padding:12px 16px">
+                                <span style="font-weight:600">@c.Title</span>
+                            </td>
+                            <td style="padding:12px 16px;font-size:.88rem">@c.ItemName</td>
+                            <td style="padding:12px 16px">
+                                <span class="@c.Status.StatusColor()">@c.Status.ToArabic()</span>
+                            </td>
+                            <td style="padding:12px 16px;text-align:center">
+                                <strong>@c.CurrentQuantity</strong> / @c.MinQuantity
+                            </td>
+                            <td style="padding:12px 16px;font-size:.88rem">
+                                <span style="text-decoration:line-through;color:var(--steel)">@T["{0} د.أ", c.IndividualPrice.ToString("N0")]</span>
+                                <span style="color:var(--amber);font-weight:800;margin-inline-start:6px">@T["{0} د.أ", c.GroupPrice.ToString("N0")]</span>
+                            </td>
+                            <td style="padding:12px 16px;font-size:.8rem;color:var(--steel)">
+                                @c.CreatedAt.ToString("dd/MM/yyyy")
+                            </td>
+                            <td style="padding:12px 16px">
+                                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                    <a asp-controller="GroupBuying" asp-action="Details" asp-route-id="@c.Id"
+                                       class="btn btn-ghost btn-sm">@T["عرض"]</a>
+                                    <a asp-controller="GroupBuying" asp-action="Edit" asp-route-id="@c.Id"
+                                       class="btn btn-outline btn-sm">@T["تعديل"]</a>
+                                    <form asp-controller="Admin" asp-action="DeleteCampaign" asp-route-id="@c.Id" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('@T["هل تريد حذف حملة \"{0}\" نهائياً؟ لا يمكن التراجع.", c.Title]')">@T["🗑 حذف"]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

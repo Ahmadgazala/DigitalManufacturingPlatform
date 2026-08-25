@@ -4,6 +4,7 @@
     int pendingManufacturers = ViewBag.PendingManufacturers ?? 0;
     int totalUsers = ViewBag.TotalUsers ?? 0;
     int totalRequests = ViewBag.TotalRequests ?? 0;
+    int pendingRequests = ViewBag.PendingRequests ?? 0;
     int totalCampaigns = ViewBag.TotalCampaigns ?? 0;
     int totalSuppliers = ViewBag.TotalSuppliers ?? 0;
 }
@@ -29,6 +30,10 @@
         <div class="kpi-card">
             <span class="kpi-label">@T["TotalRequests"]</span>
             <span class="kpi-value">@totalRequests</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["PendingRequests"]</span>
+            <span class="kpi-value @(pendingRequests > 0 ? "kpi-warning" : "")">@pendingRequests</span>
         </div>
         <div class="kpi-card">
             <span class="kpi-label">@T["ActiveCampaigns"]</span>
@@ -58,7 +63,7 @@
         <div class="dash-card">
             <div class="dash-body">
                 <h3>@T["GroupBuying"]</h3>
-                <a asp-controller="GroupBuying" asp-action="Index" class="btn btn-outline">@T["ViewCampaigns"]</a>
+                <a asp-controller="Admin" asp-action="GroupBuying" class="btn btn-outline">@T["إدارة الحملات"]</a>
                 <a asp-controller="GroupBuying" asp-action="Create" class="btn btn-primary">@T["CreateCampaign"]</a>
             </div>
         </div>
@@ -82,7 +87,12 @@
             <div class="dash-body">
                 <h3>@T["إدارة الطلبات"]</h3>
                 <p>@T["TotalRequests"]: <strong>@totalRequests</strong></p>
+                <p>@T["PendingRequests"]: <strong style="color:var(--amber)">@pendingRequests</strong></p>
                 <a asp-controller="Admin" asp-action="Requests" class="btn btn-outline">@T["عرض الطلبات"]</a>
+                @if (pendingRequests > 0)
+                {
+                    <a asp-controller="Admin" asp-action="Requests" asp-route-approval="pending" class="btn btn-primary">@T["اعتماد الطلبات"]</a>
+                }
             </div>
         </div>
     </div>

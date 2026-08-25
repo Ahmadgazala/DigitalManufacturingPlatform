@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:element name="root" msdata:IsDataSet="true" />
-  </xsd:schema>
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:element name="root" ns1:IsDataSet="true" />
+  </xs:schema>
 
   <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Nav_Manufacturers" xml:space="preserve"><value>Workshops</value></data>
@@ -318,7 +318,7 @@
     <value>Get quotes from workshops specialized in all digital manufacturing technologies — everything you need in one place in under 24 hours.</value>
   </data>
   <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
-    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+    <value>Choose "Transfer" then "CliQ"</value>
   </data>
   <data name="اختر المصنّع وادفع عبر Stripe المحمي" xml:space="preserve">
     <value>Choose the manufacturer and pay via secure Stripe</value>
@@ -1677,7 +1677,7 @@
     <value>Create Manufacturer Account</value>
   </data>
   <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
-    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+    <value>Choose "Transfer" then "CliQ"</value>
   </data>
   <data name="تم النسخ!" xml:space="preserve">
     <value>Copied!</value>
@@ -1755,7 +1755,7 @@
     <value>New payment receipt awaiting your review — request #{0}</value>
   </data>
   <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
-    <value>Choose &quot;Transfer&quot; then &quot;CliQ&quot;</value>
+    <value>Choose "Transfer" then "CliQ"</value>
   </data>
   <data name="الإجمالي: {0} د.أ" xml:space="preserve">
     <value>Total: {0} JOD</value>
@@ -1791,7 +1791,7 @@
     <value>Workshop: {0}</value>
   </data>
   <data name="تحديث على طلبك &quot;{0}&quot;: {1}" xml:space="preserve">
-    <value>Update on your request &quot;{0}&quot;: {1}</value>
+    <value>Update on your request "{0}": {1}</value>
   </data>
   <data name="تعديل المورد — {0}" xml:space="preserve">
     <value>Edit supplier — {0}</value>
@@ -1800,7 +1800,7 @@
     <value>Payment notification sent to {0} participants.</value>
   </data>
   <data name="تم إنشاء المورد «{0}» بنجاح." xml:space="preserve">
-    <value>Supplier &quot;{0}&quot; created successfully.</value>
+    <value>Supplier "{0}" created successfully.</value>
   </data>
   <data name="تم تأكيد دفعك لطلب رقم #{0}. سيبدأ المصنّع بالعمل قريباً." xml:space="preserve">
     <value>Your payment for request #{0} is confirmed. The manufacturer will start work soon.</value>
@@ -1809,7 +1809,7 @@
     <value>Request status updated to: {0}</value>
   </data>
   <data name="تم حذف المورد «{0}» بنجاح." xml:space="preserve">
-    <value>Supplier &quot;{0}&quot; deleted successfully.</value>
+    <value>Supplier "{0}" deleted successfully.</value>
   </data>
   <data name="تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع الإيصال الصحيح." xml:space="preserve">
     <value>Payment receipt for request #{0} was rejected. Please pay again and upload the correct receipt.</value>
@@ -1845,7 +1845,7 @@
     <value>A new quote arrived for your request: {0}</value>
   </data>
   <data name="↩️ طلب استرجاع عربون — المصنّع «{0}» انسحب من حملة «{1}». يرجى استرجاع العربون عبر CliQ." xml:space="preserve">
-    <value>↩️ Deposit refund request — manufacturer &quot;{0}&quot; withdrew from campaign &quot;{1}&quot;. Please refund the deposit via CliQ.</value>
+    <value>↩️ Deposit refund request — manufacturer "{0}" withdrew from campaign "{1}". Please refund the deposit via CliQ.</value>
   </data>
   <data name="⏱ {0} يوم" xml:space="preserve">
     <value>⏱ {0} days</value>
@@ -1854,19 +1854,19 @@
     <value>⏳ Waiting for the quorum ({0} / {1} units) to request the remaining amount.</value>
   </data>
   <data name="✅ تم تأكيد دفعتك الكاملة لحملة «{0}». شكراً لك!" xml:space="preserve">
-    <value>✅ Your full payment for campaign &quot;{0}&quot; is confirmed. Thank you!</value>
+    <value>✅ Your full payment for campaign "{0}" is confirmed. Thank you!</value>
   </data>
   <data name="✅ تم قبول عربونك ({0:N2} د.أ) لحملة «{1}». مشاركتك مؤكدة!" xml:space="preserve">
-    <value>✅ Your deposit ({0:N2} JOD) for campaign &quot;{1}&quot; was accepted. Your participation is confirmed!</value>
+    <value>✅ Your deposit ({0:N2} JOD) for campaign "{1}" was accepted. Your participation is confirmed!</value>
   </data>
   <data name="✅ حملة مؤكدة — اكتملت جميع المدفوعات لحملة «{0}». يمكنك إصدار أمر الشراء." xml:space="preserve">
-    <value>✅ Campaign confirmed — all payments for campaign &quot;{0}&quot; are complete. You can place the purchase order.</value>
+    <value>✅ Campaign confirmed — all payments for campaign "{0}" are complete. You can place the purchase order.</value>
   </data>
   <data name="✓ أنت منضم لهذه الحملة — {0} وحدة" xml:space="preserve">
     <value>✓ You joined this campaign — {0} units</value>
   </data>
   <data name="❌ تم رفض إيصال {0} لحملة «{1}». السبب: {2}. يرجى رفع الإيصال مجدداً." xml:space="preserve">
-    <value>❌ Receipt {0} for campaign &quot;{1}&quot; was rejected. Reason: {2}. Please upload the receipt again.</value>
+    <value>❌ Receipt {0} for campaign "{1}" was rejected. Reason: {2}. Please upload the receipt again.</value>
   </data>
   <data name="🏭 الورش ({0})" xml:space="preserve">
     <value>🏭 Workshops ({0})</value>
@@ -1878,13 +1878,13 @@
     <value>💰 {0} JOD</value>
   </data>
   <data name="💳 إيصال دفع كامل — حملة «{0}» — المبلغ المتبقي: {1:N2} د.أ. يرجى المراجعة." xml:space="preserve">
-    <value>💳 Full payment receipt — campaign &quot;{0}&quot; — remaining amount: {1:N2} JOD. Please review.</value>
+    <value>💳 Full payment receipt — campaign "{0}" — remaining amount: {1:N2} JOD. Please review.</value>
   </data>
   <data name="💳 إيصال عربون جديد — حملة «{0}» — المبلغ: {1:N2} د.أ. يرجى المراجعة." xml:space="preserve">
-    <value>💳 New deposit receipt — campaign &quot;{0}&quot; — amount: {1:N2} JOD. Please review.</value>
+    <value>💳 New deposit receipt — campaign "{0}" — amount: {1:N2} JOD. Please review.</value>
   </data>
   <data name="💳 اكتمل النصاب — يرجى دفع المبلغ المتبقي ({0:N2} د.أ) لحملة «{1}»." xml:space="preserve">
-    <value>💳 Quorum reached — please pay the remaining amount ({0:N2} JOD) for campaign &quot;{1}&quot;.</value>
+    <value>💳 Quorum reached — please pay the remaining amount ({0:N2} JOD) for campaign "{1}".</value>
   </data>
   <data name="📦 كمية: {0}" xml:space="preserve">
     <value>📦 Quantity: {0}</value>
@@ -1922,4 +1922,4 @@
   <data name="عنوان الحملة مطلوب" xml:space="preserve">
     <value>Campaign title is required.</value>
   </data>
-</root>
+<data name="PendingRequests"><value>Pending Requests</value></data><data name="بانتظار الاعتماد"><value>Pending Approval</value></data><data name="تم اعتماد طلبك &quot;{0}&quot;. يمكنك الآن استقبال عروض الأسعار من المصنّعين."><value>Your request "{0}" has been approved. You can now receive quotes from manufacturers.</value></data><data name="لم يُعتمد طلبك &quot;{0}&quot;. يرجى مراجعة البيانات وإعادة الإرسال."><value>Your request "{0}" was not approved. Please review your data and resubmit.</value></data><data name="تم اعتماد الطلب بنجاح."><value>Request approved successfully.</value></data><data name="تم رفض الطلب."><value>Request rejected.</value></data><data name="تم حذف الطلب #{0} بنجاح."><value>Request #{0} deleted successfully.</value></data><data name="تم حذف الحملة &quot;{0}&quot; بنجاح."><value>Campaign "{0}" deleted successfully.</value></data><data name="إدارة حملات الشراء الجماعي"><value>Manage Group Buying Campaigns</value></data><data name="إدارة الحملات"><value>Manage Campaigns</value></data><data name="إلغاء الاعتماد"><value>Unapprove</value></data><data name="✓ معتمد"><value>✓ Approved</value></data><data name="هل تريد اعتماد هذا الطلب؟"><value>Approve this request?</value></data><data name="هل تريد إلغاء اعتماد هذا الطلب؟"><value>Unapprove this request?</value></data><data name="هل تريد حذف هذا الطلب نهائياً؟ لا يمكن التراجع."><value>Delete this request permanently? This cannot be undone.</value></data><data name="هل تريد حذف حملة &quot;{0}&quot; نهائياً؟ لا يمكن التراجع."><value>Delete campaign "{0}" permanently? This cannot be undone.</value></data><data name="كل حالات الاعتماد"><value>All Approval Statuses</value></data><data name="لم يتم إنشاء أي حملة شراء جماعي بعد."><value>No group buying campaigns have been created yet.</value></data><data name="تم إرسال طلبك بنجاح. بانتظار موافقة الإدارة قبل ظهوره للمصنّعين."><value>Your request has been submitted successfully. Awaiting admin approval before it becomes visible to manufacturers.</value></data></root>

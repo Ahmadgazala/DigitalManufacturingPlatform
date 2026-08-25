@@ -67,6 +67,7 @@ public class RequestsController : Controller
         var userId = _userManager.GetUserId(User)!;
         model.CustomerId = userId;
         model.Status = RequestStatus.Open;
+        model.IsApproved = false;
 
         _db.ManufacturingRequests.Add(model);
         await _db.SaveChangesAsync();
@@ -98,7 +99,7 @@ public class RequestsController : Controller
             await _db.SaveChangesAsync();
         }
 
-        TempData["Success"] = _T["تم إرسال طلبك بنجاح. ستصلك عروض الأسعار قريباً."].Value;
+        TempData["Success"] = _T["تم إرسال طلبك بنجاح. بانتظار موافقة الإدارة قبل ظهوره للمصنّعين."].Value;
         return RedirectToAction(nameof(Details), new { id = model.Id });
     }
 

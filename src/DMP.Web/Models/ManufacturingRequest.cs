@@ -162,6 +162,8 @@ public class ManufacturingRequest
 
     public RequestStatus Status { get; set; } = RequestStatus.Open;
 
+    public bool IsApproved { get; set; } = false;
+
     // تتبع الطلب
     public TrackingStage? TrackingStage { get; set; }
 

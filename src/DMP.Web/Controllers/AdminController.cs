@@ -29,6 +29,7 @@ public class AdminController : Controller
         ViewBag.TotalManufacturers = await _db.Manufacturers.CountAsync();
         ViewBag.PendingManufacturers = await _db.Manufacturers.CountAsync(m => !m.IsApproved);
         ViewBag.TotalRequests = await _db.ManufacturingRequests.CountAsync();
+        ViewBag.PendingRequests = await _db.ManufacturingRequests.CountAsync(r => !r.IsApproved);
         ViewBag.TotalUsers = await _userManager.Users.CountAsync();
         ViewBag.TotalSuppliers = await _db.Suppliers.CountAsync();
         ViewBag.TotalCampaigns = await _db.GroupBuyingCampaigns.CountAsync(c => c.Status == CampaignStatus.Active);
@@ -196,7 +197,7 @@ public class AdminController : Controller
     }
 
     // GET: /Admin/Requests — كل طلبات التصنيع
-    public async Task<IActionResult> Requests(string? status, string? search)
+    public async Task<IActionResult> Requests(string? status, string? search, string? approval)
     {
         var query = _db.ManufacturingRequests
             .Include(r => r.Customer)
@@ -212,16 +213,29 @@ public class AdminController : Controller
         if (!string.IsNullOrWhiteSpace(status) && Enum.TryParse<RequestStatus>(status, out var s))
             query = query.Where(r => r.Status == s);
 
+        if (approval == "pending")
+            query = query.Where(r => !r.IsApproved);
+        else if (approval == "approved")
+            query = query.Where(r => r.IsApproved);
+
         ViewBag.StatusFilter = status;
         ViewBag.Search       = search;
+        ViewBag.ApprovalFilter = approval;
 
         var requests = await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
         return View(requests);
     }
 
-    // GET: /Admin/GroupBuying  →  يُعيد توجيه لصفحة الشراء الجماعي
-    public IActionResult GroupBuying()
-        => RedirectToAction("Index", "GroupBuying");
+    // GET: /Admin/GroupBuying  →  صفحة إدارة الحملات
+    public async Task<IActionResult> GroupBuying()
+    {
+        var campaigns = await _db.GroupBuyingCampaigns
+            .Include(c => c.Participants)
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+
+        return View(campaigns);
+    }
 
     // GET: /Admin/Users
     public async Task<IActionResult> Users()
@@ -240,5 +254,95 @@ public class AdminController : Controller
 
         ViewBag.UsersWithRoles = usersWithRoles;
         return View(users);
+    }
+
+    // POST: /Admin/ApproveRequest/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveRequest(int id)
+    {
+        var request = await _db.ManufacturingRequests.FindAsync(id);
+        if (request == null) return NotFound();
+
+        request.IsApproved = true;
+        await _db.SaveChangesAsync();
+
+        _db.Notifications.Add(new Notification
+        {
+            UserId  = request.CustomerId,
+            Message = _T["تم اعتماد طلبك \"{0}\". يمكنك الآن استقبال عروض الأسعار من المصنّعين.", request.Title].Value,
+            Link    = $"/Requests/Details/{request.Id}",
+            IsRead  = false
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم اعتماد الطلب بنجاح."].Value;
+        return RedirectToAction(nameof(Requests));
+    }
+
+    // POST: /Admin/RejectRequest/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectRequest(int id)
+    {
+        var request = await _db.ManufacturingRequests.FindAsync(id);
+        if (request == null) return NotFound();
+
+        request.IsApproved = false;
+        await _db.SaveChangesAsync();
+
+        _db.Notifications.Add(new Notification
+        {
+            UserId  = request.CustomerId,
+            Message = _T["لم يُعتمد طلبك \"{0}\". يرجى مراجعة البيانات وإعادة الإرسال.", request.Title].Value,
+            Link    = $"/Requests/Details/{request.Id}",
+            IsRead  = false
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم رفض الطلب."].Value;
+        return RedirectToAction(nameof(Requests));
+    }
+
+    // POST: /Admin/DeleteRequest/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteRequest(int id)
+    {
+        var request = await _db.ManufacturingRequests
+            .Include(r => r.Files)
+            .Include(r => r.Quotations)
+            .Include(r => r.OrderUpdates)
+            .FirstOrDefaultAsync(r => r.Id == id);
+
+        if (request == null) return NotFound();
+
+        _db.OrderUpdates.RemoveRange(request.OrderUpdates);
+        _db.Quotations.RemoveRange(request.Quotations);
+        _db.RequestFiles.RemoveRange(request.Files);
+        _db.ManufacturingRequests.Remove(request);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم حذف الطلب #{0} بنجاح.", id].Value;
+        return RedirectToAction(nameof(Requests));
+    }
+
+    // POST: /Admin/DeleteCampaign/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteCampaign(int id)
+    {
+        var campaign = await _db.GroupBuyingCampaigns
+            .Include(c => c.Participants)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (campaign == null) return NotFound();
+
+        _db.CampaignParticipants.RemoveRange(campaign.Participants);
+        _db.GroupBuyingCampaigns.Remove(campaign);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم حذف الحملة \"{0}\" بنجاح.", campaign.Title].Value;
+        return RedirectToAction(nameof(GroupBuying));
     }
 }

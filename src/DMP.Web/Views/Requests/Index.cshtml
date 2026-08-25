@@ -33,6 +33,10 @@
                         <div class="req-top">
                             <a asp-controller="Requests" asp-action="Details" asp-route-id="@req.Id" class="req-title">@req.Title</a>
                             <span class="chip @statusCls">@req.Status.ToArabic()</span>
+                            @if (!req.IsApproved)
+                            {
+                                <span class="chip chip-amber">@T["⏳ بانتظار الاعتماد"]</span>
+                            }
                             <span class="chip chip-cat">@req.Category.ToArabic()</span>
                         </div>
                         <div class="req-meta">

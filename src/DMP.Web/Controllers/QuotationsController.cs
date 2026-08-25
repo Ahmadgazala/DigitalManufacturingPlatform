@@ -63,6 +63,7 @@ public class QuotationsController : Controller
             .Include(r => r.Customer)
             .Include(r => r.Files)
             .Where(r => r.Status == RequestStatus.Open
+                        && r.IsApproved
                         && categories.Contains(r.Category)
                         && !submittedRequestIds.Contains(r.Id))
             .OrderByDescending(r => r.CreatedAt)
@@ -84,7 +85,7 @@ public class QuotationsController : Controller
         var request = await _db.ManufacturingRequests
             .Include(r => r.Customer)
             .Include(r => r.Files)
-            .FirstOrDefaultAsync(r => r.Id == requestId && r.Status == RequestStatus.Open);
+            .FirstOrDefaultAsync(r => r.Id == requestId && r.Status == RequestStatus.Open && r.IsApproved);
 
         if (request == null)
             return NotFound();
