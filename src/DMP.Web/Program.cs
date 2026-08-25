@@ -36,9 +36,19 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 // Stripe
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
-// DB
+// DB — PostgreSQL (Render) or SQLite (local dev)
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbUrl   = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(dbUrl))
+    connStr = dbUrl;
+
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (dbUrl != null && dbUrl.StartsWith("postgresql", StringComparison.OrdinalIgnoreCase))
+        opt.UseNpgsql(connStr);
+    else
+        opt.UseSqlite(connStr);
+});
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
@@ -87,6 +97,8 @@ builder.Services.AddMvc()
     });
 
 builder.Services.AddScoped<IFileService, DMP.Web.Services.FileService>();
+builder.Services.AddScoped<IExcelService, ExcelService>();
+builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
 
 var app = builder.Build();
 
