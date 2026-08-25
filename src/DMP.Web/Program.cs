@@ -39,12 +39,19 @@ StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 // DB — PostgreSQL (Render) or SQLite (local dev)
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 var dbUrl   = Environment.GetEnvironmentVariable("DATABASE_URL");
-if (!string.IsNullOrEmpty(dbUrl))
-    connStr = dbUrl;
+var usePg   = dbUrl != null && dbUrl.StartsWith("postgresql", StringComparison.OrdinalIgnoreCase);
+if (usePg)
+{
+    // Parse Render's postgresql:// URL into Npgsql connection string format
+    var uri  = new Uri(dbUrl);
+    var user = uri.UserInfo.Split(':')[0];
+    var pass = Uri.UnescapeDataString(uri.UserInfo.Split(':')[1]);
+    connStr  = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={uri.AbsolutePath.TrimStart('/')};Username={user};Password={pass};SSL Mode=Prefer";
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
-    if (dbUrl != null && dbUrl.StartsWith("postgresql", StringComparison.OrdinalIgnoreCase))
+    if (usePg)
         opt.UseNpgsql(connStr);
     else
         opt.UseSqlite(connStr);
@@ -104,9 +111,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    // تطبيق الـ migrations تلقائياً عند كل تشغيل (يعمل من VS أو terminal)
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync();
+    if (usePg)
+        await db.Database.EnsureCreatedAsync();
+    else
+        await db.Database.MigrateAsync();
 
     await SeedData.InitializeAsync(scope.ServiceProvider);
 }
