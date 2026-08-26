@@ -46,7 +46,7 @@ if (usePg)
     var uri  = new Uri(dbUrl);
     var user = uri.UserInfo.Split(':')[0];
     var pass = Uri.UnescapeDataString(uri.UserInfo.Split(':')[1]);
-    connStr  = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={uri.AbsolutePath.TrimStart('/')};Username={user};Password={pass};SSL Mode=Prefer";
+    connStr  = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={uri.AbsolutePath.TrimStart('/')};Username={user};Password={pass};SSL Mode=Prefer;Trust Server Certificate=true";
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
