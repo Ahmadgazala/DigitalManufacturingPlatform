@@ -109,17 +109,16 @@ builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
 
 var app = builder.Build();
 
-for (int attempt = 1; attempt <= 5; attempt++)
+_ = Task.Run(async () =>
 {
-    try
+    for (int attempt = 1; attempt <= 10; attempt++)
     {
-        using (var scope = app.Services.CreateScope())
+        try
         {
+            using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await db.Database.EnsureCreatedAsync();
 
-            // EnsureCreated won't add new tables to an existing DB.
-            // Manually create Products table if it doesn't exist.
             var conn = db.Database.GetDbConnection();
             await conn.OpenAsync();
             using var cmd = conn.CreateCommand();
@@ -147,17 +146,16 @@ for (int attempt = 1; attempt <= 5; attempt++)
             await conn.CloseAsync();
 
             await SeedData.InitializeAsync(scope.ServiceProvider);
+            return;
         }
-        break;
+        catch (Exception ex)
+        {
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "DB init attempt {Attempt} failed, retrying in {Delay}s...", attempt, attempt * 3);
+            await Task.Delay(attempt * 3000);
+        }
     }
-    catch (Exception ex)
-    {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "DB init attempt {Attempt} failed, retrying...", attempt);
-        if (attempt == 5) throw;
-        await Task.Delay(attempt * 5000);
-    }
-}
+});
 
 if (!app.Environment.IsDevelopment())
 {
