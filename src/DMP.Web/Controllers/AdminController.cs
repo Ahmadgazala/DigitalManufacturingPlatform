@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
+using DMP.Web.Services;
 
 namespace DMP.Web.Controllers;
 
@@ -13,13 +14,16 @@ public class AdminController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IFileService _fileService;
     private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,
+        IFileService fileService,
         Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
+        _fileService = fileService;
         _T = T;
     }
 
@@ -33,6 +37,7 @@ public class AdminController : Controller
         ViewBag.TotalUsers = await _userManager.Users.CountAsync();
         ViewBag.TotalSuppliers = await _db.Suppliers.CountAsync();
         ViewBag.TotalCampaigns = await _db.GroupBuyingCampaigns.CountAsync(c => c.Status == CampaignStatus.Active);
+        ViewBag.TotalProducts = await _db.Products.CountAsync();
 
         return View();
     }
@@ -344,5 +349,124 @@ public class AdminController : Controller
 
         TempData["Success"] = _T["تم حذف الحملة \"{0}\" بنجاح.", campaign.Title].Value;
         return RedirectToAction(nameof(GroupBuying));
+    }
+
+    // ========== Marketplace Products (Admin) ==========
+
+    // GET: /Admin/Products
+    public async Task<IActionResult> Products(string? search, string? category, string? seller)
+    {
+        var query = _db.Products
+            .Include(p => p.SellerUser)
+            .Include(p => p.Manufacturer)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(p =>
+                p.Name.Contains(search) ||
+                (p.Description != null && p.Description.Contains(search)));
+
+        if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<ProductCategory>(category, out var cat))
+            query = query.Where(p => p.Category == cat);
+
+        if (seller == "admin")
+            query = query.Where(p => p.SellerType == SellerType.Admin);
+        else if (seller == "manufacturer")
+            query = query.Where(p => p.SellerType == SellerType.Manufacturer);
+
+        ViewBag.Search = search;
+        ViewBag.CategoryFilter = category;
+        ViewBag.SellerFilter = seller;
+
+        var products = await query.OrderByDescending(p => p.CreatedAt).ToListAsync();
+        return View(products);
+    }
+
+    // GET: /Admin/CreateProduct
+    public IActionResult CreateProduct()
+    {
+        return View();
+    }
+
+    // POST: /Admin/CreateProduct
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateProduct(Product model, IFormFile? imageFile)
+    {
+        ModelState.Remove("SellerUserId");
+        ModelState.Remove("ManufacturerId");
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        model.SellerType = SellerType.Admin;
+        model.SellerUserId = _userManager.GetUserId(User);
+        model.CreatedAt = DateTime.UtcNow;
+
+        if (imageFile != null)
+            model.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+
+        _db.Products.Add(model);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم إضافة المنتج \"{0}\" بنجاح.", model.Name].Value;
+        return RedirectToAction(nameof(Products));
+    }
+
+    // GET: /Admin/EditProduct/5
+    public async Task<IActionResult> EditProduct(int id)
+    {
+        var product = await _db.Products.FindAsync(id);
+        if (product == null) return NotFound();
+        return View(product);
+    }
+
+    // POST: /Admin/EditProduct/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProduct(int id, Product model, IFormFile? imageFile)
+    {
+        var product = await _db.Products.FindAsync(id);
+        if (product == null) return NotFound();
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        product.Name = model.Name;
+        product.Description = model.Description;
+        product.Price = model.Price;
+        product.Category = model.Category;
+        product.Stock = model.Stock;
+        product.IsActive = model.IsActive;
+
+        if (imageFile != null)
+        {
+            if (!string.IsNullOrEmpty(product.ImagePath))
+                _fileService.Delete(product.ImagePath);
+            product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+        }
+
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم تعديل المنتج \"{0}\" بنجاح.", product.Name].Value;
+        return RedirectToAction(nameof(Products));
+    }
+
+    // POST: /Admin/DeleteProduct/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var product = await _db.Products.FindAsync(id);
+        if (product == null) return NotFound();
+
+        if (!string.IsNullOrEmpty(product.ImagePath))
+            _fileService.Delete(product.ImagePath);
+
+        _db.Products.Remove(product);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم حذف المنتج \"{0}\" بنجاح.", product.Name].Value;
+        return RedirectToAction(nameof(Products));
     }
 }

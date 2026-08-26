@@ -7,6 +7,7 @@
     int pendingRequests = ViewBag.PendingRequests ?? 0;
     int totalCampaigns = ViewBag.TotalCampaigns ?? 0;
     int totalSuppliers = ViewBag.TotalSuppliers ?? 0;
+    int totalProducts = ViewBag.TotalProducts ?? 0;
 }
 
 <div class="container">
@@ -42,6 +43,10 @@
         <div class="kpi-card">
             <span class="kpi-label">@T["TotalSuppliers"]</span>
             <span class="kpi-value">@totalSuppliers</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-label">@T["المنتجات"]</span>
+            <span class="kpi-value">@totalProducts</span>
         </div>
     </div>
 
@@ -93,6 +98,14 @@
                 {
                     <a asp-controller="Admin" asp-action="Requests" asp-route-approval="pending" class="btn btn-primary">@T["اعتماد الطلبات"]</a>
                 }
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["السوق - المنتجات"]</h3>
+                <p>@T["المنتجات"]: <strong>@totalProducts</strong></p>
+                <a asp-controller="Admin" asp-action="Products" class="btn btn-outline">@T["إدارة المنتجات"]</a>
+                <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-primary">@T["إضافة منتج"]</a>
             </div>
         </div>
     </div>

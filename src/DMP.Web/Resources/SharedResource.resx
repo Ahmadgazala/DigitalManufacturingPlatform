@@ -194,4 +194,7 @@
   <data name="Portfolio" xml:space="preserve">
     <value>أعمالي</value>
   </data>
-<data name="PendingRequests"><value>طلبات بانتظار الاعتماد</value></data></root>
+<data name="PendingRequests"><value>طلبات بانتظار الاعتماد</value></data>
+  <data name="ClickToUpload_Change" xml:space="preserve"><value>اضغط لتغيير الصورة</value></data>
+  <data name="بانتظار الاعتماد" xml:space="preserve"><value>بانتظار الاعتماد</value></data>
+</root>

@@ -1,0 +1,99 @@
+@model List<Product>
+@{
+    ViewData["Title"] = T["السوق"];
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>@T["السوق"]</h1>
+                <p>@T["{0} منتج متاح", Model.Count]</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);padding:20px 0">
+    <div class="container">
+        <form asp-action="Index" method="get" style="display:flex;gap:12px;flex-wrap:wrap;align-items:end">
+            <div style="flex:1;min-width:200px">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control"
+                       placeholder="@T["ابحث عن منتج..."]" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff" />
+            </div>
+            <div style="min-width:160px">
+                <select name="category" class="form-control" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff">
+                    <option value="">@T["كل الفئات"]</option>
+                    @foreach (ProductCategory cat in Enum.GetValues<ProductCategory>())
+                    {
+                        <option value="@cat" selected="@(ViewBag.CategoryFilter == cat.ToString())">@cat.ToDisplay()</option>
+                    }
+                </select>
+            </div>
+            <div style="min-width:140px">
+                <select name="seller" class="form-control" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff">
+                    <option value="">@T["الكل"]</option>
+                    <option value="admin" selected="@(ViewBag.SellerFilter == "admin")">@T["إدارة"]</option>
+                    <option value="manufacturer" selected="@(ViewBag.SellerFilter == "manufacturer")">@T["مصنّعين"]</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">@T["بحث"]</button>
+        </form>
+    </div>
+</div>
+
+<div class="container section">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">🛒</div>
+            <h3>@T["لا توجد منتجات"]</h3>
+            <p>@T["لم يتم إضافة أي منتج إلى السوق بعد."]</p>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-3">
+            @foreach (var p in Model)
+            {
+                <a asp-action="Details" asp-route-id="@p.Id" class="panel" style="display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;transition:transform .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
+                    @if (!string.IsNullOrEmpty(p.ImagePath))
+                    {
+                        <div style="height:180px;overflow:hidden;border-radius:var(--r-sm)">
+                            <img src="@p.ImagePath" alt="@p.Name" style="width:100%;height:100%;object-fit:cover" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="height:180px;background:var(--paper);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:3rem">📦</div>
+                    }
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                            <h3 style="font-size:.95rem;font-weight:800;margin:0">@p.Name</h3>
+                            <span style="font-size:.75rem;padding:3px 8px;border-radius:100px;background:var(--paper);color:var(--steel)">@p.Category.ToDisplay()</span>
+                        </div>
+                        <p style="font-size:.82rem;color:var(--steel);margin:6px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">@p.Description</p>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                            <span style="color:var(--primary);font-weight:800;font-size:1.1rem">@T["{0} د.أ", p.Price.ToString("N2")]</span>
+                            <span style="font-size:.75rem;color:var(--steel)">@p.Stock @T["متوفر"]</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+                            @if (p.SellerType == SellerType.Admin)
+                            {
+                                <span style="font-size:.72rem;padding:2px 8px;border-radius:100px;background:var(--primary);color:#fff">@T["إدارة"]</span>
+                            }
+                            else
+                            {
+                                <span style="font-size:.72rem;padding:2px 8px;border-radius:100px;background:var(--amber);color:#000">@T["مصنّع"]</span>
+                            }
+                            @if (p.Manufacturer != null)
+                            {
+                                <span style="font-size:.78rem;color:var(--steel)">@p.Manufacturer.WorkshopName</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+</div>

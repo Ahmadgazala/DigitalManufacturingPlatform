@@ -1,0 +1,103 @@
+@model Product
+@{
+    ViewData["Title"] = T["تعديل المنتج"];
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>@T["تعديل المنتج"]</h1>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-error">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="panel">
+        <form asp-action="EditProduct" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="Name">@T["اسم المنتج"]</label>
+                <input type="text" name="Name" id="Name" class="form-control" value="@Model.Name" required maxlength="200" />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">@T["الوصف"]</label>
+                <textarea name="Description" id="Description" class="form-control" rows="4" maxlength="2000">@Model.Description</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Price">@T["السعر (د.أ)"]</label>
+                    <input type="number" name="Price" id="Price" class="form-control" step="0.01" min="0.01" value="@Model.Price" required />
+                </div>
+                <div class="form-group">
+                    <label for="Stock">@T["المخزون"]</label>
+                    <input type="number" name="Stock" id="Stock" class="form-control" min="0" value="@Model.Stock" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Category">@T["الفئة"]</label>
+                <select name="Category" id="Category" class="form-control">
+                    @foreach (ProductCategory cat in Enum.GetValues<ProductCategory>())
+                    {
+                        <option value="@cat" selected="@(Model.Category == cat)">@cat.ToDisplay()</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                    <input type="checkbox" name="IsActive" value="true" checked="@(Model.IsActive)" />
+                    @T["نشط (ظاهر في السوق)"]
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="imageFile">@T["صورة المنتج"]</label>
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div style="margin-bottom:8px">
+                        <img src="@Model.ImagePath" style="width:100px;height:100px;border-radius:8px;object-fit:cover" />
+                        <span style="font-size:.8rem;color:var(--steel);margin-inline-start:8px">@T["الصورة الحالية"]</span>
+                    </div>
+                }
+                <div class="upload-zone">
+                    <input type="file" name="imageFile" id="imageFile" accept="image/*" class="upload-input" />
+                    <span>@T["ClickToUpload_Change"]</span>
+                </div>
+                <img id="imgPreview" class="preview-img" style="display:none;margin-top:0.5rem;" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">@T["حفظ التعديلات"]</button>
+                <a asp-action="MyProducts" class="btn btn-outline">@T["إلغاء"]</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('imageFile').addEventListener('change', function () {
+            var preview = document.getElementById('imgPreview');
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+}

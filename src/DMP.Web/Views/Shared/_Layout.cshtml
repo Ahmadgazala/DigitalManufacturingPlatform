@@ -75,6 +75,7 @@
             <li><a asp-controller="Manufacturers" asp-action="Index">@T["Nav_Manufacturers"]</a></li>
             <li><a asp-controller="Manufacturers" asp-action="Map">@T["الخريطة"]</a></li>
             <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
+            <li><a asp-controller="Products" asp-action="Index">@T["السوق"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <li><a asp-controller="Requests" asp-action="Index">@T["Nav_Requests"]</a></li>
@@ -83,6 +84,14 @@
             @if (User.IsInRole("Manufacturer") || User.IsInRole("Admin"))
             {
                 <li><a asp-controller="GroupBuying" asp-action="Index">@T["Nav_GroupBuying"]</a></li>
+                @if (User.IsInRole("Manufacturer"))
+                {
+                    <li><a asp-controller="Manufacturers" asp-action="MyProducts">@T["منتجاتي"]</a></li>
+                }
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a asp-controller="WhatsApp" asp-action="Index">WhatsApp</a></li>
             }
         </ul>
 

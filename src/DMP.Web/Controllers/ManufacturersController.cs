@@ -394,4 +394,133 @@ public class ManufacturersController : Controller
         TempData["Success"] = _T["شكراً! تم إضافة تقييمك."].Value;
         return RedirectToAction(nameof(Details), new { id });
     }
+
+    // ========== Manufacturer Products (Marketplace) ==========
+
+    // GET: /Manufacturers/MyProducts
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    public async Task<IActionResult> MyProducts()
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var manufacturer = await _db.Manufacturers
+            .FirstOrDefaultAsync(m => m.UserId == userId);
+
+        if (manufacturer == null)
+        {
+            TempData["Info"] = _T["يرجى إكمال ملف الورشة أولاً."].Value;
+            return RedirectToAction(nameof(Edit));
+        }
+
+        var products = await _db.Products
+            .Where(p => p.ManufacturerId == manufacturer.Id)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
+        return View(products);
+    }
+
+    // GET: /Manufacturers/CreateProduct
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    public async Task<IActionResult> CreateProduct()
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var manufacturer = await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
+        if (manufacturer == null) return RedirectToAction(nameof(Edit));
+
+        return View();
+    }
+
+    // POST: /Manufacturers/CreateProduct
+    [HttpPost]
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateProduct(Product model, IFormFile? imageFile)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var manufacturer = await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
+        if (manufacturer == null) return RedirectToAction(nameof(Edit));
+
+        ModelState.Remove("SellerUserId");
+        ModelState.Remove("ManufacturerId");
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        model.SellerType = SellerType.Manufacturer;
+        model.SellerUserId = userId;
+        model.ManufacturerId = manufacturer.Id;
+        model.CreatedAt = DateTime.UtcNow;
+
+        if (imageFile != null)
+            model.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+
+        _db.Products.Add(model);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم إضافة المنتج \"{0}\" بنجاح.", model.Name].Value;
+        return RedirectToAction(nameof(MyProducts));
+    }
+
+    // GET: /Manufacturers/EditProduct/5
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    public async Task<IActionResult> EditProduct(int id)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        if (product == null) return NotFound();
+        return View(product);
+    }
+
+    // POST: /Manufacturers/EditProduct/5
+    [HttpPost]
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProduct(int id, Product model, IFormFile? imageFile)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        if (product == null) return NotFound();
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        product.Name = model.Name;
+        product.Description = model.Description;
+        product.Price = model.Price;
+        product.Category = model.Category;
+        product.Stock = model.Stock;
+        product.IsActive = model.IsActive;
+
+        if (imageFile != null)
+        {
+            if (!string.IsNullOrEmpty(product.ImagePath))
+                _fileService.Delete(product.ImagePath);
+            product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+        }
+
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم تعديل المنتج \"{0}\" بنجاح.", product.Name].Value;
+        return RedirectToAction(nameof(MyProducts));
+    }
+
+    // POST: /Manufacturers/DeleteProduct/5
+    [HttpPost]
+    [Authorize(Roles = SeedData.ManufacturerRole)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        if (product == null) return NotFound();
+
+        if (!string.IsNullOrEmpty(product.ImagePath))
+            _fileService.Delete(product.ImagePath);
+
+        _db.Products.Remove(product);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم حذف المنتج \"{0}\" بنجاح.", product.Name].Value;
+        return RedirectToAction(nameof(MyProducts));
+    }
 }

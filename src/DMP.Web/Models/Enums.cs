@@ -74,4 +74,56 @@ public static class EnumHelpers
 
     public static string ToDisplay(this DeliveryOption d) =>
         IsEnglish ? d.ToEnglish() : d.ToArabic();
+
+    public static string ToArabic(this ProductCategory c) =>
+        IsEnglish ? c.ToEnglish() : c switch
+        {
+            ProductCategory.CNC          => "CNC",
+            ProductCategory.Printing3D   => "طباعة ثلاثية الأبعاد",
+            ProductCategory.LaserCutting  => "قطع بالليزر",
+            ProductCategory.Electronics  => "إلكترونيات",
+            ProductCategory.Woodwork     => "أعمال خشبية",
+            ProductCategory.MetalWork    => "أعمال معدنية",
+            ProductCategory.Acrylic      => "أكريليك",
+            ProductCategory.Accessories  => "ملحقات",
+            ProductCategory.RawMaterials => "خامات ومواد",
+            ProductCategory.Other        => "أخرى",
+            _ => c.ToString()
+        };
+
+    public static string ToEnglish(this ProductCategory c) => c switch
+    {
+        ProductCategory.CNC          => "CNC",
+        ProductCategory.Printing3D   => "3D Printing",
+        ProductCategory.LaserCutting  => "Laser Cutting",
+        ProductCategory.Electronics  => "Electronics",
+        ProductCategory.Woodwork     => "Woodwork",
+        ProductCategory.MetalWork    => "Metal Work",
+        ProductCategory.Acrylic      => "Acrylic",
+        ProductCategory.Accessories  => "Accessories",
+        ProductCategory.RawMaterials => "Raw Materials",
+        ProductCategory.Other        => "Other",
+        _ => c.ToString()
+    };
+
+    public static string ToDisplay(this ProductCategory c) =>
+        IsEnglish ? c.ToEnglish() : c.ToArabic();
+
+    public static string ToArabic(this SellerType s) =>
+        IsEnglish ? s.ToEnglish() : s switch
+        {
+            SellerType.Admin        => "الإدارة",
+            SellerType.Manufacturer => "مصنّع",
+            _ => s.ToString()
+        };
+
+    public static string ToEnglish(this SellerType s) => s switch
+    {
+        SellerType.Admin        => "Admin",
+        SellerType.Manufacturer => "Manufacturer",
+        _ => s.ToString()
+    };
+
+    public static string ToDisplay(this SellerType s) =>
+        IsEnglish ? s.ToEnglish() : s.ToArabic();
 }

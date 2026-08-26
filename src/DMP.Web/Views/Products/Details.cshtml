@@ -1,0 +1,95 @@
+@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container section">
+    <div style="margin-bottom:16px">
+        <a asp-action="Index" class="btn btn-outline btn-sm">@T["← العودة للسوق"]</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+        <div>
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <div style="border-radius:var(--r-md);overflow:hidden;max-height:400px">
+                    <img src="@Model.ImagePath" alt="@Model.Name" style="width:100%;height:100%;object-fit:cover" />
+                </div>
+            }
+            else
+            {
+                <div style="background:var(--paper);border-radius:var(--r-md);height:300px;display:flex;align-items:center;justify-content:center;font-size:5rem">📦</div>
+            }
+        </div>
+
+        <div>
+            <div style="display:flex;gap:8px;margin-bottom:12px">
+                <span style="font-size:.8rem;padding:4px 12px;border-radius:100px;background:var(--paper);color:var(--steel)">@Model.Category.ToDisplay()</span>
+                @if (Model.SellerType == SellerType.Admin)
+                {
+                    <span style="font-size:.8rem;padding:4px 12px;border-radius:100px;background:var(--primary);color:#fff">@T["إدارة Jo Maker"]</span>
+                }
+                else
+                {
+                    <span style="font-size:.8rem;padding:4px 12px;border-radius:100px;background:var(--amber);color:#000">@T["مصنّع"]</span>
+                }
+            </div>
+
+            <h1 style="font-size:1.6rem;font-weight:800;margin-bottom:8px">@Model.Name</h1>
+
+            <div style="font-size:1.5rem;font-weight:800;color:var(--primary);margin-bottom:16px">
+                @T["{0} د.أ", Model.Price.ToString("N2")]
+            </div>
+
+            <div style="display:flex;gap:16px;margin-bottom:20px;font-size:.9rem">
+                <div>
+                    <span style="color:var(--steel)">@T["المتوفر"]: </span>
+                    <strong>@Model.Stock</strong>
+                </div>
+                <div>
+                    <span style="color:var(--steel)">@T["التاريخ"]: </span>
+                    <span>@Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+                </div>
+            </div>
+
+            @if (Model.Description != null)
+            {
+                <div style="margin-bottom:24px">
+                    <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px">@T["الوصف"]</h3>
+                    <p style="color:var(--steel);line-height:1.7;white-space:pre-wrap">@Model.Description</p>
+                </div>
+            }
+
+            <div class="panel" style="background:var(--paper)">
+                <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px">@T["معلومات البائع"]</h3>
+                @if (Model.SellerType == SellerType.Admin)
+                {
+                    <p style="font-size:.9rem;color:var(--steel)">
+                        @T["المنتج مقدم من إدارة Jo Maker. للتواصل:"]
+                    </p>
+                    <p style="font-size:.9rem"><strong>@T["البريد"]: </strong>admin@dmp.jo</p>
+                }
+                else if (Model.Manufacturer != null)
+                {
+                    <p style="font-size:.9rem;margin-bottom:8px">
+                        <strong>@Model.Manufacturer.WorkshopName</strong>
+                    </p>
+                    @if (Model.Manufacturer.City != null)
+                    {
+                        <p style="font-size:.85rem;color:var(--steel)">📍 @Model.Manufacturer.City</p>
+                    }
+                    @if (Model.Manufacturer.ContactPhone != null)
+                    {
+                        <p style="font-size:.85rem;color:var(--steel)">📞 @Model.Manufacturer.ContactPhone</p>
+                    }
+                    @if (Model.Manufacturer.ContactEmail != null)
+                    {
+                        <p style="font-size:.85rem;color:var(--steel)">✉️ @Model.Manufacturer.ContactEmail</p>
+                    }
+                    <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@Model.ManufacturerId"
+                       class="btn btn-outline btn-sm" style="margin-top:8px">@T["عرض الورشة"]</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1922,4 +1922,51 @@
   <data name="عنوان الحملة مطلوب" xml:space="preserve">
     <value>Campaign title is required.</value>
   </data>
-<data name="PendingRequests"><value>Pending Requests</value></data><data name="بانتظار الاعتماد"><value>Pending Approval</value></data><data name="تم اعتماد طلبك &quot;{0}&quot;. يمكنك الآن استقبال عروض الأسعار من المصنّعين."><value>Your request "{0}" has been approved. You can now receive quotes from manufacturers.</value></data><data name="لم يُعتمد طلبك &quot;{0}&quot;. يرجى مراجعة البيانات وإعادة الإرسال."><value>Your request "{0}" was not approved. Please review your data and resubmit.</value></data><data name="تم اعتماد الطلب بنجاح."><value>Request approved successfully.</value></data><data name="تم رفض الطلب."><value>Request rejected.</value></data><data name="تم حذف الطلب #{0} بنجاح."><value>Request #{0} deleted successfully.</value></data><data name="تم حذف الحملة &quot;{0}&quot; بنجاح."><value>Campaign "{0}" deleted successfully.</value></data><data name="إدارة حملات الشراء الجماعي"><value>Manage Group Buying Campaigns</value></data><data name="إدارة الحملات"><value>Manage Campaigns</value></data><data name="إلغاء الاعتماد"><value>Unapprove</value></data><data name="✓ معتمد"><value>✓ Approved</value></data><data name="هل تريد اعتماد هذا الطلب؟"><value>Approve this request?</value></data><data name="هل تريد إلغاء اعتماد هذا الطلب؟"><value>Unapprove this request?</value></data><data name="هل تريد حذف هذا الطلب نهائياً؟ لا يمكن التراجع."><value>Delete this request permanently? This cannot be undone.</value></data><data name="هل تريد حذف حملة &quot;{0}&quot; نهائياً؟ لا يمكن التراجع."><value>Delete campaign "{0}" permanently? This cannot be undone.</value></data><data name="كل حالات الاعتماد"><value>All Approval Statuses</value></data><data name="لم يتم إنشاء أي حملة شراء جماعي بعد."><value>No group buying campaigns have been created yet.</value></data><data name="تم إرسال طلبك بنجاح. بانتظار موافقة الإدارة قبل ظهوره للمصنّعين."><value>Your request has been submitted successfully. Awaiting admin approval before it becomes visible to manufacturers.</value></data></root>
+<data name="PendingRequests"><value>Pending Requests</value></data><data name="بانتظار الاعتماد"><value>Pending Approval</value></data><data name="تم اعتماد طلبك &quot;{0}&quot;. يمكنك الآن استقبال عروض الأسعار من المصنّعين."><value>Your request "{0}" has been approved. You can now receive quotes from manufacturers.</value></data><data name="لم يُعتمد طلبك &quot;{0}&quot;. يرجى مراجعة البيانات وإعادة الإرسال."><value>Your request "{0}" was not approved. Please review your data and resubmit.</value></data><data name="تم اعتماد الطلب بنجاح."><value>Request approved successfully.</value></data><data name="تم رفض الطلب."><value>Request rejected.</value></data><data name="تم حذف الطلب #{0} بنجاح."><value>Request #{0} deleted successfully.</value></data><data name="تم حذف الحملة &quot;{0}&quot; بنجاح."><value>Campaign "{0}" deleted successfully.</value></data><data name="إدارة حملات الشراء الجماعي"><value>Manage Group Buying Campaigns</value></data><data name="إدارة الحملات"><value>Manage Campaigns</value></data><data name="إلغاء الاعتماد"><value>Unapprove</value></data><data name="✓ معتمد"><value>✓ Approved</value></data><data name="هل تريد اعتماد هذا الطلب؟"><value>Approve this request?</value></data><data name="هل تريد إلغاء اعتماد هذا الطلب؟"><value>Unapprove this request?</value></data><data name="هل تريد حذف هذا الطلب نهائياً؟ لا يمكن التراجع."><value>Delete this request permanently? This cannot be undone.</value></data><data name="هل تريد حذف حملة &quot;{0}&quot; نهائياً؟ لا يمكن التراجع."><value>Delete campaign "{0}" permanently? This cannot be undone.</value></data><data name="كل حالات الاعتماد"><value>All Approval Statuses</value></data><data name="لم يتم إنشاء أي حملة شراء جماعي بعد."><value>No group buying campaigns have been created yet.</value></data><data name="تم إرسال طلبك بنجاح. بانتظار موافقة الإدارة قبل ظهوره للمصنّعين."><value>Your request has been submitted successfully. Awaiting admin approval before it becomes visible to manufacturers.</value></data>
+  <data name="السوق" xml:space="preserve"><value>Marketplace</value></data>
+  <data name="{0} منتج متاح" xml:space="preserve"><value>{0} products available</value></data>
+  <data name="ابحث عن منتج..." xml:space="preserve"><value>Search products...</value></data>
+  <data name="كل الفئات" xml:space="preserve"><value>All Categories</value></data>
+  <data name="بحث" xml:space="preserve"><value>Search</value></data>
+  <data name="لا توجد منتجات" xml:space="preserve"><value>No products found</value></data>
+  <data name="لم يتم إضافة أي منتج إلى السوق بعد." xml:space="preserve"><value>No products have been added to the marketplace yet.</value></data>
+  <data name="{0} منتج" xml:space="preserve"><value>{0} products</value></data>
+  <data name="إدارة المنتجات" xml:space="preserve"><value>Manage Products</value></data>
+  <data name="إضافة منتج" xml:space="preserve"><value>Add Product</value></data>
+  <data name="إضافة منتج جديد" xml:space="preserve"><value>Add New Product</value></data>
+  <data name="اسم المنتج" xml:space="preserve"><value>Product Name</value></data>
+  <data name="الوصف" xml:space="preserve"><value>Description</value></data>
+  <data name="السعر (د.أ)" xml:space="preserve"><value>Price (JOD)</value></data>
+  <data name="المخزون" xml:space="preserve"><value>Stock</value></data>
+  <data name="الفئة" xml:space="preserve"><value>Category</value></data>
+  <data name="صورة المنتج" xml:space="preserve"><value>Product Image</value></data>
+  <data name="إضافة المنتج" xml:space="preserve"><value>Add Product</value></data>
+  <data name="حفظ التعديلات" xml:space="preserve"><value>Save Changes</value></data>
+  <data name="الصورة الحالية" xml:space="preserve"><value>Current image</value></data>
+  <data name="نشط (ظاهر في السوق)" xml:space="preserve"><value>Active (visible in marketplace)</value></data>
+  <data name="← العودة للسوق" xml:space="preserve"><value>← Back to Marketplace</value></data>
+  <data name="معلومات البائع" xml:space="preserve"><value>Seller Info</value></data>
+  <data name="المنتج مقدم من إدارة Jo Maker. للتواصل:" xml:space="preserve"><value>Product listed by Jo Maker Admin. Contact:</value></data>
+  <data name="عرض الورشة" xml:space="preserve"><value>View Workshop</value></data>
+  <data name="المتوفر" xml:space="preserve"><value>In Stock</value></data>
+  <data name="التاريخ" xml:space="preserve"><value>Date</value></data>
+  <data name="متوفر" xml:space="preserve"><value>available</value></data>
+  <data name="إدارة" xml:space="preserve"><value>Admin</value></data>
+  <data name="مصنّعين" xml:space="preserve"><value>Manufacturers</value></data>
+  <data name="الكل" xml:space="preserve"><value>All</value></data>
+  <data name="نشاط" xml:space="preserve"><value>Active</value></data>
+  <data name="معطل" xml:space="preserve"><value>Inactive</value></data>
+  <data name="تعديل المنتج" xml:space="preserve"><value>Edit Product</value></data>
+  <data name="هل تريد حذف المنتج &quot;{0}&quot;؟" xml:space="preserve"><value>Delete product "{0}"?</value></data>
+  <data name="تم إضافة المنتج &quot;{0}&quot; بنجاح." xml:space="preserve"><value>Product "{0}" added successfully.</value></data>
+  <data name="تم تعديل المنتج &quot;{0}&quot; بنجاح." xml:space="preserve"><value>Product "{0}" updated successfully.</value></data>
+  <data name="تم حذف المنتج &quot;{0}&quot; بنجاح." xml:space="preserve"><value>Product "{0}" deleted successfully.</value></data>
+  <data name="منتجاتي" xml:space="preserve"><value>My Products</value></data>
+  <data name="لم تضف أي منتج بعد. ابدأ بإضافة منتجاتك للسوق." xml:space="preserve"><value>You haven't added any products yet. Start by listing your products.</value></data>
+  <data name="السوق - المنتجات" xml:space="preserve"><value>Marketplace - Products</value></data>
+  <data name="إدارة الطلبات" xml:space="preserve"><value>Manage Requests</value></data>
+  <data name="عرض الطلبات" xml:space="preserve"><value>View Requests</value></data>
+  <data name="المنتجات" xml:space="preserve"><value>Products</value></data>
+  <data name="ClickToUpload_Change" xml:space="preserve"><value>Click to change image</value></data>
+  <data name="بانتظار الاعتماد" xml:space="preserve"><value>Pending Approval</value></data>
+</root>

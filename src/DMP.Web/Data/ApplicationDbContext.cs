@@ -22,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Notification>         Notifications         => Set<Notification>();
     public DbSet<OrderUpdate>          OrderUpdates          => Set<OrderUpdate>();
     public DbSet<PortfolioItem>        PortfolioItems        => Set<PortfolioItem>();
+    public DbSet<Product>              Products              => Set<Product>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -141,5 +142,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .Property(p => p.DepositAmount).HasPrecision(18, 2);
         builder.Entity<CampaignParticipant>()
             .Property(p => p.RemainingAmount).HasPrecision(18, 2);
+
+        builder.Entity<Product>()
+            .HasOne(p => p.SellerUser)
+            .WithMany()
+            .HasForeignKey(p => p.SellerUserId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired(false);
+
+        builder.Entity<Product>()
+            .HasOne(p => p.Manufacturer)
+            .WithMany()
+            .HasForeignKey(p => p.ManufacturerId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired(false);
+
+        builder.Entity<Product>()
+            .Property(p => p.Price).HasPrecision(18, 2);
     }
 }

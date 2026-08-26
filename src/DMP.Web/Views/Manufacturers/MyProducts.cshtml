@@ -1,0 +1,87 @@
+@model List<Product>
+@{
+    ViewData["Title"] = T["منتجاتي"];
+}
+
+<div class="page-header">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+            <h1>@T["منتجاتي"]</h1>
+            <p style="margin:0;color:var(--steel)">@T["{0} منتج", Model.Count]</p>
+        </div>
+        <a asp-action="CreateProduct" class="btn btn-primary">@T["إضافة منتج"]</a>
+    </div>
+</div>
+
+<div class="container section">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">📦</div>
+            <h3>@T["لا توجد منتجات"]</h3>
+            <p>@T["لم تضف أي منتج بعد. ابدأ بإضافة منتجاتك للسوق."]</p>
+            <a asp-action="CreateProduct" class="btn btn-primary" style="margin-top:12px">@T["إضافة منتج"]</a>
+        </div>
+    }
+    else
+    {
+        <div class="panel" style="padding:0;overflow:hidden">
+            <table style="width:100%;border-collapse:collapse">
+                <thead>
+                    <tr style="background:var(--paper);border-bottom:2px solid var(--line)">
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">#</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["المنتج"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["الفئة"]</th>
+                        <th style="padding:12px 16px;text-align:end;font-size:.85rem;color:var(--steel)">@T["السعر"]</th>
+                        <th style="padding:12px 16px;text-align:center;font-size:.85rem;color:var(--steel)">@T["المخزون"]</th>
+                        <th style="padding:12px 16px;text-align:center;font-size:.85rem;color:var(--steel)">@T["الحالة"]</th>
+                        <th style="padding:12px 16px;text-align:start;font-size:.85rem;color:var(--steel)">@T["إجراء"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr style="border-bottom:1px solid var(--line)">
+                            <td style="padding:12px 16px;color:var(--steel);font-size:.85rem">#@p.Id</td>
+                            <td style="padding:12px 16px">
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    @if (!string.IsNullOrEmpty(p.ImagePath))
+                                    {
+                                        <img src="@p.ImagePath" style="width:40px;height:40px;border-radius:8px;object-fit:cover" />
+                                    }
+                                    <span style="font-weight:600">@p.Name</span>
+                                </div>
+                            </td>
+                            <td style="padding:12px 16px;font-size:.85rem">@p.Category.ToDisplay()</td>
+                            <td style="padding:12px 16px;text-align:end;font-weight:700;color:var(--primary)">@T["{0} د.أ", p.Price.ToString("N2")]</td>
+                            <td style="padding:12px 16px;text-align:center">@p.Stock</td>
+                            <td style="padding:12px 16px;text-align:center">
+                                @if (p.IsActive)
+                                {
+                                    <span style="color:var(--green);font-weight:600;font-size:.85rem">● @T["نشط"]</span>
+                                }
+                                else
+                                {
+                                    <span style="color:var(--steel);font-size:.85rem">● @T["معطل"]</span>
+                                }
+                            </td>
+                            <td style="padding:12px 16px">
+                                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@p.Id"
+                                       class="btn btn-ghost btn-sm">@T["عرض"]</a>
+                                    <a asp-action="EditProduct" asp-route-id="@p.Id"
+                                       class="btn btn-outline btn-sm">@T["تعديل"]</a>
+                                    <form asp-action="DeleteProduct" asp-route-id="@p.Id" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('@T["هل تريد حذف المنتج \"{0}\"؟", p.Name]')">@T["🗑 حذف"]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -87,6 +87,9 @@ public static class SeedData
 
         // ── Suppliers ─────────────────────────────────────────────
         await EnsureSuppliers(db);
+
+        // ── Marketplace Products ──────────────────────────────────
+        await EnsureProducts(db, userManager);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -837,5 +840,84 @@ public static class SeedData
         var result = await um.CreateAsync(user, password);
         if (result.Succeeded)
             await um.AddToRoleAsync(user, role);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    private static async Task EnsureProducts(
+        ApplicationDbContext db,
+        UserManager<ApplicationUser> um)
+    {
+        if (await db.Products.AnyAsync()) return;
+
+        var admin = await um.FindByEmailAsync("admin@dmp.jo");
+        var manufacturers = await db.Manufacturers.ToListAsync();
+
+        var products = new List<Product>
+        {
+            new()
+            {
+                Name = "خيط PLA للطباعة ثلاثية الأبعاد — 1 كجم",
+                Description = "خيط PLA عالي الجودة للطباعة ثلاثية الأبعاد. قابل للتحلل بيئياً، مناسب للمبتدئين والمحترفين. قطر 1.75 مم، ت tolerance ±0.03 مم. متوفر بعدة ألوان.",
+                Price = 12.50m,
+                Category = ProductCategory.Printing3D,
+                SellerType = SellerType.Admin,
+                SellerUserId = admin?.Id,
+                Stock = 100,
+                IsActive = true
+            },
+            new()
+            {
+                Name = "لوح أكريليك شفاف 3 مم",
+                Description = "لوح أكريليك شفاف بسماكة 3 مم، مناسب للcuts بالليزر والإكسسوارات. مقاس 60×40 سم. سطح مقاوم للخدش.",
+                Price = 8.00m,
+                Category = ProductCategory.Acrylic,
+                SellerType = SellerType.Admin,
+                SellerUserId = admin?.Id,
+                Stock = 50,
+                IsActive = true
+            },
+            new()
+            {
+                Name = "لوحة خشب خيزران 5 مم",
+                Description = "لوحة خشب خيزران طبيعي 5 مم. مناسبة للcuts بالليزر وCNC. مقاس 40×30 سم.",
+                Price = 6.75m,
+                Category = ProductCategory.Woodwork,
+                SellerType = SellerType.Admin,
+                SellerUserId = admin?.Id,
+                Stock = 30,
+                IsActive = true
+            },
+            new()
+            {
+                Name = "قضيب ألمنيوم 6061 — 1 متر",
+                Description = "قضيب ألمنيوم صلب 6061، مقاس 10×10 مم. مناسب لمشاريع CNC والأتمتة.",
+                Price = 4.50m,
+                Category = ProductCategory.MetalWork,
+                SellerType = SellerType.Admin,
+                SellerUserId = admin?.Id,
+                Stock = 80,
+                IsActive = true
+            }
+        };
+
+        // Add manufacturer products
+        foreach (var m in manufacturers.Take(2))
+        {
+            products.Add(new Product
+            {
+                Name = $"نموذج PCB مخصص — {m.WorkshopName}",
+                Description = $"تصنيع لوحات PCB بروتوتايب بتقنية SMT. من ورشة {m.WorkshopName}. يشمل التصميم والتركيب.",
+                Price = 25.00m,
+                Category = ProductCategory.Electronics,
+                SellerType = SellerType.Manufacturer,
+                SellerUserId = m.UserId,
+                ManufacturerId = m.Id,
+                Stock = 20,
+                IsActive = true
+            });
+        }
+
+        db.Products.AddRange(products);
+        await db.SaveChangesAsync();
     }
 }
