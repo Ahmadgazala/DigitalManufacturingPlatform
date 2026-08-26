@@ -112,7 +112,35 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync();
+    await db.Database.EnsureCreatedAsync();
+
+    // EnsureCreated won't add new tables to an existing DB.
+    // Manually create Products table if it doesn't exist.
+    var conn = db.Database.GetDbConnection();
+    await conn.OpenAsync();
+    using var cmd = conn.CreateCommand();
+    cmd.CommandText = @"
+        CREATE TABLE IF NOT EXISTS ""Products"" (
+            ""Id"" SERIAL PRIMARY KEY,
+            ""Name"" VARCHAR(200) NOT NULL,
+            ""Description"" VARCHAR(2000),
+            ""Price"" NUMERIC(18,2) NOT NULL,
+            ""ImagePath"" VARCHAR(200),
+            ""Category"" INTEGER NOT NULL,
+            ""SellerType"" INTEGER NOT NULL,
+            ""SellerUserId"" TEXT,
+            ""ManufacturerId"" INTEGER,
+            ""IsActive"" BOOLEAN NOT NULL DEFAULT TRUE,
+            ""Stock"" INTEGER NOT NULL DEFAULT 0,
+            ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            CONSTRAINT ""FK_Products_AspNetUsers_SellerUserId"" FOREIGN KEY (""SellerUserId"") REFERENCES ""AspNetUsers""(""Id""),
+            CONSTRAINT ""FK_Products_Manufacturers_ManufacturerId"" FOREIGN KEY (""ManufacturerId"") REFERENCES ""Manufacturers""(""Id"")
+        );
+        CREATE INDEX IF NOT EXISTS ""IX_Products_SellerUserId"" ON ""Products"" (""SellerUserId"");
+        CREATE INDEX IF NOT EXISTS ""IX_Products_ManufacturerId"" ON ""Products"" (""ManufacturerId"");
+    ";
+    await cmd.ExecuteNonQueryAsync();
+    await conn.CloseAsync();
 
     await SeedData.InitializeAsync(scope.ServiceProvider);
 }
