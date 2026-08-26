@@ -109,40 +109,54 @@ builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+for (int attempt = 1; attempt <= 5; attempt++)
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.EnsureCreatedAsync();
+    try
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await db.Database.EnsureCreatedAsync();
 
-    // EnsureCreated won't add new tables to an existing DB.
-    // Manually create Products table if it doesn't exist.
-    var conn = db.Database.GetDbConnection();
-    await conn.OpenAsync();
-    using var cmd = conn.CreateCommand();
-    cmd.CommandText = @"
-        CREATE TABLE IF NOT EXISTS ""Products"" (
-            ""Id"" SERIAL PRIMARY KEY,
-            ""Name"" VARCHAR(200) NOT NULL,
-            ""Description"" VARCHAR(2000),
-            ""Price"" NUMERIC(18,2) NOT NULL,
-            ""ImagePath"" VARCHAR(200),
-            ""Category"" INTEGER NOT NULL,
-            ""SellerType"" INTEGER NOT NULL,
-            ""SellerUserId"" TEXT,
-            ""ManufacturerId"" INTEGER,
-            ""IsActive"" BOOLEAN NOT NULL DEFAULT TRUE,
-            ""Stock"" INTEGER NOT NULL DEFAULT 0,
-            ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            CONSTRAINT ""FK_Products_AspNetUsers_SellerUserId"" FOREIGN KEY (""SellerUserId"") REFERENCES ""AspNetUsers""(""Id""),
-            CONSTRAINT ""FK_Products_Manufacturers_ManufacturerId"" FOREIGN KEY (""ManufacturerId"") REFERENCES ""Manufacturers""(""Id"")
-        );
-        CREATE INDEX IF NOT EXISTS ""IX_Products_SellerUserId"" ON ""Products"" (""SellerUserId"");
-        CREATE INDEX IF NOT EXISTS ""IX_Products_ManufacturerId"" ON ""Products"" (""ManufacturerId"");
-    ";
-    await cmd.ExecuteNonQueryAsync();
-    await conn.CloseAsync();
+            // EnsureCreated won't add new tables to an existing DB.
+            // Manually create Products table if it doesn't exist.
+            var conn = db.Database.GetDbConnection();
+            await conn.OpenAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                CREATE TABLE IF NOT EXISTS ""Products"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""Name"" VARCHAR(200) NOT NULL,
+                    ""Description"" VARCHAR(2000),
+                    ""Price"" NUMERIC(18,2) NOT NULL,
+                    ""ImagePath"" VARCHAR(200),
+                    ""Category"" INTEGER NOT NULL,
+                    ""SellerType"" INTEGER NOT NULL,
+                    ""SellerUserId"" TEXT,
+                    ""ManufacturerId"" INTEGER,
+                    ""IsActive"" BOOLEAN NOT NULL DEFAULT TRUE,
+                    ""Stock"" INTEGER NOT NULL DEFAULT 0,
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    CONSTRAINT ""FK_Products_AspNetUsers_SellerUserId"" FOREIGN KEY (""SellerUserId"") REFERENCES ""AspNetUsers""(""Id""),
+                    CONSTRAINT ""FK_Products_Manufacturers_ManufacturerId"" FOREIGN KEY (""ManufacturerId"") REFERENCES ""Manufacturers""(""Id"")
+                );
+                CREATE INDEX IF NOT EXISTS ""IX_Products_SellerUserId"" ON ""Products"" (""SellerUserId"");
+                CREATE INDEX IF NOT EXISTS ""IX_Products_ManufacturerId"" ON ""Products"" (""ManufacturerId"");
+            ";
+            await cmd.ExecuteNonQueryAsync();
+            await conn.CloseAsync();
 
-    await SeedData.InitializeAsync(scope.ServiceProvider);
+            await SeedData.InitializeAsync(scope.ServiceProvider);
+        }
+        break;
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "DB init attempt {Attempt} failed, retrying...", attempt);
+        if (attempt == 5) throw;
+        await Task.Delay(attempt * 5000);
+    }
 }
 
 if (!app.Environment.IsDevelopment())
