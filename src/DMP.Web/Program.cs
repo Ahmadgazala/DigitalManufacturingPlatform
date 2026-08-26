@@ -29,6 +29,14 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     WebRootPath = webRootPath
 });
 
+// Disable config file watchers (inotify) to avoid hitting Render's per-process limit
+builder.Configuration.Sources.Clear();
+var env = builder.Environment;
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+    .AddEnvironmentVariables();
+
 // Bind to Render's PORT env var (or fall back to appsettings / 5000)
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
