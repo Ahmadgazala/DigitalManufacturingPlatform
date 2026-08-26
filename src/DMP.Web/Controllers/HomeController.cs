@@ -19,20 +19,28 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var latestManufacturers = await _db.Manufacturers
-            .Where(m => m.IsApproved)
-            .OrderByDescending(m => m.CreatedAt)
-            .Take(6)
-            .ToListAsync();
+        try
+        {
+            var latestManufacturers = await _db.Manufacturers
+                .Where(m => m.IsApproved)
+                .OrderByDescending(m => m.CreatedAt)
+                .Take(6)
+                .ToListAsync();
 
-        var activeCampaigns = await _db.GroupBuyingCampaigns
-            .Where(c => c.Status == CampaignStatus.Active && c.DeadlineDate > DateTime.UtcNow)
-            .OrderByDescending(c => c.CreatedAt)
-            .Take(3)
-            .ToListAsync();
+            var activeCampaigns = await _db.GroupBuyingCampaigns
+                .Where(c => c.Status == CampaignStatus.Active && c.DeadlineDate > DateTime.UtcNow)
+                .OrderByDescending(c => c.CreatedAt)
+                .Take(3)
+                .ToListAsync();
 
-        ViewBag.LatestManufacturers = latestManufacturers;
-        ViewBag.ActiveCampaigns = activeCampaigns;
+            ViewBag.LatestManufacturers = latestManufacturers;
+            ViewBag.ActiveCampaigns = activeCampaigns;
+        }
+        catch
+        {
+            ViewBag.LatestManufacturers = new List<Manufacturer>();
+            ViewBag.ActiveCampaigns = new List<GroupBuyingCampaign>();
+        }
 
         return View();
     }
