@@ -112,8 +112,6 @@ builder.Services.AddMvc()
     });
 
 builder.Services.AddScoped<IFileService, DMP.Web.Services.FileService>();
-builder.Services.AddScoped<IExcelService, ExcelService>();
-builder.Services.AddHttpClient<IWhatsAppService, WhatsAppService>();
 
 var app = builder.Build();
 

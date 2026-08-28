@@ -89,11 +89,7 @@
                     <li><a asp-controller="Manufacturers" asp-action="MyProducts">@T["منتجاتي"]</a></li>
                 }
             }
-            @if (User.IsInRole("Admin"))
-            {
-                <li><a asp-controller="WhatsApp" asp-action="Index">WhatsApp</a></li>
-            }
-        </ul>
+            </ul>
 
         <div class="nav-actions">
             @if (User.Identity?.IsAuthenticated == true)
