@@ -199,6 +199,19 @@ _ = Task.Run(async () =>
                     ""Data"" BYTEA NOT NULL,
                     ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW()
                 );
+
+                CREATE TABLE IF NOT EXISTS ""ProductReviews"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""ProductId"" INTEGER NOT NULL,
+                    ""CustomerUserId"" TEXT NOT NULL,
+                    ""CustomerName"" VARCHAR(200) NOT NULL,
+                    ""Rating"" INTEGER NOT NULL,
+                    ""Comment"" VARCHAR(1000),
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    CONSTRAINT ""FK_ProductReviews_Products_ProductId"" FOREIGN KEY (""ProductId"") REFERENCES ""Products""(""Id"") ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS ""IX_ProductReviews_ProductId"" ON ""ProductReviews"" (""ProductId"");
+                CREATE UNIQUE INDEX IF NOT EXISTS ""IX_ProductReviews_ProductId_CustomerUserId"" ON ""ProductReviews"" (""ProductId"", ""CustomerUserId"");
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

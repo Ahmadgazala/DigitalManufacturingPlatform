@@ -27,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Order>                Orders                => Set<Order>();
     public DbSet<OrderItem>            OrderItems            => Set<OrderItem>();
     public DbSet<StoredFile>           StoredFiles           => Set<StoredFile>();
+    public DbSet<ProductReview>       ProductReviews        => Set<ProductReview>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -204,5 +205,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         builder.Entity<StoredFile>()
             .Property(f => f.Id).HasMaxLength(40);
+
+        builder.Entity<ProductReview>()
+            .HasOne(r => r.Product)
+            .WithMany(p => p.Reviews)
+            .HasForeignKey(r => r.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProductReview>()
+            .HasOne(r => r.Customer)
+            .WithMany()
+            .HasForeignKey(r => r.CustomerUserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<ProductReview>()
+            .HasIndex(r => new { r.ProductId, r.CustomerUserId })
+            .IsUnique();
     }
 }

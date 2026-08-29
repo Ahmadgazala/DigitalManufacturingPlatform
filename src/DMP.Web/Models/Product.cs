@@ -36,6 +36,10 @@ public class Product
 
     public ApplicationUser? SellerUser { get; set; }
     public Manufacturer? Manufacturer { get; set; }
+
+    public List<ProductReview> Reviews { get; set; } = new();
+    public int ReviewsCount => Reviews.Count;
+    public double AverageRating => Reviews.Count == 0 ? 0 : Math.Round(Reviews.Average(r => r.Rating), 1);
 }
 
 public enum ProductCategory

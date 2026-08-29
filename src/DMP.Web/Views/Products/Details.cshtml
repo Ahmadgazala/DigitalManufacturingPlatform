@@ -41,6 +41,17 @@
                 @T["{0} د.أ", Model.Price.ToString("N2")]
             </div>
 
+            @if (Model.ReviewsCount > 0)
+            {
+                <div class="star-rating" style="margin-bottom:16px;font-size:1rem">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="@(i <= (int)Math.Round(Model.AverageRating) ? "star filled" : "star")">&#9733;</span>
+                    }
+                    <span style="color:var(--steel)">@Model.AverageRating.ToString("0.0") — @T["{0} تقييم", Model.ReviewsCount]</span>
+                </div>
+            }
+
             <div style="display:flex;gap:16px;margin-bottom:20px;font-size:.9rem">
                 <div>
                     <span style="color:var(--steel)">@T["المتوفر"]: </span>
@@ -116,4 +127,85 @@
             </div>
         </div>
     </div>
+
+    @if (Model.Reviews.Count > 0 || User.Identity.IsAuthenticated)
+    {
+        <div class="panel" style="margin-top:32px">
+            <h2 style="font-size:1.1rem;font-weight:800;margin-bottom:16px">@T["تقييمات المنتج"]</h2>
+
+            @if (Model.Reviews.Count > 0)
+            {
+                @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                {
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong>@review.CustomerName</strong>
+                            <div class="star-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="@(i <= review.Rating ? "star filled" : "star")">&#9733;</span>
+                                }
+                            </div>
+                            <span class="review-date">@review.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(review.Comment))
+                        {
+                            <p>@review.Comment</p>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="color:var(--steel)">@T["لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!"]</p>
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:20px">
+                    <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px">@T["AddReview"]</h3>
+                    <form asp-controller="Products" asp-action="AddReview" asp-route-id="@Model.Id" method="post" style="max-width:520px">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>@T["Rating"]</label>
+                            <div class="star-rating-input" id="starInput">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="star-btn" data-value="@i">&#9733;</span>
+                                }
+                            </div>
+                            <input type="hidden" name="Rating" id="ratingValue" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Comment">@T["Comment"]</label>
+                            <textarea name="Comment" id="Comment" class="form-control" rows="3" placeholder="@T["WriteYourReview"]"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">@T["SubmitReview"]</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <p style="font-size:.9rem;color:var(--steel);margin-top:16px">
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Products/Details/@Model.Id">@T["سجّل الدخول لتقييم هذا المنتج"]</a>
+                </p>
+            }
+        </div>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        var stars = document.querySelectorAll('#starInput .star-btn');
+        var input = document.getElementById('ratingValue');
+        stars.forEach(function (star) {
+            star.addEventListener('click', function () {
+                var val = parseInt(star.getAttribute('data-value'));
+                input.value = val;
+                stars.forEach(function (s, idx) {
+                    s.classList.toggle('filled', idx < val);
+                });
+            });
+        });
+    </script>
+}

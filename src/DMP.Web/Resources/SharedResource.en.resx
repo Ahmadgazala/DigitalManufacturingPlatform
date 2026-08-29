@@ -2020,4 +2020,10 @@
   <data name="تم رفض الدفع لطلب #{0}." xml:space="preserve"><value>Payment rejected for order #{0}.</value></data>
   <data name="تم تأكيد دفع طلبك #{0}. شكراً لثقتك بنا!" xml:space="preserve"><value>Payment for order #{0} confirmed. Thank you for trusting us!</value></data>
   <data name="تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع إيصال صحيح." xml:space="preserve"><value>Payment receipt for order #{0} was rejected. Please pay again and upload a correct receipt.</value></data>
+  <data name="تقييمات المنتج" xml:space="preserve"><value>Product reviews</value></data>
+  <data name="لا يمكنك تقييم منتجك الخاص." xml:space="preserve"><value>You cannot rate your own product.</value></data>
+  <data name="لقد قيّمت هذا المنتج من قبل." xml:space="preserve"><value>You have already rated this product.</value></data>
+  <data name="{0} تقييم" xml:space="preserve"><value>{0} reviews</value></data>
+  <data name="لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!" xml:space="preserve"><value>No reviews yet. Be the first to rate this product!</value></data>
+  <data name="سجّل الدخول لتقييم هذا المنتج" xml:space="preserve"><value>Log in to rate this product</value></data>
 </root>

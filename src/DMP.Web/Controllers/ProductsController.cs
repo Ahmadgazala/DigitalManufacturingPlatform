@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -9,11 +11,13 @@ namespace DMP.Web.Controllers;
 public class ProductsController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IStringLocalizer<SharedResource> _T;
 
-    public ProductsController(ApplicationDbContext db, IStringLocalizer<SharedResource> T)
+    public ProductsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, IStringLocalizer<SharedResource> T)
     {
         _db = db;
+        _userManager = userManager;
         _T = T;
     }
 
@@ -23,6 +27,7 @@ public class ProductsController : Controller
         var query = _db.Products
             .Include(p => p.SellerUser)
             .Include(p => p.Manufacturer)
+            .Include(p => p.Reviews)
             .Where(p => p.IsActive)
             .AsQueryable();
 
@@ -53,11 +58,60 @@ public class ProductsController : Controller
         var product = await _db.Products
             .Include(p => p.SellerUser)
             .Include(p => p.Manufacturer)
+            .Include(p => p.Reviews)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (product == null)
             return NotFound();
 
         return View(product);
+    }
+
+    // POST: /Products/AddReview/5
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddReview(int id, int rating, string? comment)
+    {
+        var userId = _userManager.GetUserId(User)!;
+
+        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null) return NotFound();
+
+        // منع صاحب المنتج من تقييم منتجه
+        if (product.SellerUserId == userId)
+        {
+            TempData["Error"] = _T["لا يمكنك تقييم منتجك الخاص."].Value;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // منع التقييم المتكرر
+        var alreadyReviewed = await _db.ProductReviews.AnyAsync(r => r.ProductId == id && r.CustomerUserId == userId);
+        if (alreadyReviewed)
+        {
+            TempData["Error"] = _T["لقد قيّمت هذا المنتج من قبل."].Value;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        if (rating < 1 || rating > 5)
+        {
+            TempData["Error"] = _T["التقييم يجب أن يكون بين 1 و 5."].Value;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+
+        _db.ProductReviews.Add(new ProductReview
+        {
+            ProductId      = id,
+            CustomerUserId = userId,
+            CustomerName   = user?.FullName ?? _T["مستخدم"].Value,
+            Rating         = rating,
+            Comment        = comment
+        });
+
+        await _db.SaveChangesAsync();
+        TempData["Success"] = _T["شكراً! تم إضافة تقييمك."].Value;
+        return RedirectToAction(nameof(Details), new { id });
     }
 }
