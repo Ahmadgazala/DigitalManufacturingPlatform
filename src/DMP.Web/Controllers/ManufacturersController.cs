@@ -259,13 +259,13 @@ public class ManufacturersController : Controller
 
             if (vm.ProfilePhoto != null)
             {
-                _fileService.Delete(manufacturer.ProfilePhotoPath);
+                await _fileService.DeleteAsync(manufacturer.ProfilePhotoPath);
                 manufacturer.ProfilePhotoPath = await _fileService.SaveImageAsync(vm.ProfilePhoto, "profiles");
             }
 
             if (vm.CoverPhoto != null)
             {
-                _fileService.Delete(manufacturer.CoverPhotoPath);
+                await _fileService.DeleteAsync(manufacturer.CoverPhotoPath);
                 manufacturer.CoverPhotoPath = await _fileService.SaveImageAsync(vm.CoverPhoto, "covers");
             }
 
@@ -341,7 +341,7 @@ public class ManufacturersController : Controller
         if (photo == null)
             return NotFound();
 
-        _fileService.Delete(photo.FilePath);
+        await _fileService.DeleteAsync(photo.FilePath);
         _db.WorkshopPhotos.Remove(photo);
         await _db.SaveChangesAsync();
 
@@ -494,7 +494,7 @@ public class ManufacturersController : Controller
         if (imageFile != null)
         {
             if (!string.IsNullOrEmpty(product.ImagePath))
-                _fileService.Delete(product.ImagePath);
+                await _fileService.DeleteAsync(product.ImagePath);
             product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
         }
 
@@ -515,7 +515,7 @@ public class ManufacturersController : Controller
         if (product == null) return NotFound();
 
         if (!string.IsNullOrEmpty(product.ImagePath))
-            _fileService.Delete(product.ImagePath);
+            await _fileService.DeleteAsync(product.ImagePath);
 
         _db.Products.Remove(product);
         await _db.SaveChangesAsync();

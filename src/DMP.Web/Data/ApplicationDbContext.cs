@@ -26,6 +26,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CartItem>             CartItems             => Set<CartItem>();
     public DbSet<Order>                Orders                => Set<Order>();
     public DbSet<OrderItem>            OrderItems            => Set<OrderItem>();
+    public DbSet<StoredFile>           StoredFiles           => Set<StoredFile>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -200,5 +201,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         builder.Entity<OrderItem>()
             .Property(i => i.UnitPrice).HasPrecision(18, 2);
+
+        builder.Entity<StoredFile>()
+            .Property(f => f.Id).HasMaxLength(40);
     }
 }

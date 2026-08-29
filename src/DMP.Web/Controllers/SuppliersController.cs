@@ -147,7 +147,7 @@ public class SuppliersController : Controller
             {
                 if (logo != null && logo.Length > 0)
                 {
-                    _fileService.Delete(supplier.LogoPath);
+                    await _fileService.DeleteAsync(supplier.LogoPath);
                     supplier.LogoPath = await _fileService.SaveImageAsync(logo, "suppliers");
                 }
 
@@ -182,7 +182,7 @@ public class SuppliersController : Controller
         if (supplier == null)
             return NotFound();
 
-        _fileService.Delete(supplier.LogoPath);
+        await _fileService.DeleteAsync(supplier.LogoPath);
         _db.Suppliers.Remove(supplier);
         await _db.SaveChangesAsync();
 

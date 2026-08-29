@@ -15,20 +15,17 @@ public class GroupBuyingController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
-    private readonly IWebHostEnvironment _env;
     private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public GroupBuyingController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
         IFileService fileService,
-        IWebHostEnvironment env,
         Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
         _fileService = fileService;
-        _env = env;
         _T = T;
     }
 
@@ -261,15 +258,15 @@ public class GroupBuyingController : Controller
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
-        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "receipts");
-        Directory.CreateDirectory(uploadsDir);
-        var fileName = $"deposit_{campaignId}_{participant.Id}_{DateTime.UtcNow:yyyyMMddHHmmss}{ext}";
-        var filePath = Path.Combine(uploadsDir, fileName);
-        using (var stream = new FileStream(filePath, FileMode.Create))
-            await receiptImage.CopyToAsync(stream);
+        var saved = await _fileService.SaveFileAsync(receiptImage, "receipts");
+        if (saved == null)
+        {
+            TempData["Error"] = _T["تعذر حفظ الإيصال. تحقق من حجم وصيغة الملف."].Value;
+            return RedirectToAction(nameof(Details), new { id = campaignId });
+        }
 
         var depositAmount = Math.Round(campaign.GroupPrice * participant.Quantity / 2, 2);
-        participant.DepositReceiptPath = $"/uploads/receipts/{fileName}";
+        participant.DepositReceiptPath = saved;
         participant.DepositAmount      = depositAmount;
         participant.PaymentStatus      = ParticipantPaymentStatus.DepositUnderReview;
 
@@ -331,16 +328,16 @@ public class GroupBuyingController : Controller
             return RedirectToAction(nameof(Details), new { id = campaignId });
         }
 
-        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "receipts");
-        Directory.CreateDirectory(uploadsDir);
-        var fileName = $"remaining_{campaignId}_{participant.Id}_{DateTime.UtcNow:yyyyMMddHHmmss}{ext}";
-        var filePath = Path.Combine(uploadsDir, fileName);
-        using (var stream = new FileStream(filePath, FileMode.Create))
-            await receiptImage.CopyToAsync(stream);
+        var saved = await _fileService.SaveFileAsync(receiptImage, "receipts");
+        if (saved == null)
+        {
+            TempData["Error"] = _T["تعذر حفظ الإيصال. تحقق من حجم وصيغة الملف."].Value;
+            return RedirectToAction(nameof(Details), new { id = campaignId });
+        }
 
         var totalAmount     = campaign.GroupPrice * participant.Quantity;
         var remainingAmount = Math.Round(totalAmount - (participant.DepositAmount ?? 0), 2);
-        participant.RemainingReceiptPath = $"/uploads/receipts/{fileName}";
+        participant.RemainingReceiptPath = saved;
         participant.RemainingAmount      = remainingAmount;
         participant.PaymentStatus        = ParticipantPaymentStatus.FullUnderReview;
 
@@ -661,7 +658,7 @@ public class GroupBuyingController : Controller
         {
             if (image != null && image.Length > 0)
             {
-                _fileService.Delete(campaign.ImagePath);
+                await _fileService.DeleteAsync(campaign.ImagePath);
                 campaign.ImagePath = await _fileService.SaveImageAsync(image, "campaigns");
             }
 

@@ -1,22 +1,25 @@
+using DMP.Web.Data;
+using DMP.Web.Models;
+
 namespace DMP.Web.Services;
 
 public interface IFileService
 {
     Task<string?> SaveImageAsync(IFormFile? file, string folder);
     Task<string?> SaveFileAsync(IFormFile? file, string folder);
-    void Delete(string? relativePath);
+    Task DeleteAsync(string? url);
 }
 
 public class FileService : IFileService
 {
-    private readonly IWebHostEnvironment _env;
+    private readonly ApplicationDbContext _db;
     private readonly long _maxImageBytes = 5 * 1024 * 1024; // 5 MB
     private readonly long _maxFileBytes  = 20 * 1024 * 1024; // 20 MB
 
     private static readonly string[] AllowedImages = { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
-    private static readonly string[] AllowedFiles  = { ".jpg", ".jpeg", ".png", ".pdf", ".dxf", ".svg", ".stl", ".step", ".stp", ".zip" };
+    private static readonly string[] AllowedFiles  = { ".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf", ".dxf", ".svg", ".stl", ".step", ".stp", ".zip" };
 
-    public FileService(IWebHostEnvironment env) => _env = env;
+    public FileService(ApplicationDbContext db) => _db = db;
 
     public async Task<string?> SaveImageAsync(IFormFile? file, string folder)
     {
@@ -38,19 +41,30 @@ public class FileService : IFileService
 
     private async Task<string> SaveAsync(IFormFile file, string folder)
     {
-        var dir = Path.Combine(_env.WebRootPath, "uploads", folder);
-        Directory.CreateDirectory(dir);
-        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-        var fullPath = Path.Combine(dir, fileName);
-        await using var stream = new FileStream(fullPath, FileMode.Create);
-        await file.CopyToAsync(stream);
-        return $"/uploads/{folder}/{fileName}";
+        var entry = new StoredFile
+        {
+            Folder      = folder,
+            FileName    = Path.GetFileName(file.FileName),
+            ContentType = file.ContentType
+        };
+        await using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        entry.Data = ms.ToArray();
+
+        _db.StoredFiles.Add(entry);
+        await _db.SaveChangesAsync();
+        return $"/files/{entry.Id}";
     }
 
-    public void Delete(string? relativePath)
+    public async Task DeleteAsync(string? url)
     {
-        if (string.IsNullOrEmpty(relativePath)) return;
-        var full = Path.Combine(_env.WebRootPath, relativePath.TrimStart('/'));
-        if (File.Exists(full)) File.Delete(full);
+        if (string.IsNullOrWhiteSpace(url) || !url.StartsWith("/files/")) return;
+        var id = url.Substring("/files/".Length);
+        var file = await _db.StoredFiles.FindAsync(id);
+        if (file != null)
+        {
+            _db.StoredFiles.Remove(file);
+            await _db.SaveChangesAsync();
+        }
     }
 }

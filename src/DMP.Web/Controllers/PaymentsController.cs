@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using DMP.Web.Data;
 using DMP.Web.Models;
+using DMP.Web.Services;
 
 namespace DMP.Web.Controllers;
 
@@ -13,18 +14,18 @@ public class PaymentsController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IWebHostEnvironment _env;
+    private readonly IFileService _fileService;
     private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
 
     public PaymentsController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IWebHostEnvironment env,
+        IFileService fileService,
         Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T)
     {
         _db = db;
         _userManager = userManager;
-        _env = env;
+        _fileService = fileService;
         _T = T;
     }
 
@@ -93,17 +94,15 @@ public class PaymentsController : Controller
         }
 
         // حفظ الصورة
-        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "receipts");
-        Directory.CreateDirectory(uploadsDir);
-
-        var fileName = $"receipt_{requestId}_{DateTime.UtcNow:yyyyMMddHHmmss}{ext}";
-        var filePath = Path.Combine(uploadsDir, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-            await receiptImage.CopyToAsync(stream);
+        var saved = await _fileService.SaveFileAsync(receiptImage, "receipts");
+        if (saved == null)
+        {
+            TempData["Error"] = _T["تعذر حفظ الإيصال. تحقق من حجم وصيغة الملف."].Value;
+            return RedirectToAction("Checkout", new { requestId });
+        }
 
         // تحديث الطلب
-        request.PaymentReceiptPath = $"/uploads/receipts/{fileName}";
+        request.PaymentReceiptPath = saved;
         request.PaymentStatus      = PaymentStatus.UnderReview;
         await _db.SaveChangesAsync();
 

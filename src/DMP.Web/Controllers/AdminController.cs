@@ -445,7 +445,7 @@ public class AdminController : Controller
         if (imageFile != null)
         {
             if (!string.IsNullOrEmpty(product.ImagePath))
-                _fileService.Delete(product.ImagePath);
+                await _fileService.DeleteAsync(product.ImagePath);
             product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
         }
 
@@ -464,7 +464,7 @@ public class AdminController : Controller
         if (product == null) return NotFound();
 
         if (!string.IsNullOrEmpty(product.ImagePath))
-            _fileService.Delete(product.ImagePath);
+            await _fileService.DeleteAsync(product.ImagePath);
 
         _db.Products.Remove(product);
         await _db.SaveChangesAsync();

@@ -190,6 +190,15 @@ _ = Task.Run(async () =>
                 );
                 CREATE INDEX IF NOT EXISTS ""IX_OrderItems_OrderId"" ON ""OrderItems"" (""OrderId"");
                 CREATE INDEX IF NOT EXISTS ""IX_OrderItems_ProductId"" ON ""OrderItems"" (""ProductId"");
+
+                CREATE TABLE IF NOT EXISTS ""StoredFiles"" (
+                    ""Id"" VARCHAR(40) PRIMARY KEY,
+                    ""Folder"" TEXT,
+                    ""FileName"" TEXT,
+                    ""ContentType"" TEXT,
+                    ""Data"" BYTEA NOT NULL,
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                );
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

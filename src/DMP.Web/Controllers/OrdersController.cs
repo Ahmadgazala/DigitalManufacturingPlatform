@@ -14,20 +14,20 @@ public class OrdersController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IWebHostEnvironment _env;
+    private readonly IFileService _fileService;
     private readonly Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> _T;
     private readonly CartService _cart;
 
     public OrdersController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        IWebHostEnvironment env,
+        IFileService fileService,
         Microsoft.Extensions.Localization.IStringLocalizer<DMP.Web.SharedResource> T,
         CartService cart)
     {
         _db = db;
         _userManager = userManager;
-        _env = env;
+        _fileService = fileService;
         _T = T;
         _cart = cart;
     }
@@ -213,16 +213,14 @@ public class OrdersController : Controller
             return RedirectToAction(nameof(Payment), new { id });
         }
 
-        var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "orders");
-        Directory.CreateDirectory(uploadsDir);
+        var saved = await _fileService.SaveFileAsync(receiptImage, "orders");
+        if (saved == null)
+        {
+            TempData["Error"] = _T["تعذر حفظ الإيصال. تحقق من حجم وصيغة الملف."].Value;
+            return RedirectToAction(nameof(Payment), new { id });
+        }
 
-        var fileName = $"order_{order.OrderNumber}_{DateTime.UtcNow:yyyyMMddHHmmss}{ext}";
-        var filePath = Path.Combine(uploadsDir, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-            await receiptImage.CopyToAsync(stream);
-
-        order.PaymentReceiptPath = $"/uploads/orders/{fileName}";
+        order.PaymentReceiptPath = saved;
         order.Status             = OrderStatus.UnderReview;
         await _db.SaveChangesAsync();
 
