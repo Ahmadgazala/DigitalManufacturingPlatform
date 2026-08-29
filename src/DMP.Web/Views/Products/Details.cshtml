@@ -128,9 +128,7 @@
         </div>
     </div>
 
-    @if (Model.Reviews.Count > 0 || User.Identity.IsAuthenticated)
-    {
-        <div class="panel" style="margin-top:32px">
+    <div class="panel" style="margin-top:32px">
             <h2 style="font-size:1.1rem;font-weight:800;margin-bottom:16px">@T["تقييمات المنتج"]</h2>
 
             @if (Model.Reviews.Count > 0)
@@ -190,8 +188,7 @@
                     <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Products/Details/@Model.Id">@T["سجّل الدخول لتقييم هذا المنتج"]</a>
                 </p>
             }
-        </div>
-    }
+    </div>
 </div>
 
 @section Scripts {
