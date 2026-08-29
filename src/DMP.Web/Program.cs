@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Stripe;
 using System.Globalization;
 
 // إيجاد مجلد wwwroot الحقيقي بغض النظر عن مجلد التشغيل (VS أو terminal)
@@ -40,9 +39,6 @@ builder.Configuration
 // Bind to Render's PORT env var (or fall back to appsettings / 5000)
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-// Stripe
-StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // DB — PostgreSQL (Render) or SQLite (local dev)
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -147,6 +143,8 @@ _ = Task.Run(async () =>
                 );
                 CREATE INDEX IF NOT EXISTS ""IX_Products_SellerUserId"" ON ""Products"" (""SellerUserId"");
                 CREATE INDEX IF NOT EXISTS ""IX_Products_ManufacturerId"" ON ""Products"" (""ManufacturerId"");
+
+                DELETE FROM ""Products"" WHERE ""Name"" = 'test number 1' OR ""Name"" = 'filment';
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

@@ -35,11 +35,23 @@ public class HomeController : Controller
 
             ViewBag.LatestManufacturers = latestManufacturers;
             ViewBag.ActiveCampaigns = activeCampaigns;
+
+            ViewBag.ApprovedWorkshops = await _db.Manufacturers.CountAsync(m => m.IsApproved);
+            ViewBag.CityCount = await _db.Manufacturers
+                .Where(m => m.IsApproved && m.City != null && m.City != "")
+                .Select(m => m.City)
+                .Distinct()
+                .CountAsync();
+            ViewBag.CompletedRequests = await _db.ManufacturingRequests
+                .CountAsync(r => r.Status == RequestStatus.Completed);
         }
         catch
         {
             ViewBag.LatestManufacturers = new List<Manufacturer>();
             ViewBag.ActiveCampaigns = new List<GroupBuyingCampaign>();
+            ViewBag.ApprovedWorkshops = 0;
+            ViewBag.CityCount = 0;
+            ViewBag.CompletedRequests = 0;
         }
 
         return View();

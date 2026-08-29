@@ -35,11 +35,11 @@
 
                 <div class="hero-stats">
                     <div>
-                        <div class="hero-stat-num">5+</div>
+                        <div class="hero-stat-num">@(ViewBag.ApprovedWorkshops ?? 0)+</div>
                         <div class="hero-stat-lbl">@T["ورشة معتمدة"]</div>
                     </div>
                     <div>
-                        <div class="hero-stat-num">3</div>
+                        <div class="hero-stat-num">@(ViewBag.CityCount ?? 0)</div>
                         <div class="hero-stat-lbl">@T["مدن أردنية"]</div>
                     </div>
                     <div>
@@ -198,7 +198,7 @@
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                             <span style="color:var(--green-txt);font-size:.72rem;font-weight:700">@T["طلب منجز"]</span>
                         </div>
-                        <div class="hero-floater-num">47</div>
+                        <div class="hero-floater-num">@ViewBag.CompletedRequests ?? 0</div>
                         <div class="hero-floater-lbl">@T["هذا الشهر"]</div>
                     </div>
                     <div class="hero-floater hero-floater-2">
@@ -252,7 +252,7 @@
                     <span class="step-num">3</span>
                 </div>
                 <div class="step-title">@T["اعتمد وادفع بأمان"]</div>
-                <div class="step-desc">@T["اختر المصنّع وادفع عبر Stripe المحمي"]</div>
+                <div class="step-desc">@T["اختر المصنّع وادفع بأمان عبر CliQ"]</div>
             </div>
 
             <!-- Step 4: Receive product -->
@@ -369,7 +369,7 @@
                     </svg>
                 </div>
                 <h3>@T["دفع محمي بالكامل"]</h3>
-                <p>@T["أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر Stripe مع ضمان استرداد."]</p>
+                <p>@T["أموالك محفوظة حتى تستلم طلبك. دفع آمن عبر CliQ مع ضمان استرداد."]</p>
             </div>
 
             <!-- Cell 4: Order tracking -->
