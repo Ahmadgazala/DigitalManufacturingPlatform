@@ -8,6 +8,8 @@
     int totalCampaigns = ViewBag.TotalCampaigns ?? 0;
     int totalSuppliers = ViewBag.TotalSuppliers ?? 0;
     int totalProducts = ViewBag.TotalProducts ?? 0;
+    int totalOrders = ViewBag.TotalOrders ?? 0;
+    int pendingOrders = ViewBag.PendingOrders ?? 0;
 }
 
 <div class="container">
@@ -106,6 +108,18 @@
                 <p>@T["المنتجات"]: <strong>@totalProducts</strong></p>
                 <a asp-controller="Admin" asp-action="Products" class="btn btn-outline">@T["إدارة المنتجات"]</a>
                 <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-primary">@T["إضافة منتج"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>@T["طلبات السوق"]</h3>
+                <p>@T["الطلبات"]: <strong>@totalOrders</strong>
+                    @if (pendingOrders > 0)
+                    {
+                        <span style="color:var(--amber);font-weight:700">(@T["{0} بانتظار المعالجة", pendingOrders])</span>
+                    }
+                </p>
+                <a asp-controller="Admin" asp-action="Orders" class="btn btn-primary">@T["إدارة الطلبات والمدفوعات"]</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,211 @@
+@model Order
+@{
+    ViewData["Title"] = T["الدفع عبر CliQ"];
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>@T["الدفع عبر CliQ"]</h1>
+        <p>@T["أكمل الدفع وارفع صورة الإيصال لتأكيد طلبك"]</p>
+    </div>
+</div>
+
+<div class="container section">
+    <div style="max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">@TempData["Error"]</div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <!-- ملخص الطلب -->
+        <div class="panel">
+            <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                @T["ملخص الطلب"]
+            </h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+                @foreach (var item in Model.Items)
+                {
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                            {
+                                <img src="@item.ImagePath" alt="@item.ProductName" style="width:40px;height:40px;object-fit:cover;border-radius:8px" />
+                            }
+                            <div style="min-width:0">
+                                <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">@item.ProductName</div>
+                                <div style="font-size:.75rem;color:var(--steel)">@item.Quantity × @T["{0} د.أ", item.UnitPrice.ToString("N2")]</div>
+                            </div>
+                        </div>
+                        <span style="font-weight:700;font-size:.85rem">@T["{0} د.أ", (item.UnitPrice * item.Quantity).ToString("N2")]</span>
+                    </div>
+                }
+                <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-sky);padding-top:14px">
+                    <span style="font-size:.95rem;font-weight:700">@T["المبلغ الإجمالي"]</span>
+                    <span style="font-size:1.5rem;font-weight:900;color:var(--sky)">@T["{0} د.أ", Model.TotalAmount.ToString("N2")]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- تعليمات الدفع CliQ -->
+        <div class="cliq-card">
+            <div class="cliq-header">
+                <div class="cliq-logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="cliq-title">@T["الدفع عبر CliQ"]</div>
+                    <div class="cliq-subtitle">@T["خدمة الدفع الفوري الأردنية"]</div>
+                </div>
+            </div>
+
+            <div class="cliq-steps">
+                <div class="cliq-step">
+                    <div class="cliq-step-num">1</div>
+                    <div class="cliq-step-text">@T["افتح تطبيق البنك الخاص بك"]</div>
+                </div>
+                <div class="cliq-step">
+                    <div class="cliq-step-num">2</div>
+                    <div class="cliq-step-text">@T["اختر \"تحويل\" ثم \"CliQ\""]</div>
+                </div>
+                <div class="cliq-step">
+                    <div class="cliq-step-num">3</div>
+                    <div class="cliq-step-text">@T["أدخل رقم CliQ أدناه"]</div>
+                </div>
+                <div class="cliq-step">
+                    <div class="cliq-step-num">4</div>
+                    <div class="cliq-step-text">@T["أدخل المبلغ وأكمل الدفع"]</div>
+                </div>
+            </div>
+
+            <div class="cliq-number-box">
+                <div class="cliq-number-label">@T["رقم CliQ"]</div>
+                <div class="cliq-number" id="cliqNumber">0785131316</div>
+                <button class="cliq-copy-btn" onclick="copyCliQ()" id="copyBtn" type="button">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    @T["نسخ"]
+                </button>
+            </div>
+
+            <div class="cliq-amount-reminder">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                @T["تأكد من إدخال المبلغ الصحيح:"]
+                <strong>@T["{0} د.أ", Model.TotalAmount.ToString("N2")]</strong>
+            </div>
+        </div>
+
+        <!-- رفع إيصال الدفع -->
+        <div class="panel">
+            <h2 style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                @T["ارفع إيصال الدفع"]
+            </h2>
+            <p style="color:var(--text-2);font-size:.875rem;margin-bottom:20px;line-height:1.7">
+                @T["بعد إتمام التحويل، ارفع لقطة شاشة أو صورة إيصال الدفع. سيراجعها المدير ويؤكد طلبك خلال 24 ساعة."]
+            </p>
+
+            <form asp-controller="Orders" asp-action="SubmitReceipt" method="post"
+                  enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('receiptFile').click()">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <div class="uz-text">@T["اضغط لرفع صورة الإيصال"]</div>
+                    <div class="uz-hint">@T["JPG، PNG، PDF — حتى 10 ميغابايت"]</div>
+                    <div class="uz-selected" id="fileLabel" style="display:none"></div>
+                </div>
+                <input type="file" id="receiptFile" name="receiptImage"
+                       accept=".jpg,.jpeg,.png,.webp,.pdf"
+                       style="display:none"
+                       onchange="handleFileSelect(this)" required />
+
+                <div id="previewBox" style="display:none;margin-top:12px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--border-sky);max-height:260px">
+                    <img id="previewImg" src="" alt="@T["معاينة الإيصال"]" style="width:100%;max-height:260px;object-fit:contain;background:var(--surface-2)"/>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;padding:13px;font-size:.95rem">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    @T["إرسال إيصال الدفع للمراجعة"]
+                </button>
+            </form>
+        </div>
+
+        <div style="text-align:center">
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-ghost btn-sm">@T["العودة للطلب"]</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function copyCliQ() {
+    var num = document.getElementById('cliqNumber').textContent.trim();
+    navigator.clipboard.writeText(num).then(function() {
+        var btn = document.getElementById('copyBtn');
+        btn.textContent = @Html.Raw(Json.Serialize(T["تم النسخ!"].Value));
+        btn.style.background = 'var(--green-bg)';
+        btn.style.color = 'var(--green-txt)';
+        btn.style.borderColor = 'var(--green-bd)';
+        setTimeout(function() {
+            btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> ' + @Html.Raw(Json.Serialize(T["نسخ"].Value));
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+        }, 2500);
+    }).catch(function() {
+        alert(@Html.Raw(Json.Serialize(T["رقم CliQ"].Value)) + ': ' + num);
+    });
+}
+
+function handleFileSelect(input) {
+    if (!input.files || !input.files[0]) return;
+    var file = input.files[0];
+    var label = document.getElementById('fileLabel');
+    label.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' ' + @Html.Raw(Json.Serialize(T["كيلوبايت"].Value)) + ')';
+    label.style.display = 'block';
+
+    if (file.type.startsWith('image/')) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('previewBox').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('previewBox').style.display = 'none';
+    }
+}
+
+var zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('dragging');
+});
+zone.addEventListener('dragleave', function() {
+    zone.classList.remove('dragging');
+});
+zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('dragging');
+    var dt = e.dataTransfer;
+    if (dt && dt.files.length) {
+        var input = document.getElementById('receiptFile');
+        input.files = dt.files;
+        handleFileSelect(input);
+    }
+});
+</script>
+}

@@ -52,6 +52,30 @@
                 </div>
             </div>
 
+            @if (Model.Stock <= 0 || !Model.IsActive)
+            {
+                <div class="alert alert-error" style="max-width:360px">
+                    @T["هذا المنتج غير متوفر حالياً."]
+                </div>
+            }
+            else
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" style="max-width:360px;margin-bottom:24px">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div style="display:flex;gap:10px;align-items:stretch">
+                        <div style="width:110px">
+                            <input type="number" name="quantity" value="1" min="1" max="@Model.Stock" class="form-control" style="height:100%" />
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="flex:1;padding:12px">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                            @T["أضف إلى السلة"]
+                        </button>
+                    </div>
+                    <p style="font-size:.8rem;color:var(--steel);margin-top:6px">@T["{0} قطعة متوفرة", Model.Stock]</p>
+                </form>
+            }
+
             @if (Model.Description != null)
             {
                 <div style="margin-bottom:24px">

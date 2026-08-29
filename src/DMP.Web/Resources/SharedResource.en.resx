@@ -1676,9 +1676,6 @@
   <data name="إنشاء حساب مصنّع" xml:space="preserve">
     <value>Create Manufacturer Account</value>
   </data>
-  <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
-    <value>Choose "Transfer" then "CliQ"</value>
-  </data>
   <data name="تم النسخ!" xml:space="preserve">
     <value>Copied!</value>
   </data>
@@ -1753,9 +1750,6 @@
   </data>
   <data name="إيصال دفع جديد بانتظار مراجعتك — طلب رقم #{0}" xml:space="preserve">
     <value>New payment receipt awaiting your review — request #{0}</value>
-  </data>
-  <data name="اختر &quot;تحويل&quot; ثم &quot;CliQ&quot;" xml:space="preserve">
-    <value>Choose "Transfer" then "CliQ"</value>
   </data>
   <data name="الإجمالي: {0} د.أ" xml:space="preserve">
     <value>Total: {0} JOD</value>
@@ -1927,7 +1921,6 @@
   <data name="{0} منتج متاح" xml:space="preserve"><value>{0} products available</value></data>
   <data name="ابحث عن منتج..." xml:space="preserve"><value>Search products...</value></data>
   <data name="كل الفئات" xml:space="preserve"><value>All Categories</value></data>
-  <data name="بحث" xml:space="preserve"><value>Search</value></data>
   <data name="لا توجد منتجات" xml:space="preserve"><value>No products found</value></data>
   <data name="لم يتم إضافة أي منتج إلى السوق بعد." xml:space="preserve"><value>No products have been added to the marketplace yet.</value></data>
   <data name="{0} منتج" xml:space="preserve"><value>{0} products</value></data>
@@ -1935,21 +1928,17 @@
   <data name="إضافة منتج" xml:space="preserve"><value>Add Product</value></data>
   <data name="إضافة منتج جديد" xml:space="preserve"><value>Add New Product</value></data>
   <data name="اسم المنتج" xml:space="preserve"><value>Product Name</value></data>
-  <data name="الوصف" xml:space="preserve"><value>Description</value></data>
   <data name="السعر (د.أ)" xml:space="preserve"><value>Price (JOD)</value></data>
   <data name="المخزون" xml:space="preserve"><value>Stock</value></data>
   <data name="الفئة" xml:space="preserve"><value>Category</value></data>
   <data name="صورة المنتج" xml:space="preserve"><value>Product Image</value></data>
   <data name="إضافة المنتج" xml:space="preserve"><value>Add Product</value></data>
   <data name="حفظ التعديلات" xml:space="preserve"><value>Save Changes</value></data>
-  <data name="الصورة الحالية" xml:space="preserve"><value>Current image</value></data>
   <data name="نشط (ظاهر في السوق)" xml:space="preserve"><value>Active (visible in marketplace)</value></data>
   <data name="← العودة للسوق" xml:space="preserve"><value>← Back to Marketplace</value></data>
   <data name="معلومات البائع" xml:space="preserve"><value>Seller Info</value></data>
   <data name="المنتج مقدم من إدارة Jo Maker. للتواصل:" xml:space="preserve"><value>Product listed by Jo Maker Admin. Contact:</value></data>
-  <data name="عرض الورشة" xml:space="preserve"><value>View Workshop</value></data>
   <data name="المتوفر" xml:space="preserve"><value>In Stock</value></data>
-  <data name="التاريخ" xml:space="preserve"><value>Date</value></data>
   <data name="متوفر" xml:space="preserve"><value>available</value></data>
   <data name="إدارة" xml:space="preserve"><value>Admin</value></data>
   <data name="مصنّعين" xml:space="preserve"><value>Manufacturers</value></data>
@@ -1964,9 +1953,71 @@
   <data name="منتجاتي" xml:space="preserve"><value>My Products</value></data>
   <data name="لم تضف أي منتج بعد. ابدأ بإضافة منتجاتك للسوق." xml:space="preserve"><value>You haven't added any products yet. Start by listing your products.</value></data>
   <data name="السوق - المنتجات" xml:space="preserve"><value>Marketplace - Products</value></data>
-  <data name="إدارة الطلبات" xml:space="preserve"><value>Manage Requests</value></data>
-  <data name="عرض الطلبات" xml:space="preserve"><value>View Requests</value></data>
   <data name="المنتجات" xml:space="preserve"><value>Products</value></data>
   <data name="ClickToUpload_Change" xml:space="preserve"><value>Click to change image</value></data>
-  <data name="بانتظار الاعتماد" xml:space="preserve"><value>Pending Approval</value></data>
+  <data name="سلة التسوق" xml:space="preserve"><value>Shopping cart</value></data>
+  <data name="{0} منتج في سلتك" xml:space="preserve"><value>{0} item(s) in your cart</value></data>
+  <data name="سلتك فارغة" xml:space="preserve"><value>Your cart is empty</value></data>
+  <data name="سلتك فارغة." xml:space="preserve"><value>Your cart is empty.</value></data>
+  <data name="تصفح السوق" xml:space="preserve"><value>Browse marketplace</value></data>
+  <data name="تصفح السوق وأضف منتجات إلى سلتك." xml:space="preserve"><value>Browse the marketplace and add products to your cart.</value></data>
+  <data name="الصورة" xml:space="preserve"><value>Image</value></data>
+  <data name="السعر" xml:space="preserve"><value>Price</value></data>
+  <data name="المنتج" xml:space="preserve"><value>Product</value></data>
+  <data name="إزالة" xml:space="preserve"><value>Remove</value></data>
+  <data name="منتجات غير متوفرة حالياً" xml:space="preserve"><value>Currently unavailable products</value></data>
+  <data name="إجمالي السلة" xml:space="preserve"><value>Cart total</value></data>
+  <data name="هل تريد إفراغ السلة؟" xml:space="preserve"><value>Do you want to empty your cart?</value></data>
+  <data name="إفراغ السلة" xml:space="preserve"><value>Empty cart</value></data>
+  <data name="متابعة التسوق" xml:space="preserve"><value>Continue shopping</value></data>
+  <data name="إتمام الطلب والدفع" xml:space="preserve"><value>Checkout &amp; Pay</value></data>
+  <data name="تمت إضافة المنتج إلى السلة." xml:space="preserve"><value>Product added to cart.</value></data>
+  <data name="تمت إزالة المنتج من السلة." xml:space="preserve"><value>Product removed from cart.</value></data>
+  <data name="متابعة طلباتك وحالة الدفع" xml:space="preserve"><value>Track your orders and payment status</value></data>
+  <data name="تصفح السوق وأضف منتجات لإنشاء أول طلب لك." xml:space="preserve"><value>Browse the marketplace and add products to place your first order.</value></data>
+  <data name="{0} منتج — {1}" xml:space="preserve"><value>{0} items — {1}</value></data>
+  <data name="إتمام الطلب" xml:space="preserve"><value>Checkout</value></data>
+  <data name="أدخل بيانات التوصيل ثم أكمل الدفع عبر CliQ" xml:space="preserve"><value>Enter your delivery details, then complete payment via CliQ</value></data>
+  <data name="ملخص السلة" xml:space="preserve"><value>Cart summary</value></data>
+  <data name="عدد المنتجات" xml:space="preserve"><value>Number of items</value></data>
+  <data name="بيانات التوصيل" xml:space="preserve"><value>Delivery details</value></data>
+  <data name="عنوان التوصيل" xml:space="preserve"><value>Delivery address</value></data>
+  <data name="المدينة، المنطقة، الشارع، أقرب علامة مميزة" xml:space="preserve"><value>City, area, street, nearest landmark</value></data>
+  <data name="ملاحظات إضافية (اختياري)" xml:space="preserve"><value>Additional notes (optional)</value></data>
+  <data name="تأكيد الطلب والمتابعة للدفع" xml:space="preserve"><value>Confirm order &amp; continue to payment</value></data>
+  <data name="العودة للسلة" xml:space="preserve"><value>Back to cart</value></data>
+  <data name="كل طلباتي" xml:space="preserve"><value>All my orders</value></data>
+  <data name="ملاحظات" xml:space="preserve"><value>Notes</value></data>
+  <data name="ملاحظة الإدارة" xml:space="preserve"><value>Admin note</value></data>
+  <data name="متابعة الدفع عبر CliQ" xml:space="preserve"><value>Continue payment via CliQ</value></data>
+  <data name="إيصال الدفع قيد المراجعة من الإدارة. سيتم تأكيد طلبك خلال 24 ساعة." xml:space="preserve"><value>Your payment receipt is under review. Your order will be confirmed within 24 hours.</value></data>
+  <data name="تم تأكيد دفع هذا الطلب." xml:space="preserve"><value>Payment for this order has been confirmed.</value></data>
+  <data name="إيصال الدفع قيد المراجعة من الإدارة." xml:space="preserve"><value>Your payment receipt is under review by the admin.</value></data>
+  <data name="تم رفع إيصال الدفع بنجاح. سيتم مراجعته وتأكيده خلال 24 ساعة." xml:space="preserve"><value>Payment receipt uploaded successfully. It will be reviewed and confirmed within 24 hours.</value></data>
+  <data name="إيصال دفع جديد بانتظار مراجعتك — طلب #{0}" xml:space="preserve"><value>New payment receipt awaiting your review — order #{0}</value></data>
+  <data name="الطلبات" xml:space="preserve"><value>Orders</value></data>
+  <data name="السبب: {0}" xml:space="preserve"><value>Reason: {0}</value></data>
+  <data name="تاريخ الدفع" xml:space="preserve"><value>Payment date</value></data>
+  <data name="مدفوعة" xml:space="preserve"><value>Paid</value></data>
+  <data name="متابعة الطلبات وإيصالات الدفع" xml:space="preserve"><value>Track orders and payment receipts</value></data>
+  <data name="إيصالات بانتظار المراجعة" xml:space="preserve"><value>Receipts awaiting review</value></data>
+  <data name="الهاتف: {0}" xml:space="preserve"><value>Phone: {0}</value></data>
+  <data name="طلبات السوق" xml:space="preserve"><value>Marketplace orders</value></data>
+  <data name="{0} بانتظار المعالجة" xml:space="preserve"><value>{0} awaiting processing</value></data>
+  <data name="إدارة الطلبات والمدفوعات" xml:space="preserve"><value>Manage orders &amp; payments</value></data>
+  <data name="بانتظار مراجعة الإيصال" xml:space="preserve"><value>Receipt under review</value></data>
+  <data name="تم الدفع" xml:space="preserve"><value>Paid</value></data>
+  <data name="ملغي" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="أضف إلى السلة" xml:space="preserve"><value>Add to cart</value></data>
+  <data name="أضف للسلة" xml:space="preserve"><value>Add to cart</value></data>
+  <data name="نفدت الكمية" xml:space="preserve"><value>Out of stock</value></data>
+  <data name="{0} قطعة متوفرة" xml:space="preserve"><value>{0} pieces available</value></data>
+  <data name="هذا المنتج غير متوفر حالياً." xml:space="preserve"><value>This product is currently unavailable.</value></data>
+  <data name="إدارة Jo Maker" xml:space="preserve"><value>Jo Maker Admin</value></data>
+  <data name="المنتج &quot;{0}&quot; غير متوفر بالكمية المطلوبة." xml:space="preserve"><value>Product &quot;{0}&quot; is not available in the requested quantity.</value></data>
+  <data name="طلب جديد رقم #{0} — {1}" xml:space="preserve"><value>New order #{0} — {1}</value></data>
+  <data name="تم قبول الدفع لطلب #{0}." xml:space="preserve"><value>Payment accepted for order #{0}.</value></data>
+  <data name="تم رفض الدفع لطلب #{0}." xml:space="preserve"><value>Payment rejected for order #{0}.</value></data>
+  <data name="تم تأكيد دفع طلبك #{0}. شكراً لثقتك بنا!" xml:space="preserve"><value>Payment for order #{0} confirmed. Thank you for trusting us!</value></data>
+  <data name="تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع إيصال صحيح." xml:space="preserve"><value>Payment receipt for order #{0} was rejected. Please pay again and upload a correct receipt.</value></data>
 </root>

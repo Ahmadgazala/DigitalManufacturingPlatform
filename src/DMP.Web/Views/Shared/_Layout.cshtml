@@ -55,6 +55,12 @@
 </head>
 <body>
 
+@inject DMP.Web.Services.CartService CartService
+@{
+    int cartCount = 0;
+    try { cartCount = await CartService.GetCountAsync(); } catch { }
+}
+
 <nav class="navbar">
     <div class="container nav-inner">
         <a class="nav-brand" asp-controller="Home" asp-action="Index">
@@ -79,6 +85,7 @@
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <li><a asp-controller="Requests" asp-action="Index">@T["Nav_Requests"]</a></li>
+                <li><a asp-controller="Orders" asp-action="Index">@T["طلباتي"]</a></li>
                 <li><a asp-controller="Messages" asp-action="Inbox">@T["Nav_Messages"]</a></li>
             }
             @if (User.IsInRole("Manufacturer") || User.IsInRole("Admin"))
@@ -92,6 +99,13 @@
             </ul>
 
         <div class="nav-actions">
+            <a class="nav-bell" asp-controller="Cart" asp-action="Index" title="@T["سلة التسوق"]">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="bell-badge" id="cartBadge" style="@(cartCount > 0 ? "" : "display:none")">@cartCount</span>
+            </a>
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <a class="nav-bell" asp-controller="Notifications" asp-action="Index" title="@T["الإشعارات"]">

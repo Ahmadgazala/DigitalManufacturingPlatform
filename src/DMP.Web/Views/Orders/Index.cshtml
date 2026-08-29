@@ -1,0 +1,68 @@
+@model List<Order>
+@{
+    ViewData["Title"] = T["طلباتي"];
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>@T["طلباتي"]</h1>
+        <p>@T["متابعة طلباتك وحالة الدفع"]</p>
+    </div>
+</div>
+
+<div class="container section">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">📦</div>
+            <h3>@T["لا توجد طلبات بعد"]</h3>
+            <p>@T["تصفح السوق وأضف منتجات لإنشاء أول طلب لك."]</p>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary">@T["تصفح السوق"]</a>
+        </div>
+    }
+    else
+    {
+        <div style="max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+            @foreach (var order in Model)
+            {
+                <a asp-action="Details" asp-route-id="@order.Id" class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;text-decoration:none;color:inherit;transition:transform .2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <div>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                            <span style="font-weight:800;color:var(--text-1)">#@order.OrderNumber</span>
+                            <span style="font-size:.75rem;color:var(--steel)">@order.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div style="font-size:.85rem;color:var(--steel);margin-top:4px">
+                            @T["{0} منتج — {1}", order.Items.Sum(i => i.Quantity), $"{order.TotalAmount:N2} د.أ"]
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px">
+                        @switch (order.Status)
+                        {
+                            case OrderStatus.Pending:
+                                <span class="badge-pending">@order.Status.ToDisplay()</span>
+                                break;
+                            case OrderStatus.UnderReview:
+                                <span class="badge-pending">@order.Status.ToDisplay()</span>
+                                break;
+                            case OrderStatus.Paid:
+                                <span class="badge-approved">@order.Status.ToDisplay()</span>
+                                break;
+                            case OrderStatus.Cancelled:
+                                <span class="badge-rejected">@order.Status.ToDisplay()</span>
+                                break;
+                        }
+                    </div>
+                </a>
+            }
+        </div>
+    }
+</div>

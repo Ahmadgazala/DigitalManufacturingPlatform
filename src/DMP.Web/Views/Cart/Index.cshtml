@@ -1,0 +1,136 @@
+@model List<CartItem>
+@{
+    ViewData["Title"] = T["سلة التسوق"];
+    decimal total = ViewBag.Total ?? 0m;
+    var outOfStock = (List<CartItem>?)ViewBag.OutOfStock ?? new List<CartItem>();
+    var validItems = Model.Where(c => c.Product != null && c.Product.IsActive && c.Product.Stock > 0).ToList();
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>@T["سلة التسوق"]</h1>
+                <p>@T["{0} منتج في سلتك", Model.Sum(c => c.Quantity)]</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="ico">🛒</div>
+            <h3>@T["سلتك فارغة"]</h3>
+            <p>@T["تصفح السوق وأضف منتجات إلى سلتك."]</p>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary">@T["تصفح السوق"]</a>
+        </div>
+    }
+    else
+    {
+        <div style="display:grid;grid-template-columns:1fr;gap:20px">
+            <div class="panel" style="padding:0;overflow:hidden">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width:70px">@T["الصورة"]</th>
+                            <th>@T["المنتج"]</th>
+                            <th style="width:90px">@T["السعر"]</th>
+                            <th style="width:130px">@T["الكمية"]</th>
+                            <th style="width:110px">@T["الإجمالي"]</th>
+                            <th style="width:50px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in validItems)
+                        {
+                            var lineTotal = item.Product!.Price * item.Quantity;
+                            var max = item.Product.Stock;
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Product.ImagePath))
+                                    {
+                                        <img src="@item.Product.ImagePath" alt="@item.Product.Name" style="width:48px;height:48px;object-fit:cover;border-radius:8px" />
+                                    }
+                                    else
+                                    {
+                                        <div style="width:48px;height:48px;background:var(--paper);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem">📦</div>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" style="font-weight:700;color:var(--text-1)">@item.Product.Name</a>
+                                    <div style="font-size:.78rem;color:var(--steel)">@item.Product.Category.ToDisplay()</div>
+                                </td>
+                                <td style="color:var(--steel)">@T["{0} د.أ", item.Product.Price.ToString("N2")]</td>
+                                <td>
+                                    <form asp-action="Update" method="post" style="display:flex;align-items:center;gap:6px">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                        <input type="number" name="quantity" value="@item.Quantity" min="1" max="@max" class="form-control" style="width:70px" />
+                                        <button type="submit" class="btn btn-outline btn-sm">@T["تحديث"]</button>
+                                    </form>
+                                </td>
+                                <td style="color:var(--primary);font-weight:800">@T["{0} د.أ", lineTotal.ToString("N2")]</td>
+                                <td>
+                                    <form asp-action="Remove" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                        <button type="submit" class="btn btn-sm btn-ghost" title="@T["إزالة"]" style="color:var(--red-txt)">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (outOfStock.Any())
+            {
+                <div class="panel" style="background:rgba(255,193,7,.08);border-color:rgba(255,193,7,.3)">
+                    <h3 style="font-size:.95rem;margin-bottom:10px;color:var(--amber-txt)">@T["منتجات غير متوفرة حالياً"]</h3>
+                    @foreach (var item in outOfStock)
+                    {
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>@(item.Product?.Name ?? "—")</span>
+                            <form asp-action="Remove" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-outline">@T["إزالة"]</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="panel" style="background:var(--paper)">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+                    <div>
+                        <div style="font-size:.85rem;color:var(--steel)">@T["إجمالي السلة"]</div>
+                        <div style="font-size:1.6rem;font-weight:800;color:var(--primary)">@T["{0} د.أ", total.ToString("N2")]</div>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <form asp-action="Clear" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline"
+                                    onclick="return confirm('@T["هل تريد إفراغ السلة؟"]')">@T["إفراغ السلة"]</button>
+                        </form>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-outline">@T["متابعة التسوق"]</a>
+                        <a asp-controller="Orders" asp-action="Checkout" class="btn btn-primary">@T["إتمام الطلب والدفع"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

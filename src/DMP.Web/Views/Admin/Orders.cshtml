@@ -1,0 +1,198 @@
+@model List<Order>
+@{
+    ViewData["Title"] = T["طلبات السوق"];
+    var underReview = Model.Where(o => o.Status == OrderStatus.UnderReview).ToList();
+    var pending    = Model.Where(o => o.Status == OrderStatus.Pending).ToList();
+    var paid       = Model.Where(o => o.Status == OrderStatus.Paid).ToList();
+}
+
+<div class="page-header">
+    <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div>
+                <h1>@T["طلبات السوق"]</h1>
+                <p>@T["متابعة الطلبات وإيصالات الدفع"]</p>
+            </div>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-outline btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                @T["لوحة التحكم"]
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state" style="padding:40px 20px">
+            <div class="ico">📦</div>
+            <h3>@T["لا توجد طلبات بعد"]</h3>
+        </div>
+    }
+    else
+    {
+        <!-- قيد المراجعة -->
+        @if (underReview.Any())
+        {
+            <h2 style="font-size:1.1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;margin-bottom:20px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                @T["إيصالات بانتظار المراجعة"]
+                <span class="badge-pending">@underReview.Count</span>
+            </h2>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px">
+                @foreach (var order in underReview)
+                {
+                    <div class="pay-review-card">
+                        <div class="pay-review-header">
+                            <div>
+                                <div class="pay-review-title">#@order.OrderNumber — @T["الطلب"]</div>
+                                <div class="pay-review-meta">
+                                    @T["العميل: {0}", order.CustomerName]
+                                    &nbsp;|&nbsp;
+                                    @T["الهاتف: {0}", order.ContactPhone]
+                                    &nbsp;|&nbsp;
+                                    @order.CreatedAt.ToString("dd/MM/yyyy")
+                                </div>
+                            </div>
+                            <span class="badge-pending">@T["قيد المراجعة"]</span>
+                        </div>
+
+                        <div class="pay-review-body">
+                            <div class="pay-review-img">
+                                @if (!string.IsNullOrEmpty(order.PaymentReceiptPath))
+                                {
+                                    @if (order.PaymentReceiptPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;color:var(--text-2)">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--red-txt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                            <span style="font-size:.82rem">@T["ملف PDF"]</span>
+                                            <a href="@order.PaymentReceiptPath" target="_blank" class="btn btn-sm btn-outline">@T["فتح PDF"]</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a href="@order.PaymentReceiptPath" target="_blank">
+                                            <img src="@order.PaymentReceiptPath" alt="@T["إيصال الدفع"]" />
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <div style="padding:20px;color:var(--text-3);font-size:.85rem">@T["لا توجد صورة"]</div>
+                                }
+                            </div>
+
+                            <div class="pay-review-actions">
+                                <div>
+                                    <div style="font-size:.75rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">@T["المبلغ"]</div>
+                                    <div class="pay-review-amount">@T["{0} د.أ", order.TotalAmount.ToString("N2")]</div>
+                                </div>
+
+                                <form asp-controller="Admin" asp-action="ApproveOrderPayment" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <div class="form-group" style="margin-bottom:8px">
+                                        <input type="text" name="note" class="form-control" placeholder="@T["ملاحظة (اختياري)"]" />
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-block"
+                                            onclick="return confirm('@T["هل تؤكد قبول هذه الدفعة؟"]')">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                        @T["قبول الدفع"]
+                                    </button>
+                                </form>
+
+                                <form asp-controller="Admin" asp-action="RejectOrderPayment" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <div class="form-group" style="margin-bottom:8px">
+                                        <input type="text" name="note" class="form-control" placeholder="@T["سبب الرفض"]" />
+                                    </div>
+                                    <button type="submit" class="btn btn-danger btn-block"
+                                            onclick="return confirm('@T["هل تريد رفض هذه الدفعة؟"]')">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                        @T["رفض الدفع"]
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- بانتظار الدفع -->
+        @if (pending.Any())
+        {
+            <h2 style="font-size:1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber-txt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                @T["بانتظار الدفع"]
+                <span class="badge-pending">@pending.Count</span>
+            </h2>
+            <div class="panel" style="padding:0;overflow:hidden">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>@T["العميل"]</th>
+                            <th>@T["المبلغ"]</th>
+                            <th>@T["التاريخ"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in pending)
+                        {
+                            <tr>
+                                <td style="color:var(--text-2)">#@order.OrderNumber</td>
+                                <td>@order.CustomerName</td>
+                                <td style="color:var(--sky);font-weight:700">@T["{0} د.أ", order.TotalAmount.ToString("N2")]</td>
+                                <td style="color:var(--text-2)">@order.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <!-- مدفوعة -->
+        @if (paid.Any())
+        {
+            <h2 style="font-size:1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;margin-bottom:14px;margin-top:32px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-txt)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                @T["مدفوعة"]
+                <span class="badge-approved">@paid.Count</span>
+            </h2>
+            <div class="panel" style="padding:0;overflow:hidden">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>@T["العميل"]</th>
+                            <th>@T["المبلغ"]</th>
+                            <th>@T["تاريخ الدفع"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in paid)
+                        {
+                            <tr>
+                                <td style="color:var(--text-2)">#@order.OrderNumber</td>
+                                <td>@order.CustomerName</td>
+                                <td style="color:var(--sky);font-weight:700">@T["{0} د.أ", order.TotalAmount.ToString("N2")]</td>
+                                <td style="color:var(--text-2)">@order.PaidAt?.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+</div>

@@ -108,6 +108,8 @@ builder.Services.AddMvc()
     });
 
 builder.Services.AddScoped<IFileService, DMP.Web.Services.FileService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<CartService>();
 
 var app = builder.Build();
 
@@ -145,6 +147,49 @@ _ = Task.Run(async () =>
                 CREATE INDEX IF NOT EXISTS ""IX_Products_ManufacturerId"" ON ""Products"" (""ManufacturerId"");
 
                 DELETE FROM ""Products"" WHERE ""Name"" = 'test number 1' OR ""Name"" = 'filment';
+
+                CREATE TABLE IF NOT EXISTS ""CartItems"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""CartKey"" TEXT NOT NULL,
+                    ""ProductId"" INTEGER NOT NULL,
+                    ""Quantity"" INTEGER NOT NULL,
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    CONSTRAINT ""FK_CartItems_Products_ProductId"" FOREIGN KEY (""ProductId"") REFERENCES ""Products""(""Id"") ON DELETE CASCADE
+                );
+                CREATE UNIQUE INDEX IF NOT EXISTS ""IX_CartItems_CartKey_ProductId"" ON ""CartItems"" (""CartKey"", ""ProductId"");
+
+                CREATE TABLE IF NOT EXISTS ""Orders"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""OrderNumber"" VARCHAR(32) NOT NULL,
+                    ""CustomerId"" TEXT NOT NULL,
+                    ""CustomerName"" VARCHAR(200) NOT NULL,
+                    ""CustomerEmail"" VARCHAR(200) NOT NULL,
+                    ""ContactPhone"" VARCHAR(50) NOT NULL,
+                    ""ShippingAddress"" TEXT,
+                    ""Notes"" TEXT,
+                    ""TotalAmount"" NUMERIC(18,2) NOT NULL,
+                    ""Status"" INTEGER NOT NULL,
+                    ""PaymentReceiptPath"" VARCHAR(200),
+                    ""PaymentReviewNote"" VARCHAR(300),
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    ""PaidAt"" TIMESTAMPTZ,
+                    CONSTRAINT ""FK_Orders_AspNetUsers_CustomerId"" FOREIGN KEY (""CustomerId"") REFERENCES ""AspNetUsers""(""Id"")
+                );
+                CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Orders_OrderNumber"" ON ""Orders"" (""OrderNumber"");
+
+                CREATE TABLE IF NOT EXISTS ""OrderItems"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""OrderId"" INTEGER NOT NULL,
+                    ""ProductId"" INTEGER NOT NULL,
+                    ""ProductName"" VARCHAR(200) NOT NULL,
+                    ""ImagePath"" VARCHAR(200),
+                    ""UnitPrice"" NUMERIC(18,2) NOT NULL,
+                    ""Quantity"" INTEGER NOT NULL,
+                    CONSTRAINT ""FK_OrderItems_Orders_OrderId"" FOREIGN KEY (""OrderId"") REFERENCES ""Orders""(""Id"") ON DELETE CASCADE,
+                    CONSTRAINT ""FK_OrderItems_Products_ProductId"" FOREIGN KEY (""ProductId"") REFERENCES ""Products""(""Id"")
+                );
+                CREATE INDEX IF NOT EXISTS ""IX_OrderItems_OrderId"" ON ""OrderItems"" (""OrderId"");
+                CREATE INDEX IF NOT EXISTS ""IX_OrderItems_ProductId"" ON ""OrderItems"" (""ProductId"");
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

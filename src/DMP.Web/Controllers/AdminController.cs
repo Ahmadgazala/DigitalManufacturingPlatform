@@ -38,6 +38,9 @@ public class AdminController : Controller
         ViewBag.TotalSuppliers = await _db.Suppliers.CountAsync();
         ViewBag.TotalCampaigns = await _db.GroupBuyingCampaigns.CountAsync(c => c.Status == CampaignStatus.Active);
         ViewBag.TotalProducts = await _db.Products.CountAsync();
+        ViewBag.TotalOrders = await _db.Orders.CountAsync();
+        ViewBag.PendingOrders = await _db.Orders.CountAsync(o =>
+            o.Status == OrderStatus.Pending || o.Status == OrderStatus.UnderReview);
 
         return View();
     }
@@ -468,5 +471,72 @@ public class AdminController : Controller
 
         TempData["Success"] = _T["تم حذف المنتج \"{0}\" بنجاح.", product.Name].Value;
         return RedirectToAction(nameof(Products));
+    }
+
+    // ========== Orders (Admin) ==========
+
+    // GET: /Admin/Orders
+    public async Task<IActionResult> Orders()
+    {
+        var orders = await _db.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync();
+        return View(orders);
+    }
+
+    // POST: /Admin/ApproveOrderPayment
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveOrderPayment(int id, string? note)
+    {
+        var order = await _db.Orders
+            .FirstOrDefaultAsync(o => o.Id == id);
+        if (order == null) return NotFound();
+
+        order.Status             = OrderStatus.Paid;
+        order.PaidAt             = DateTime.UtcNow;
+        order.PaymentReviewNote  = note;
+
+        _db.Notifications.Add(new Notification
+        {
+            UserId    = order.CustomerId,
+            Message   = _T["تم تأكيد دفع طلبك #{0}. شكراً لثقتك بنا!", order.OrderNumber].Value,
+            Link      = $"/Orders/Details/{order.Id}",
+            IsRead    = false,
+            CreatedAt = DateTime.UtcNow
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم قبول الدفع لطلب #{0}.", order.OrderNumber].Value;
+        return RedirectToAction(nameof(Orders));
+    }
+
+    // POST: /Admin/RejectOrderPayment
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectOrderPayment(int id, string? note)
+    {
+        var order = await _db.Orders
+            .FirstOrDefaultAsync(o => o.Id == id);
+        if (order == null) return NotFound();
+
+        order.Status             = OrderStatus.Pending;
+        order.PaymentReviewNote  = note;
+
+        _db.Notifications.Add(new Notification
+        {
+            UserId    = order.CustomerId,
+            Message   = _T["تم رفض إيصال الدفع للطلب #{0}. يرجى إعادة الدفع ورفع إيصال صحيح.", order.OrderNumber].Value
+                        + (string.IsNullOrEmpty(note) ? "" : _T[" السبب: {0}", note].Value),
+            Link      = $"/Orders/Payment/{order.Id}",
+            IsRead    = false,
+            CreatedAt = DateTime.UtcNow
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Error"] = _T["تم رفض الدفع للطلب #{0}.", order.OrderNumber].Value;
+        return RedirectToAction(nameof(Orders));
     }
 }
