@@ -127,6 +127,27 @@
                     </li>
                 }
             }
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <li class="nav-mobile-only">
+                    <a asp-controller="Dashboard" asp-action="Index">🖥️ @T["لوحتي"]</a>
+                </li>
+                <li class="nav-mobile-only">
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button class="nav-mobile-logout" type="submit">↩ @T["Nav_Logout"]</button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="nav-mobile-only">
+                    <a asp-controller="Account" asp-action="Login">@T["Nav_Login"]</a>
+                </li>
+                <li class="nav-mobile-only">
+                    <a asp-controller="Account" asp-action="Register">@T["Nav_Register"]</a>
+                </li>
+            }
         </ul>
 
         <div class="nav-actions">

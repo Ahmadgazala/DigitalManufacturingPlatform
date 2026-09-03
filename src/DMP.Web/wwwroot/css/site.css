@@ -237,6 +237,7 @@ button { font-family: inherit; }
         border-bottom: 1px solid var(--border);
         box-shadow: 0 24px 40px rgba(0,0,0,.6);
         backdrop-filter: blur(20px);
+        max-height: calc(100dvh - var(--hh) - 8px); overflow-y: auto;
     }
     .nav-links.open { display: flex; }
     .nav-links a {
@@ -246,6 +247,27 @@ button { font-family: inherit; }
     }
     .nav-links a:last-of-type { border-bottom: none; }
     .nav-links a:hover { color: var(--text-1); background: rgba(255,255,255,.04); }
+
+    /* hide desktop text buttons in the top action bar; they move into the hamburger menu */
+    .nav-actions { gap: 2px; }
+    .nav-actions .btn { display: none; }
+    .nav-actions .nav-bell { width: 34px; height: 34px; }
+
+    /* auth actions shown inside the hamburger menu on mobile */
+    .nav-mobile-only { display: block; }
+    .nav-mobile-only .nav-mobile-logout {
+        width: 100%; text-align: start; background: none; border: none; cursor: pointer;
+        font-family: inherit; color: var(--text-2); font-size: .9rem; font-weight: 500;
+        padding: 12px 8px; border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile-only .nav-mobile-logout:hover { color: var(--text-1); background: rgba(255,255,255,.04); }
+}
+
+/* Hidden on desktop; visible only inside the mobile hamburger menu */
+.nav-mobile-only { display: none; }
+.nav-mobile-only a {
+    display: flex; align-items: center; gap: 9px;
+    border-bottom: 1px solid var(--border);
 }
 
 /* ================================================================
@@ -1032,6 +1054,13 @@ textarea.form-control { resize: vertical; min-height: 110px; }
 }
 .admin-table tr:last-child td { border-bottom: none; }
 .admin-table tr:hover td { background: var(--surface-1); }
+
+/* Horizontally scrollable table wrapper for narrow screens */
+.table-wrap {
+    width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.table-wrap > table { min-width: 720px; }
+.table-wrap.table-wrap-sm > table { min-width: 0; }
 
 /* ================================================================
    QUICK LINKS
@@ -1905,6 +1934,40 @@ textarea.form-control { resize: vertical; min-height: 110px; }
 [data-theme="light"] .req-detail-header { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-bottom-color: rgba(0,0,0,.08); }
 [data-theme="light"] .req-detail-header h1 { color: var(--text-1); }
 [data-theme="light"] .req-detail-header p  { color: var(--text-2); }
+
+/* ================================================================
+   MOBILE RESPONSIVE OVERRIDES
+   Force inline grid overrides to collapse on narrow screens and fix
+   content that would otherwise overflow a small viewport.
+=============================================================== */
+
+/* Collapse inline 3-col and 4-col dashboard/group-buying grids to single column */
+@media(max-width:700px) {
+    .dash-grid[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    .kpi-row[style*="grid-template-columns"] { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media(max-width:560px) {
+    .dash-grid[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    .kpi-row[style*="grid-template-columns"] { grid-template-columns: 1fr 1fr !important; }
+}
+/* GroupBuying inline grids */
+@media(max-width:600px) {
+    div[style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    div[style*="grid-template-columns:1fr 1fr 1fr 1fr"] { grid-template-columns: 1fr 1fr !important; }
+}
+/* CliQ long numbers: allow wrapping instead of overflowing */
+.cliq-number { overflow-wrap: anywhere; word-break: break-word; }
+.cliq-copy { overflow-wrap: anywhere; }
+
+/* On very small screens, reduce heavy vertical padding to save space */
+@media(max-width:600px) {
+    .section { padding: 48px 0; }
+    .features-bento { padding: 44px 0; }
+    .cta-section { padding: 56px 0; }
+    .hero { padding: 48px 0 40px; }
+    .container { padding-inline: 16px; }
+}
+
 
 /* ================================================================
    REDUCED MOTION
