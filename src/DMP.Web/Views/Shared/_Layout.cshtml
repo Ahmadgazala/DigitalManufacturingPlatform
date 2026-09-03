@@ -78,26 +78,56 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a asp-controller="Home" asp-action="Index">@T["Nav_Home"]</a></li>
-            <li><a asp-controller="Manufacturers" asp-action="Index">@T["Nav_Manufacturers"]</a></li>
-            <li><a asp-controller="Manufacturers" asp-action="Map">@T["الخريطة"]</a></li>
-            <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
             <li><a asp-controller="Products" asp-action="Index">@T["السوق"]</a></li>
+            <li class="nav-group" data-label="الورش">
+                <a href="#" aria-haspopup="true" aria-expanded="false" onclick="return navGroupToggle(this)">
+                    @T["الورش"]<span class="chev">▼</span>
+                </a>
+                <div class="nav-drop">
+                    <a asp-controller="Manufacturers" asp-action="Index">@T["دليل الورش"]</a>
+                    <a asp-controller="Manufacturers" asp-action="Map">@T["خريطة الورش"]</a>
+                </div>
+            </li>
+            <li><a asp-controller="Suppliers" asp-action="Index">@T["Nav_Suppliers"]</a></li>
+            <li><a asp-controller="GroupBuying" asp-action="Index">@T["الشراء الجماعي"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <li><a asp-controller="Dashboard" asp-action="Index">@T["لوحتي"]</a></li>
-                <li><a asp-controller="Requests" asp-action="Index">@T["Nav_Requests"]</a></li>
-                <li><a asp-controller="Orders" asp-action="Index">@T["طلباتي"]</a></li>
-                <li><a asp-controller="Messages" asp-action="Inbox">@T["Nav_Messages"]</a></li>
-            }
-            @if (User.IsInRole("Manufacturer") || User.IsInRole("Admin"))
-            {
-                <li><a asp-controller="GroupBuying" asp-action="Index">@T["Nav_GroupBuying"]</a></li>
+                <li class="nav-group" data-label="حسابي">
+                    <a href="#" aria-haspopup="true" aria-expanded="false" onclick="return navGroupToggle(this)">
+                        @T["حسابي"]<span class="chev">▼</span>
+                    </a>
+                    <div class="nav-drop">
+                        <a asp-controller="Dashboard" asp-action="Index">🖥️ @T["لوحتي"]</a>
+                        <a asp-controller="Orders" asp-action="Index">📦 @T["طلباتي"]</a>
+                        <a asp-controller="Requests" asp-action="Index">🏭 @T["طلبات التصنيع"]</a>
+                        <a asp-controller="Messages" asp-action="Inbox">💬 @T["Nav_Messages"]</a>
+                    </div>
+                </li>
                 @if (User.IsInRole("Manufacturer"))
                 {
-                    <li><a asp-controller="Manufacturers" asp-action="MyProducts">@T["منتجاتي"]</a></li>
+                    <li class="nav-group" data-label="ورشتي">
+                        <a href="#" aria-haspopup="true" aria-expanded="false" onclick="return navGroupToggle(this)">
+                            @T["ورشتي"]<span class="chev">▼</span>
+                        </a>
+                        <div class="nav-drop">
+                            <a asp-controller="Manufacturers" asp-action="Dashboard">🛠️ @T["Nav_Dashboard"]</a>
+                            <a asp-controller="Manufacturers" asp-action="MyProducts">📦 @T["منتجاتي"]</a>
+                        </div>
+                    </li>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-group" data-label="الإدارة">
+                        <a href="#" aria-haspopup="true" aria-expanded="false" onclick="return navGroupToggle(this)">
+                            @T["الإدارة"]<span class="chev">▼</span>
+                        </a>
+                        <div class="nav-drop">
+                            <a asp-controller="Admin" asp-action="Index">⚙️ @T["Nav_Admin"]</a>
+                        </div>
+                    </li>
                 }
             }
-            </ul>
+        </ul>
 
         <div class="nav-actions">
             <a class="nav-bell" asp-controller="Cart" asp-action="Index" title="@T["سلة التسوق"]">
@@ -206,20 +236,20 @@
             <div>
                 <div class="footer-col-title">@T["المنصة"]</div>
                 <div class="footer-col-links">
+                    <a asp-controller="Home" asp-action="Index">@T["الرئيسية"]</a>
+                    <a asp-controller="Products" asp-action="Index">@T["السوق"]</a>
                     <a asp-controller="Manufacturers" asp-action="Index">@T["دليل الورش"]</a>
-                    <a asp-controller="Manufacturers" asp-action="Map">@T["خريطة الورش"]</a>
                     <a asp-controller="Suppliers" asp-action="Index">@T["الموردون"]</a>
-                    <a asp-controller="GroupBuying" asp-action="Index">@T["الشراء الجماعي"]</a>
                 </div>
             </div>
-            <!-- Services links -->
+            <!-- Explore links -->
             <div>
-                <div class="footer-col-title">@T["الخدمات"]</div>
+                <div class="footer-col-title">@T["استكشف"]</div>
                 <div class="footer-col-links">
+                    <a asp-controller="Manufacturers" asp-action="Map">@T["خريطة الورش"]</a>
+                    <a asp-controller="GroupBuying" asp-action="Index">@T["الشراء الجماعي"]</a>
                     <a asp-controller="Requests" asp-action="Create">@T["اطلب تصنيعاً"]</a>
                     <a asp-controller="Account" asp-action="Register">@T["سجّل ورشتك"]</a>
-                    <a asp-controller="Manufacturers" asp-action="Index">@T["قطع CNC"]</a>
-                    <a asp-controller="Manufacturers" asp-action="Index">@T["طباعة ثلاثية الأبعاد"]</a>
                 </div>
             </div>
             <!-- Account links -->
@@ -229,7 +259,7 @@
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <a asp-controller="Dashboard" asp-action="Index">@T["لوحتي"]</a>
-                        <a asp-controller="Requests" asp-action="Index">@T["طلبات التصنيع"]</a>
+                        <a asp-controller="Orders" asp-action="Index">@T["طلباتي"]</a>
                         <a asp-controller="Messages" asp-action="Inbox">@T["الرسائل"]</a>
                         <a asp-controller="Notifications" asp-action="Index">@T["الإشعارات"]</a>
                     }
@@ -283,7 +313,30 @@
         });
     }
 
-    // Active link highlight
+    // Dropdown group header: prevent navigation & toggle mobile accordion
+    function navGroupToggle(el) {
+        const li = el.closest('.nav-group');
+        if (window.innerWidth <= 768) {
+            const wasOpen = li.classList.contains('open');
+            navLinks.querySelectorAll('.nav-group.open').forEach(function(g) {
+                if (g !== li) g.classList.remove('open');
+            });
+            li.classList.toggle('open', !wasOpen);
+            el.setAttribute('aria-expanded', !wasOpen);
+            return false;
+        }
+        return false;
+    }
+    // Close dropdowns when a drop item is clicked (mobile) / outside click (desktop)
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.nav-group')) {
+            navLinks.querySelectorAll('.nav-group.open').forEach(function(g) {
+                g.classList.remove('open');
+            });
+        }
+    });
+
+    // Active link highlight (also apply to dropdown items)
     (function() {
         const path = window.location.pathname.toLowerCase();
         document.querySelectorAll('.nav-links a').forEach(function(a) {

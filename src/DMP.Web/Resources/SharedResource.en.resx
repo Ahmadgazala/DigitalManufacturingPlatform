@@ -2069,4 +2069,10 @@
   <data name="أنشئ طلب تصنيع" xml:space="preserve"><value>Create a request</value></data>
   <data name="اعثر على ورشة" xml:space="preserve"><value>Find a workshop</value></data>
   <data name="استكشف دليل الورش أو الخريطة التفاعلية." xml:space="preserve"><value>Explore the workshop directory or the interactive map.</value></data>
+  <data name="الورش" xml:space="preserve"><value>Workshops</value></data>
+  <data name="حسابي" xml:space="preserve"><value>My Account</value></data>
+  <data name="ورشتي" xml:space="preserve"><value>My Workshop</value></data>
+  <data name="الإدارة" xml:space="preserve"><value>Administration</value></data>
+  <data name="طلبات التصنيع" xml:space="preserve"><value>Manufacturing requests</value></data>
+  <data name="استكشف" xml:space="preserve"><value>Explore</value></data>
 </root>

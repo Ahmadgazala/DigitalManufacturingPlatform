@@ -135,6 +135,57 @@ button { font-family: inherit; }
 .nav-links a:hover { color: var(--text-1); background: rgba(255,255,255,.06); }
 .nav-links a.active-link { color: var(--sky); background: var(--sky-tint); }
 
+/* ── Nav dropdown groups ─────────────────────────────────── */
+.nav-group { position: relative; }
+.nav-group > a {
+    display: flex; align-items: center; gap: 5px;
+}
+.nav-group > a .chev {
+    font-size: .62rem; opacity: .7; transition: transform .15s var(--ease);
+}
+.nav-group:hover > a .chev { transform: rotate(180deg); }
+.nav-drop {
+    position: absolute; top: calc(100% + 10px); inset-inline-start: 0;
+    min-width: 220px; padding: 7px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-md); border-radius: var(--r-sm);
+    box-shadow: var(--sh-lg);
+    opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity .15s var(--ease), transform .15s var(--ease), visibility .15s;
+    z-index: 60;
+    display: flex; flex-direction: column; gap: 2px;
+}
+.nav-group:hover .nav-drop,
+.nav-group:focus-within .nav-drop { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav-drop a {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px; border-radius: var(--r-xs);
+    color: var(--text-2); font-size: .85rem; font-weight: 500;
+    white-space: nowrap;
+}
+.nav-drop a:hover { color: var(--text-1); background: var(--sky-tint); }
+.nav-drop a.active-link { color: var(--sky); background: var(--sky-tint); }
+.nav-drop .extra { color: var(--text-3); font-weight: 400; font-size: .82rem; }
+.nav-group .badge-mini {
+    background: var(--sky); color: var(--text-inv);
+    border-radius: var(--r-pill); padding: 0 6px;
+    font-size: .62rem; font-weight: 800; line-height: 1.5;
+}
+
+@media(max-width:768px) {
+    .nav-group { position: static; }
+    .nav-drop {
+        position: static; inset: auto; width: 100% !important; min-width: 0;
+        box-shadow: none; border: none; border-inline-start: 2px solid var(--border-sky);
+        border-radius: 0; margin-inline-start: 8px; padding: 2px 0 2px 6px;
+        background: transparent;
+        opacity: 1; visibility: visible; transform: none;
+        display: none;
+    }
+    .nav-group.open .nav-drop { display: flex; }
+    .nav-drop a { padding: 10px 8px; }
+}
+
 .nav-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-inline-start: auto; }
 
 .nav-bell {
