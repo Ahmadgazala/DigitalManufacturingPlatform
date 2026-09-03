@@ -55,10 +55,13 @@ public class MessagesController : Controller
     // GET: /Messages/Conversation/userId  (also accepts ?otherUserId= or path segment id)
     public async Task<IActionResult> Conversation(string otherUserId, string? id = null)
     {
-        otherUserId ??= id;
+        string? target = otherUserId ?? id;
         var userId = _userManager.GetUserId(User)!;
 
-        var otherUser = await _userManager.FindByIdAsync(otherUserId);
+        if (string.IsNullOrEmpty(target))
+            return NotFound();
+
+        var otherUser = await _userManager.FindByIdAsync(target);
         if (otherUser == null)
             return NotFound();
 

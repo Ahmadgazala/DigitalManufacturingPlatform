@@ -169,7 +169,7 @@
                 <p style="color:var(--steel)">@T["لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!"]</p>
             }
 
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity?.IsAuthenticated == true)
             {
                 <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:20px">
                     <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px">@T["AddReview"]</h3>

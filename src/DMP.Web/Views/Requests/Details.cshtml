@@ -109,7 +109,7 @@
                         <div>
                             <div style="font-weight:800;color:#065f46">@T["تم الدفع بنجاح"]</div>
                             <div style="font-size:.82rem;color:#059669">
-                                @T["المبلغ: {0} $ — {1}", Model.PaidAmount?.ToString("N2"), Model.PaidAt.Value.ToString("yyyy/MM/dd")]
+                                @T["المبلغ: {0} $ — {1}", (Model.PaidAmount?.ToString("N2") ?? "0.00"), Model.PaidAt.Value.ToString("yyyy/MM/dd")]
                             </div>
                         </div>
                     </div>

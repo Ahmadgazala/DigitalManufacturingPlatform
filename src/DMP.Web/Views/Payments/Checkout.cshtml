@@ -31,7 +31,7 @@
                 </li>
                 <li>
                     <span class="k">@T["مدة التنفيذ"]</span>
-                    <span class="v">@T["{0} يوم", quotation?.EstimatedDays]</span>
+                    <span class="v">@T["{0} يوم", (quotation?.EstimatedDays ?? 0)]</span>
                 </li>
                 @if (!string.IsNullOrEmpty(quotation?.Notes))
                 {
@@ -43,7 +43,7 @@
                 <li style="border-top:1px solid var(--border-sky);padding-top:14px;margin-top:4px">
                     <span class="k" style="font-size:.95rem;font-weight:700">@T["المبلغ الإجمالي"]</span>
                     <span class="v" style="font-size:1.5rem;font-weight:900;color:var(--sky)">
-                        @T["{0} د.أ", quotation?.Price.ToString("N2")]
+                        @T["{0} د.أ", (quotation?.Price.ToString("N2") ?? "0.00")]
                     </span>
                 </li>
             </ul>
@@ -97,7 +97,7 @@
             <div class="cliq-amount-reminder">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 @T["تأكد من إدخال المبلغ الصحيح:"]
-                <strong>@T["{0} د.أ", quotation?.Price.ToString("N2")]</strong>
+                <strong>@T["{0} د.أ", (quotation?.Price.ToString("N2") ?? "0.00")]</strong>
             </div>
         </div>
 

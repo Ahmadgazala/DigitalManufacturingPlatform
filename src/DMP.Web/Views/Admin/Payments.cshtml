@@ -56,7 +56,7 @@
                         <div>
                             <div class="pay-review-title">#@req.Id — @req.Title</div>
                             <div class="pay-review-meta">
-                                @T["العميل: {0}", req.Customer?.FullName]
+                                @T["العميل: {0}", (req.Customer?.FullName ?? "—")]
                                 &nbsp;|&nbsp;
                                 @T["الورشة: {0}", (accepted?.Manufacturer?.WorkshopName ?? "—")]
                                 &nbsp;|&nbsp;

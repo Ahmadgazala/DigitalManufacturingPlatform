@@ -187,7 +187,7 @@
                         <div style="margin-top:16px;padding:16px;background:#f0f9ff;border-radius:12px;border:1.5px solid #7dd3fc">
                             <div style="font-weight:700;color:#0369a1">@T["⏳ إيصال العربون قيد المراجعة"]</div>
                             <div style="font-size:.85rem;color:#0c4a6e;margin-top:4px">
-                                @T["المبلغ المرفوع: {0} د.أ — سيتم التأكيد خلال 24 ساعة.", myPart.DepositAmount?.ToString("N2")]
+                                @T["المبلغ المرفوع: {0} د.أ — سيتم التأكيد خلال 24 ساعة.", (myPart.DepositAmount?.ToString("N2") ?? "0.00")]
                             </div>
                         </div>
                     }
@@ -197,7 +197,7 @@
                             <span style="font-size:1.4rem">✅</span>
                             <div>
                                 <div style="font-weight:700;color:#166534">@T["تم قبول العربون"]</div>
-                                <div style="font-size:.85rem;color:#166534">@T["{0} د.أ — {1}", myPart.DepositAmount?.ToString("N2"), myPart.DepositPaidAt?.ToString("dd/MM/yyyy")]</div>
+                                <div style="font-size:.85rem;color:#166534">@T["{0} د.أ — {1}", (myPart.DepositAmount?.ToString("N2") ?? "0.00"), (myPart.DepositPaidAt?.ToString("dd/MM/yyyy") ?? "—")]</div>
                             </div>
                         </div>
 
@@ -208,7 +208,7 @@
                                 <div style="font-weight:800;font-size:1rem;margin-bottom:4px">@T["💳 الخطوة 2: ادفع المبلغ المتبقي"]</div>
                                 <div style="font-size:.88rem;color:#92400e;margin-bottom:14px">
                                     @T["اكتمل النصاب! المبلغ المتبقي:"] <strong>@T["{0} د.أ", remainDue.ToString("N2")]</strong>
-                                    @T["(الإجمالي {0} د.أ − العربون {1} د.أ)", totalDue.ToString("N2"), myPart.DepositAmount?.ToString("N2")]
+                                    @T["(الإجمالي {0} د.أ − العربون {1} د.أ)", totalDue.ToString("N2"), (myPart.DepositAmount?.ToString("N2") ?? "0.00")]
                                 </div>
 
                                 <div style="padding:12px;background:white;border-radius:8px;border:1px solid #fde68a;margin-bottom:14px;font-size:.88rem">
@@ -252,8 +252,8 @@
                             <div>
                                 <div style="font-weight:800;color:#166534;font-size:1rem">@T["تم الدفع الكامل — مشاركتك مؤكدة"]</div>
                                 <div style="font-size:.85rem;color:#166534">
-                                    @T["العربون: {0} د.أ +", myPart.DepositAmount?.ToString("N2")]
-                                    @T["المتبقي: {0} د.أ =", myPart.RemainingAmount?.ToString("N2")]
+                                    @T["العربون: {0} د.أ +", (myPart.DepositAmount?.ToString("N2") ?? "0.00")]
+                                    @T["المتبقي: {0} د.أ =", (myPart.RemainingAmount?.ToString("N2") ?? "0.00")]
                                     @T["الإجمالي: {0} د.أ", myPart.TotalPaid.ToString("N2")]
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                                             <span style="color:var(--amber)">@(isDepositReview ? T["إيصال عربون"] : T["إيصال دفع كامل"])</span>
                                         </div>
                                         <div style="font-size:.82rem;color:#92400e">
-                                            @T["{0} وحدة | المبلغ: {1} د.أ", p.Quantity, amount?.ToString("N2")]
+                                            @T["{0} وحدة | المبلغ: {1} د.أ", p.Quantity, (amount?.ToString("N2") ?? "0.00")]
                                         </div>
                                     </div>
                                     @if (!string.IsNullOrEmpty(receiptPath))

@@ -38,7 +38,7 @@ public class CartService
     {
         var key = GetCartKey();
         return await _db.CartItems
-            .Include(c => c.Product).ThenInclude(p => p.Images)
+            .Include(c => c.Product!).ThenInclude(p => p.Images)
             .Where(c => c.CartKey == key)
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DMP.Web/DMP.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DMP.Web.Tests/DMP.Web.Tests.csproj" />
+  </Folder>
+</Solution>
