@@ -412,6 +412,7 @@ public class ManufacturersController : Controller
         }
 
         var products = await _db.Products
+            .Include(p => p.Images)
             .Where(p => p.ManufacturerId == manufacturer.Id)
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
@@ -434,7 +435,7 @@ public class ManufacturersController : Controller
     [HttpPost]
     [Authorize(Roles = SeedData.ManufacturerRole)]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(Product model, IFormFile? imageFile)
+    public async Task<IActionResult> CreateProduct(Product model, List<IFormFile>? imageFiles)
     {
         var userId = _userManager.GetUserId(User)!;
         var manufacturer = await _db.Manufacturers.FirstOrDefaultAsync(m => m.UserId == userId);
@@ -451,8 +452,9 @@ public class ManufacturersController : Controller
         model.ManufacturerId = manufacturer.Id;
         model.CreatedAt = DateTime.UtcNow;
 
-        if (imageFile != null)
-            model.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+        var paths = await _fileService.SaveImagesAsync(imageFiles ?? new List<IFormFile>(), "products");
+        for (int i = 0; i < paths.Count; i++)
+            model.Images.Add(new ProductImage { ImagePath = paths[i], IsCover = i == 0 });
 
         _db.Products.Add(model);
         await _db.SaveChangesAsync();
@@ -466,7 +468,9 @@ public class ManufacturersController : Controller
     public async Task<IActionResult> EditProduct(int id)
     {
         var userId = _userManager.GetUserId(User)!;
-        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -475,14 +479,17 @@ public class ManufacturersController : Controller
     [HttpPost]
     [Authorize(Roles = SeedData.ManufacturerRole)]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct(int id, Product model, IFormFile? imageFile)
+    public async Task<IActionResult> EditProduct(int id, Product model, List<IFormFile>? imageFiles,
+        int? coverImageId, List<int>? removeImageIds)
     {
         var userId = _userManager.GetUserId(User)!;
-        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
         if (product == null) return NotFound();
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View(product);
 
         product.Name = model.Name;
         product.Description = model.Description;
@@ -491,11 +498,36 @@ public class ManufacturersController : Controller
         product.Stock = model.Stock;
         product.IsActive = model.IsActive;
 
-        if (imageFile != null)
+        // حذف الصور المحددة
+        if (removeImageIds != null && removeImageIds.Count > 0)
         {
-            if (!string.IsNullOrEmpty(product.ImagePath))
-                await _fileService.DeleteAsync(product.ImagePath);
-            product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+            var toRemove = product.Images.Where(i => removeImageIds.Contains(i.Id)).ToList();
+            foreach (var img in toRemove)
+            {
+                await _fileService.DeleteAsync(img.ImagePath);
+                product.Images.Remove(img);
+                _db.ProductImages.Remove(img);
+            }
+        }
+
+        // إضافة صور جديدة
+        var paths = await _fileService.SaveImagesAsync(imageFiles ?? new List<IFormFile>(), "products");
+        foreach (var path in paths)
+        {
+            var img = new ProductImage { ImagePath = path, IsCover = false };
+            product.Images.Add(img);
+            _db.ProductImages.Add(img);
+        }
+
+        // اختيار صورة الغلاف
+        if (coverImageId.HasValue && product.Images.Any(i => i.Id == coverImageId.Value))
+        {
+            foreach (var img in product.Images) img.IsCover = false;
+            product.Images.First(i => i.Id == coverImageId.Value).IsCover = true;
+        }
+        else if (product.Images.Count > 0 && !product.Images.Any(i => i.IsCover))
+        {
+            product.Images.First().IsCover = true;
         }
 
         await _db.SaveChangesAsync();
@@ -511,11 +543,15 @@ public class ManufacturersController : Controller
     public async Task<IActionResult> DeleteProduct(int id)
     {
         var userId = _userManager.GetUserId(User)!;
-        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id && p.SellerUserId == userId);
         if (product == null) return NotFound();
 
         if (!string.IsNullOrEmpty(product.ImagePath))
             await _fileService.DeleteAsync(product.ImagePath);
+        foreach (var img in product.Images)
+            await _fileService.DeleteAsync(img.ImagePath);
 
         _db.Products.Remove(product);
         await _db.SaveChangesAsync();

@@ -7,7 +7,14 @@ public enum OrderStatus
     Pending     = 0,
     UnderReview = 1,
     Paid        = 2,
-    Cancelled   = 3
+    Cancelled   = 3,
+    Processing  = 4
+}
+
+public enum PaymentMethod
+{
+    CliQ            = 0,
+    CashOnDelivery  = 1
 }
 
 public class Order
@@ -37,6 +44,9 @@ public class Order
     public decimal TotalAmount { get; set; }
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
+    public PaymentMethod PaymentMethod { get; set; } = PaymentMethod.CliQ;
+    public bool IsCashOnDelivery => PaymentMethod == PaymentMethod.CashOnDelivery;
 
     [MaxLength(200)]
     public string? PaymentReceiptPath { get; set; }
@@ -89,6 +99,7 @@ public static class OrderStatusHelpers
             OrderStatus.Pending     => "بانتظار الدفع",
             OrderStatus.UnderReview => "بانتظار مراجعة الإيصال",
             OrderStatus.Paid        => "تم الدفع",
+            OrderStatus.Processing  => "قيد التجهيز",
             OrderStatus.Cancelled   => "ملغي",
             _ => s.ToString()
         };
@@ -99,7 +110,24 @@ public static class OrderStatusHelpers
         OrderStatus.Pending     => "Awaiting payment",
         OrderStatus.UnderReview => "Receipt under review",
         OrderStatus.Paid        => "Paid",
+        OrderStatus.Processing  => "Processing",
         OrderStatus.Cancelled   => "Cancelled",
         _ => s.ToString()
+    };
+
+    public static string ToDisplay(this PaymentMethod m)
+    {
+        if (IsEnglish) return m.ToEnglish();
+        return m switch
+        {
+            PaymentMethod.CashOnDelivery => "الدفع عند الاستلام",
+            _ => "دفع عبر CliQ"
+        };
+    }
+
+    public static string ToEnglish(this PaymentMethod m) => m switch
+    {
+        PaymentMethod.CashOnDelivery => "Cash on delivery",
+        _ => "Pay via CliQ"
     };
 }

@@ -63,19 +63,42 @@
             </div>
 
             <div class="form-group">
-                <label for="imageFile">@T["صورة المنتج"]</label>
-                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                <label>@T["صور المنتج"]</label>
+
+                @if (Model.Images.Any())
+                {
+                    <div class="product-gallery mgr-gallery" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+                        @foreach (var img in Model.Images)
+                        {
+                            <div class="mgr-thumb @(img.IsCover ? "is-cover" : "")" style="position:relative;width:90px">
+                                <img src="@img.ImagePath" style="width:90px;height:90px;border-radius:8px;object-fit:cover" />
+                                @if (img.IsCover)
+                                {
+                                    <span style="position:absolute;top:4px;left:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:6px;text-align:center">@T["الغلاف"]</span>
+                                }
+                                <label style="display:flex;align-items:center;gap:4px;font-size:.7rem;margin-top:4px;cursor:pointer">
+                                    <input type="radio" name="coverImageId" value="@img.Id" checked="@(img.IsCover)" /> @T["غلاف"]
+                                </label>
+                                <label style="display:flex;align-items:center;gap:4px;font-size:.7rem;cursor:pointer;color:var(--red-txt)">
+                                    <input type="checkbox" name="removeImageIds" value="@img.Id" /> @T["حذف"]
+                                </label>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div style="margin-bottom:8px">
                         <img src="@Model.ImagePath" style="width:100px;height:100px;border-radius:8px;object-fit:cover" />
                         <span style="font-size:.8rem;color:var(--steel);margin-inline-start:8px">@T["الصورة الحالية"]</span>
                     </div>
                 }
+
                 <div class="upload-zone">
-                    <input type="file" name="imageFile" id="imageFile" accept="image/*" class="upload-input" />
-                    <span>@T["ClickToUpload_Change"]</span>
+                    <input type="file" name="imageFiles" id="imageFiles" accept="image/*" multiple class="upload-input" />
+                    <span>@T["أضف صوراً إضافية"]</span>
                 </div>
-                <img id="imgPreview" class="preview-img" style="display:none;margin-top:0.5rem;" />
+                <div id="newPreviews" class="product-gallery" style="margin-top:8px"></div>
             </div>
 
             <div class="form-actions">
@@ -88,15 +111,22 @@
 
 @section Scripts {
     <script>
-        document.getElementById('imageFile').addEventListener('change', function () {
-            var preview = document.getElementById('imgPreview');
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(this.files[0]);
+        document.getElementById('imageFiles').addEventListener('change', function () {
+            var gallery = document.getElementById('newPreviews');
+            gallery.innerHTML = '';
+            if (this.files) {
+                for (var i = 0; i < this.files.length; i++) {
+                    (function (file) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'gallery-thumb';
+                            gallery.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    })(this.files[i]);
+                }
             }
         });
     </script>

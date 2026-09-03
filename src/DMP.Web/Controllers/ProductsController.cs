@@ -28,6 +28,7 @@ public class ProductsController : Controller
             .Include(p => p.SellerUser)
             .Include(p => p.Manufacturer)
             .Include(p => p.Reviews)
+            .Include(p => p.Images)
             .Where(p => p.IsActive)
             .AsQueryable();
 
@@ -59,6 +60,7 @@ public class ProductsController : Controller
             .Include(p => p.SellerUser)
             .Include(p => p.Manufacturer)
             .Include(p => p.Reviews)
+            .Include(p => p.Images)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (product == null)

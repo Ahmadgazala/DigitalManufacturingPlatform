@@ -771,6 +771,31 @@ textarea.form-control { resize: vertical; min-height: 110px; }
 .uz-hint { font-size: .76rem; color: var(--text-2); }
 .uz-selected { font-size: .8rem; color: var(--sky); font-weight: 600; }
 
+.product-gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+.gallery-thumb {
+    width: 90px; height: 90px; object-fit: cover; border-radius: 8px;
+    border: 2px solid transparent;
+}
+.gallery-thumb.is-cover, .mgr-thumb.is-cover {
+    border-color: var(--sky);
+}
+.mgr-gallery .mgr-thumb {
+    border: 2px solid var(--border-md);
+    border-radius: 10px; padding: 4px;
+}
+.mgr-gallery .mgr-thumb.is-cover { border-color: var(--sky); background: var(--sky-tint); }
+
+.pay-option {
+    display: flex; flex-direction: column; gap: 4px;
+    border: 1.5px solid var(--border-md); border-radius: var(--r-sm);
+    padding: 14px; cursor: pointer; transition: border-color .15s, background .15s;
+}
+.pay-option:hover { border-color: var(--sky); }
+.pay-option input { accent-color: var(--sky); width: auto; }
+.pay-option:has(input:checked) {
+    border-color: var(--sky); background: var(--sky-tint);
+}
+
 /* ================================================================
    MESSAGES
 ================================================================ */

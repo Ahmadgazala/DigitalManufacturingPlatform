@@ -53,6 +53,9 @@
                             case OrderStatus.UnderReview:
                                 <span class="badge-pending">@order.Status.ToDisplay()</span>
                                 break;
+                            case OrderStatus.Processing:
+                                <span class="badge-pending">@order.Status.ToDisplay()</span>
+                                break;
                             case OrderStatus.Paid:
                                 <span class="badge-approved">@order.Status.ToDisplay()</span>
                                 break;

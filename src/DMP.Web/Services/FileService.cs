@@ -6,6 +6,7 @@ namespace DMP.Web.Services;
 public interface IFileService
 {
     Task<string?> SaveImageAsync(IFormFile? file, string folder);
+    Task<List<string>> SaveImagesAsync(IEnumerable<IFormFile> files, string folder);
     Task<string?> SaveFileAsync(IFormFile? file, string folder);
     Task DeleteAsync(string? url);
 }
@@ -37,6 +38,19 @@ public class FileService : IFileService
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!AllowedFiles.Contains(ext)) throw new InvalidOperationException("صيغة الملف غير مدعومة");
         return await SaveAsync(file, folder);
+    }
+
+    public async Task<List<string>> SaveImagesAsync(IEnumerable<IFormFile> files, string folder)
+    {
+        var saved = new List<string>();
+        if (files == null) return saved;
+        foreach (var file in files)
+        {
+            if (file is null || file.Length == 0) continue;
+            var path = await SaveImageAsync(file, folder);
+            if (path != null) saved.Add(path);
+        }
+        return saved;
     }
 
     private async Task<string> SaveAsync(IFormFile file, string folder)

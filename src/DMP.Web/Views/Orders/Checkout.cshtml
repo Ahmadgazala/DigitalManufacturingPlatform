@@ -7,7 +7,7 @@
 <div class="page-header">
     <div class="container">
         <h1>@T["إتمام الطلب"]</h1>
-        <p>@T["أدخل بيانات التوصيل ثم أكمل الدفع عبر CliQ"]</p>
+        <p>@T["أدخل بيانات التوصيل واختر طريقة الدفع"]</p>
     </div>
 </div>
 
@@ -67,8 +67,24 @@
                     <textarea name="notes" class="form-control" rows="2"></textarea>
                 </div>
 
+                <div class="form-group">
+                    <label>@T["طريقة الدفع"] *</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
+                        <label class="pay-option">
+                            <input type="radio" name="paymentMethod" value="cliq" checked />
+                            <span style="font-weight:700;display:block">@T["دفع عبر CliQ"]</span>
+                            <span style="font-size:.78rem;color:var(--steel)">@T["ادفع الآن إلكترونياً وارفع الإيصال"]</span>
+                        </label>
+                        <label class="pay-option">
+                            <input type="radio" name="paymentMethod" value="cod" />
+                            <span style="font-weight:700;display:block">@T["الدفع عند الاستلام"]</span>
+                            <span style="font-size:.78rem;color:var(--steel)">@T["ادفع نقداً عند وصول الطلب"]</span>
+                        </label>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary btn-block" style="padding:13px;font-size:.95rem">
-                    @T["تأكيد الطلب والمتابعة للدفع"]
+                    @T["تأكيد الطلب"]
                 </button>
             </form>
         </div>

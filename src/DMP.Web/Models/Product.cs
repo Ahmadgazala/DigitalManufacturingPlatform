@@ -40,6 +40,28 @@ public class Product
     public List<ProductReview> Reviews { get; set; } = new();
     public int ReviewsCount => Reviews.Count;
     public double AverageRating => Reviews.Count == 0 ? 0 : Math.Round(Reviews.Average(r => r.Rating), 1);
+
+    public List<ProductImage> Images { get; set; } = new();
+
+    public string? CoverImage =>
+        Images.FirstOrDefault(i => i.IsCover)?.ImagePath
+        ?? Images.FirstOrDefault()?.ImagePath
+        ?? ImagePath;
+}
+
+public class ProductImage
+{
+    public int Id { get; set; }
+
+    public int ProductId { get; set; }
+    public Product? Product { get; set; }
+
+    [StringLength(200)]
+    public string ImagePath { get; set; } = string.Empty;
+
+    public bool IsCover { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
 
 public enum ProductCategory

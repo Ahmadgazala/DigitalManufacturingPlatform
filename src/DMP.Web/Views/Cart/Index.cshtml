@@ -58,9 +58,9 @@
                             var max = item.Product.Stock;
                             <tr>
                                 <td>
-                                    @if (!string.IsNullOrEmpty(item.Product.ImagePath))
+                                    @if (!string.IsNullOrEmpty(item.Product.CoverImage))
                                     {
-                                        <img src="@item.Product.ImagePath" alt="@item.Product.Name" style="width:48px;height:48px;object-fit:cover;border-radius:8px" />
+                                        <img src="@item.Product.CoverImage" alt="@item.Product.Name" style="width:48px;height:48px;object-fit:cover;border-radius:8px" />
                                     }
                                     else
                                     {

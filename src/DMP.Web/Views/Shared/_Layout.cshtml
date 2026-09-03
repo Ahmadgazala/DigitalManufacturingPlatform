@@ -227,7 +227,7 @@
                 <div class="footer-col-links">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a asp-controller="Requests" asp-action="Index">@T["طلباتي"]</a>
+                        <a asp-controller="Requests" asp-action="Index">@T["طلبات التصنيع"]</a>
                         <a asp-controller="Messages" asp-action="Inbox">@T["الرسائل"]</a>
                         <a asp-controller="Notifications" asp-action="Index">@T["الإشعارات"]</a>
                     }

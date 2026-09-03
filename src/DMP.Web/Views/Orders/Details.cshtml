@@ -18,6 +18,9 @@
                 case OrderStatus.UnderReview:
                     <span class="badge-pending" style="font-size:.9rem;padding:8px 16px">@Model.Status.ToDisplay()</span>
                     break;
+                case OrderStatus.Processing:
+                    <span class="badge-pending" style="font-size:.9rem;padding:8px 16px">@Model.Status.ToDisplay()</span>
+                    break;
                 case OrderStatus.Paid:
                     <span class="badge-approved" style="font-size:.9rem;padding:8px 16px">@Model.Status.ToDisplay()</span>
                     break;
@@ -80,6 +83,7 @@
             <ul class="info-list">
                 <li><span class="k">@T["الاسم"]</span><span class="v">@Model.CustomerName</span></li>
                 <li><span class="k">@T["الهاتف"]</span><span class="v" dir="ltr" style="text-align:right">@Model.ContactPhone</span></li>
+                <li><span class="k">@T["طريقة الدفع"]</span><span class="v">@Model.PaymentMethod.ToDisplay()</span></li>
                 <li><span class="k">@T["العنوان"]</span><span class="v">@(Model.ShippingAddress ?? "—")</span></li>
                 @if (!string.IsNullOrEmpty(Model.Notes))
                 {
@@ -92,11 +96,17 @@
             </ul>
         </div>
 
-        @if (Model.Status == OrderStatus.Pending)
+        @if (Model.Status == OrderStatus.Pending && !Model.IsCashOnDelivery)
         {
             <a asp-action="Payment" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="padding:13px;font-size:.95rem">
                 @T["متابعة الدفع عبر CliQ"]
             </a>
+        }
+        else if (Model.Status == OrderStatus.Processing && Model.IsCashOnDelivery)
+        {
+            <div class="alert" style="background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber-txt)">
+                @T["طلبك قيد التجهيز. سيتم التواصل معك على هذا الرقم لتأكيد التوصيل، وستدفع نقداً عند الاستلام."]
+            </div>
         }
         else if (Model.Status == OrderStatus.UnderReview)
         {

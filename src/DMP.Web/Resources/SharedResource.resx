@@ -8,7 +8,7 @@
   <data name="Nav_Home" xml:space="preserve"><value>الرئيسية</value></data>
   <data name="Nav_Manufacturers" xml:space="preserve"><value>دليل الورش</value></data>
   <data name="Nav_Suppliers" xml:space="preserve"><value>الموردون</value></data>
-  <data name="Nav_Requests" xml:space="preserve"><value>طلباتي</value></data>
+  <data name="Nav_Requests" xml:space="preserve"><value>طلبات التصنيع</value></data>
   <data name="Nav_GroupBuying" xml:space="preserve"><value>الشراء الجماعي</value></data>
   <data name="Nav_Messages" xml:space="preserve"><value>الرسائل</value></data>
   <data name="Nav_Notifications" xml:space="preserve"><value>الإشعارات</value></data>

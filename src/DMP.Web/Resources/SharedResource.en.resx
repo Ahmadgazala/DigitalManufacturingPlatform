@@ -2026,4 +2026,28 @@
   <data name="{0} تقييم" xml:space="preserve"><value>{0} reviews</value></data>
   <data name="لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!" xml:space="preserve"><value>No reviews yet. Be the first to rate this product!</value></data>
   <data name="سجّل الدخول لتقييم هذا المنتج" xml:space="preserve"><value>Log in to rate this product</value></data>
+  <data name="صور المنتج" xml:space="preserve"><value>Product images</value></data>
+  <data name="اختر صورة واحدة أو أكثر — أول صورة ستكون الغلاف" xml:space="preserve"><value>Choose one or more images — the first image will be the cover</value></data>
+  <data name="أول صورة ستكون الغلاف" xml:space="preserve"><value>The first image will be the cover</value></data>
+  <data name="صورة الغلاف" xml:space="preserve"><value>Cover image</value></data>
+  <data name="الغلاف" xml:space="preserve"><value>Cover</value></data>
+  <data name="أضف صوراً إضافية" xml:space="preserve"><value>Add additional images</value></data>
+  <data name="غلاف" xml:space="preserve"><value>Cover</value></data>
+  <data name="حذف" xml:space="preserve"><value>Remove</value></data>
+  <data name="طريقة الدفع" xml:space="preserve"><value>Payment method</value></data>
+  <data name="دفع عبر CliQ" xml:space="preserve"><value>Pay via CliQ</value></data>
+  <data name="الدفع عند الاستلام" xml:space="preserve"><value>Cash on delivery</value></data>
+  <data name="ادفع الآن إلكترونياً وارفع الإيصال" xml:space="preserve"><value>Pay online now and upload the receipt</value></data>
+  <data name="ادفع نقداً عند وصول الطلب" xml:space="preserve"><value>Pay in cash when the order arrives</value></data>
+  <data name="تأكيد الطلب" xml:space="preserve"><value>Confirm order</value></data>
+  <data name="تم إنشاء طلبك بنجاح. الدفع عند الاستلام. سنقوم بتجهيز الطلب والتواصل معك." xml:space="preserve"><value>Your order was placed successfully. Cash on delivery. We will prepare your order and contact you.</value></data>
+  <data name="قيد التجهيز" xml:space="preserve"><value>Processing</value></data>
+  <data name="الدفع عند الاستلام — قيد التجهيز" xml:space="preserve"><value>Cash on delivery — processing</value></data>
+  <data name="تم التسليم والدفع" xml:space="preserve"><value>Delivered &amp; paid</value></data>
+  <data name="تم تسليم الطلب واستلام الدفع نقداً؟" xml:space="preserve"><value>Was the order delivered and cash collected?</value></data>
+  <data name="هذا الطلب ليس دفعاً عند الاستلام." xml:space="preserve"><value>This order is not cash on delivery.</value></data>
+  <data name="اكتمل طلبك #{0} (الدفع عند الاستلام). شكراً لثقتك بنا!" xml:space="preserve"><value>Your order #{0} is complete (cash on delivery). Thank you for trusting us!</value></data>
+  <data name="تم تأكيد تسليم الطلب #{0} واستلام الدفع." xml:space="preserve"><value>Confirmed delivery of order #{0} and payment received.</value></data>
+  <data name="طلبك قيد التجهيز. سيتم التواصل معك على هذا الرقم لتأكيد التوصيل، وستدفع نقداً عند الاستلام." xml:space="preserve"><value>Your order is being processed. We will contact you on this number to confirm delivery, and you will pay in cash on arrival.</value></data>
+  <data name="أدخل بيانات التوصيل واختر طريقة الدفع" xml:space="preserve"><value>Enter your delivery details and choose a payment method</value></data>
 </root>

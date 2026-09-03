@@ -362,6 +362,7 @@ public class AdminController : Controller
         var query = _db.Products
             .Include(p => p.SellerUser)
             .Include(p => p.Manufacturer)
+            .Include(p => p.Images)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
@@ -394,7 +395,7 @@ public class AdminController : Controller
     // POST: /Admin/CreateProduct
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(Product model, IFormFile? imageFile)
+    public async Task<IActionResult> CreateProduct(Product model, List<IFormFile>? imageFiles)
     {
         ModelState.Remove("SellerUserId");
         ModelState.Remove("ManufacturerId");
@@ -406,8 +407,9 @@ public class AdminController : Controller
         model.SellerUserId = _userManager.GetUserId(User);
         model.CreatedAt = DateTime.UtcNow;
 
-        if (imageFile != null)
-            model.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+        var paths = await _fileService.SaveImagesAsync(imageFiles ?? new List<IFormFile>(), "products");
+        for (int i = 0; i < paths.Count; i++)
+            model.Images.Add(new ProductImage { ImagePath = paths[i], IsCover = i == 0 });
 
         _db.Products.Add(model);
         await _db.SaveChangesAsync();
@@ -419,7 +421,9 @@ public class AdminController : Controller
     // GET: /Admin/EditProduct/5
     public async Task<IActionResult> EditProduct(int id)
     {
-        var product = await _db.Products.FindAsync(id);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -427,13 +431,16 @@ public class AdminController : Controller
     // POST: /Admin/EditProduct/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProduct(int id, Product model, IFormFile? imageFile)
+    public async Task<IActionResult> EditProduct(int id, Product model, List<IFormFile>? imageFiles,
+        int? coverImageId, List<int>? removeImageIds)
     {
-        var product = await _db.Products.FindAsync(id);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View(product);
 
         product.Name = model.Name;
         product.Description = model.Description;
@@ -442,11 +449,36 @@ public class AdminController : Controller
         product.Stock = model.Stock;
         product.IsActive = model.IsActive;
 
-        if (imageFile != null)
+        // حذف الصور المحددة
+        if (removeImageIds != null && removeImageIds.Count > 0)
         {
-            if (!string.IsNullOrEmpty(product.ImagePath))
-                await _fileService.DeleteAsync(product.ImagePath);
-            product.ImagePath = await _fileService.SaveImageAsync(imageFile, "products");
+            var toRemove = product.Images.Where(i => removeImageIds.Contains(i.Id)).ToList();
+            foreach (var img in toRemove)
+            {
+                await _fileService.DeleteAsync(img.ImagePath);
+                product.Images.Remove(img);
+                _db.ProductImages.Remove(img);
+            }
+        }
+
+        // إضافة صور جديدة
+        var paths = await _fileService.SaveImagesAsync(imageFiles ?? new List<IFormFile>(), "products");
+        foreach (var path in paths)
+        {
+            var img = new ProductImage { ImagePath = path, IsCover = false };
+            product.Images.Add(img);
+            _db.ProductImages.Add(img);
+        }
+
+        // اختيار صورة الغلاف
+        if (coverImageId.HasValue && product.Images.Any(i => i.Id == coverImageId.Value))
+        {
+            foreach (var img in product.Images) img.IsCover = false;
+            product.Images.First(i => i.Id == coverImageId.Value).IsCover = true;
+        }
+        else if (product.Images.Count > 0 && !product.Images.Any(i => i.IsCover))
+        {
+            product.Images.First().IsCover = true;
         }
 
         await _db.SaveChangesAsync();
@@ -460,11 +492,15 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteProduct(int id)
     {
-        var product = await _db.Products.FindAsync(id);
+        var product = await _db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
         if (!string.IsNullOrEmpty(product.ImagePath))
             await _fileService.DeleteAsync(product.ImagePath);
+        foreach (var img in product.Images)
+            await _fileService.DeleteAsync(img.ImagePath);
 
         _db.Products.Remove(product);
         await _db.SaveChangesAsync();
@@ -537,6 +573,37 @@ public class AdminController : Controller
         await _db.SaveChangesAsync();
 
         TempData["Error"] = _T["تم رفض الدفع للطلب #{0}.", order.OrderNumber].Value;
+        return RedirectToAction(nameof(Orders));
+    }
+
+    // POST: /Admin/CompleteCashOrder — تأكيد تسليم طلب الدفع عند الاستلام ودفعه
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CompleteCashOrder(int id)
+    {
+        var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        if (order == null) return NotFound();
+
+        if (!order.IsCashOnDelivery)
+        {
+            TempData["Error"] = _T["هذا الطلب ليس دفعاً عند الاستلام."].Value;
+            return RedirectToAction(nameof(Orders));
+        }
+
+        order.Status = OrderStatus.Paid;
+        order.PaidAt = DateTime.UtcNow;
+
+        _db.Notifications.Add(new Notification
+        {
+            UserId    = order.CustomerId,
+            Message   = _T["اكتمل طلبك #{0} (الدفع عند الاستلام). شكراً لثقتك بنا!", order.OrderNumber].Value,
+            Link      = $"/Orders/Details/{order.Id}",
+            IsRead    = false,
+            CreatedAt = DateTime.UtcNow
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم تأكيد تسليم الطلب #{0} واستلام الدفع.", order.OrderNumber].Value;
         return RedirectToAction(nameof(Orders));
     }
 }

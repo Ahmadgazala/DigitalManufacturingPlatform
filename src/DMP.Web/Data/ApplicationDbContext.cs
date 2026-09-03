@@ -28,6 +28,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrderItem>            OrderItems            => Set<OrderItem>();
     public DbSet<StoredFile>           StoredFiles           => Set<StoredFile>();
     public DbSet<ProductReview>       ProductReviews        => Set<ProductReview>();
+    public DbSet<ProductImage>        ProductImages         => Set<ProductImage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -221,5 +222,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ProductReview>()
             .HasIndex(r => new { r.ProductId, r.CustomerUserId })
             .IsUnique();
+
+        builder.Entity<ProductImage>()
+            .HasOne(i => i.Product)
+            .WithMany(p => p.Images)
+            .HasForeignKey(i => i.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

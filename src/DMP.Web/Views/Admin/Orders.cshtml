@@ -3,6 +3,7 @@
     ViewData["Title"] = T["طلبات السوق"];
     var underReview = Model.Where(o => o.Status == OrderStatus.UnderReview).ToList();
     var pending    = Model.Where(o => o.Status == OrderStatus.Pending).ToList();
+    var processing = Model.Where(o => o.Status == OrderStatus.Processing).ToList();
     var paid       = Model.Where(o => o.Status == OrderStatus.Paid).ToList();
 }
 
@@ -126,6 +127,54 @@
                         </div>
                     </div>
                 }
+            </div>
+        }
+
+        <!-- الدفع عند الاستلام (قيد التجهيز) -->
+        @if (processing.Any())
+        {
+            <h2 style="font-size:1rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
+                @T["الدفع عند الاستلام — قيد التجهيز"]
+                <span class="badge-pending">@processing.Count</span>
+            </h2>
+            <div class="panel" style="padding:0;overflow:hidden;margin-bottom:32px">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>@T["العميل"]</th>
+                            <th>@T["الهاتف"]</th>
+                            <th>@T["العنوان"]</th>
+                            <th>@T["المبلغ"]</th>
+                            <th>@T["التاريخ"]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in processing)
+                        {
+                            <tr>
+                                <td style="color:var(--text-2)">#@order.OrderNumber</td>
+                                <td>@order.CustomerName</td>
+                                <td style="color:var(--text-2)">@order.ContactPhone</td>
+                                <td style="color:var(--text-2);max-width:220px">@order.ShippingAddress</td>
+                                <td style="color:var(--sky);font-weight:700">@T["{0} د.أ", order.TotalAmount.ToString("N2")]</td>
+                                <td style="color:var(--text-2)">@order.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <form asp-controller="Admin" asp-action="CompleteCashOrder" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@order.Id" />
+                                        <button type="submit" class="btn btn-success btn-sm"
+                                                onclick="return confirm('@T["تم تسليم الطلب واستلام الدفع نقداً؟"]')">
+                                            @T["تم التسليم والدفع"]
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         }
 

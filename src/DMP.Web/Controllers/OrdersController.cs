@@ -71,7 +71,7 @@ public class OrdersController : Controller
     // POST: /Orders/PlaceOrder — إنشاء الطلب وتأكيده ثم التوجه للدفع
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PlaceOrder(string contactPhone, string shippingAddress, string notes)
+    public async Task<IActionResult> PlaceOrder(string contactPhone, string shippingAddress, string notes, string? paymentMethod)
     {
         var userId = _userManager.GetUserId(User)!;
         var user = await _userManager.FindByIdAsync(userId);
@@ -104,6 +104,8 @@ public class OrdersController : Controller
             orderNumber = $"JM-{DateTime.UtcNow:yyyyMMdd}-{orderCount + 1}";
         }
 
+        var isCod = string.Equals(paymentMethod, "cod", StringComparison.OrdinalIgnoreCase);
+
         var order = new Order
         {
             OrderNumber     = orderNumber,
@@ -114,7 +116,8 @@ public class OrdersController : Controller
             ShippingAddress = shippingAddress,
             Notes           = notes,
             TotalAmount     = items.Sum(i => (i.Product!.Price) * i.Quantity),
-            Status          = OrderStatus.Pending,
+            PaymentMethod   = isCod ? PaymentMethod.CashOnDelivery : PaymentMethod.CliQ,
+            Status          = isCod ? OrderStatus.Processing : OrderStatus.Pending,
             CreatedAt       = DateTime.UtcNow
         };
         _db.Orders.Add(order);
@@ -126,7 +129,7 @@ public class OrdersController : Controller
                 Order       = order,
                 ProductId   = item.ProductId,
                 ProductName = item.Product!.Name,
-                ImagePath   = item.Product.ImagePath,
+                ImagePath   = item.Product.CoverImage,
                 UnitPrice   = item.Product.Price,
                 Quantity    = item.Quantity
             });
@@ -139,12 +142,13 @@ public class OrdersController : Controller
 
         // إشعار للمدير بطلب جديد
         var admin = await _userManager.GetUsersInRoleAsync(SeedData.AdminRole);
+        var statusLabel = isCod ? _T["قيد التجهيز"].Value : _T["بانتظار الدفع"].Value;
         foreach (var adminUser in admin)
         {
             _db.Notifications.Add(new Notification
             {
                 UserId    = adminUser.Id,
-                Message   = _T["طلب جديد رقم #{0} — {1}", orderNumber, _T["بانتظار الدفع"].Value].Value,
+                Message   = _T["طلب جديد رقم #{0} — {1}", orderNumber, statusLabel].Value,
                 Link      = $"/Admin/Orders",
                 CreatedAt = DateTime.UtcNow
             });
@@ -157,6 +161,12 @@ public class OrdersController : Controller
             _db.CartItems.RemoveRange(cartItems);
         }
         await _db.SaveChangesAsync();
+
+        if (isCod)
+        {
+            TempData["Success"] = _T["تم إنشاء طلبك بنجاح. الدفع عند الاستلام. سنقوم بتجهيز الطلب والتواصل معك."].Value;
+            return RedirectToAction(nameof(Details), new { id = order.Id });
+        }
 
         return RedirectToAction(nameof(Payment), new { id = order.Id });
     }
@@ -178,6 +188,10 @@ public class OrdersController : Controller
         if (order.Status == OrderStatus.UnderReview)
         {
             TempData["Error"] = _T["إيصال الدفع قيد المراجعة من الإدارة."].Value;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        if (order.IsCashOnDelivery)
+        {
             return RedirectToAction(nameof(Details), new { id });
         }
 

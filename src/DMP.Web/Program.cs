@@ -169,6 +169,7 @@ _ = Task.Run(async () =>
                     ""Notes"" TEXT,
                     ""TotalAmount"" NUMERIC(18,2) NOT NULL,
                     ""Status"" INTEGER NOT NULL,
+                    ""PaymentMethod"" INTEGER NOT NULL DEFAULT 0,
                     ""PaymentReceiptPath"" VARCHAR(200),
                     ""PaymentReviewNote"" VARCHAR(300),
                     ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -176,6 +177,7 @@ _ = Task.Run(async () =>
                     CONSTRAINT ""FK_Orders_AspNetUsers_CustomerId"" FOREIGN KEY (""CustomerId"") REFERENCES ""AspNetUsers""(""Id"")
                 );
                 CREATE UNIQUE INDEX IF NOT EXISTS ""IX_Orders_OrderNumber"" ON ""Orders"" (""OrderNumber"");
+                ALTER TABLE ""Orders"" ADD COLUMN IF NOT EXISTS ""PaymentMethod"" INTEGER NOT NULL DEFAULT 0;
 
                 CREATE TABLE IF NOT EXISTS ""OrderItems"" (
                     ""Id"" SERIAL PRIMARY KEY,
@@ -212,6 +214,16 @@ _ = Task.Run(async () =>
                 );
                 CREATE INDEX IF NOT EXISTS ""IX_ProductReviews_ProductId"" ON ""ProductReviews"" (""ProductId"");
                 CREATE UNIQUE INDEX IF NOT EXISTS ""IX_ProductReviews_ProductId_CustomerUserId"" ON ""ProductReviews"" (""ProductId"", ""CustomerUserId"");
+
+                CREATE TABLE IF NOT EXISTS ""ProductImages"" (
+                    ""Id"" SERIAL PRIMARY KEY,
+                    ""ProductId"" INTEGER NOT NULL,
+                    ""ImagePath"" VARCHAR(200) NOT NULL,
+                    ""IsCover"" BOOLEAN NOT NULL DEFAULT FALSE,
+                    ""CreatedAt"" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    CONSTRAINT ""FK_ProductImages_Products_ProductId"" FOREIGN KEY (""ProductId"") REFERENCES ""Products""(""Id"") ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS ""IX_ProductImages_ProductId"" ON ""ProductImages"" (""ProductId"");
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

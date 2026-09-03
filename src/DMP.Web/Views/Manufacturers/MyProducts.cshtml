@@ -45,9 +45,9 @@
                             <td style="padding:12px 16px;color:var(--steel);font-size:.85rem">#@p.Id</td>
                             <td style="padding:12px 16px">
                                 <div style="display:flex;align-items:center;gap:10px">
-                                    @if (!string.IsNullOrEmpty(p.ImagePath))
+                                    @if (!string.IsNullOrEmpty(p.CoverImage))
                                     {
-                                        <img src="@p.ImagePath" style="width:40px;height:40px;border-radius:8px;object-fit:cover" />
+                                        <img src="@p.CoverImage" style="width:40px;height:40px;border-radius:8px;object-fit:cover" />
                                     }
                                     <span style="font-weight:600">@p.Name</span>
                                 </div>
