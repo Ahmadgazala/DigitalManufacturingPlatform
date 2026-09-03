@@ -2050,4 +2050,23 @@
   <data name="تم تأكيد تسليم الطلب #{0} واستلام الدفع." xml:space="preserve"><value>Confirmed delivery of order #{0} and payment received.</value></data>
   <data name="طلبك قيد التجهيز. سيتم التواصل معك على هذا الرقم لتأكيد التوصيل، وستدفع نقداً عند الاستلام." xml:space="preserve"><value>Your order is being processed. We will contact you on this number to confirm delivery, and you will pay in cash on arrival.</value></data>
   <data name="أدخل بيانات التوصيل واختر طريقة الدفع" xml:space="preserve"><value>Enter your delivery details and choose a payment method</value></data>
+  <data name="لوحتي" xml:space="preserve"><value>My Dashboard</value></data>
+  <data name="مرحباً" xml:space="preserve"><value>Welcome</value></data>
+  <data name="نظرة عامة على طلباتك وتقييماتك وإشعاراتك" xml:space="preserve"><value>An overview of your orders, reviews, and notifications</value></data>
+  <data name="إجمالي الطلبات" xml:space="preserve"><value>Total orders</value></data>
+  <data name="طلبات قيد التنفيذ" xml:space="preserve"><value>Orders in progress</value></data>
+  <data name="إجمالي المشتريات (د.أ)" xml:space="preserve"><value>Total spent (JOD)</value></data>
+  <data name="تقييمات كتبتها" xml:space="preserve"><value>Reviews written</value></data>
+  <data name="أحدث الطلبات" xml:space="preserve"><value>Recent orders</value></data>
+  <data name="لا توجد طلبات بعد. ابدأ بزيارة السوق!" xml:space="preserve"><value>No orders yet. Start by visiting the marketplace!</value></data>
+  <data name="آخر الإشعارات" xml:space="preserve"><value>Latest notifications</value></data>
+  <data name="لا توجد إشعارات." xml:space="preserve"><value>No notifications.</value></data>
+  <data name="تسوّق المنتجات" xml:space="preserve"><value>Shop products</value></data>
+  <data name="اكتشف منتجات من ورش التصنيع المحلية." xml:space="preserve"><value>Discover products from local manufacturing workshops.</value></data>
+  <data name="زر السوق" xml:space="preserve"><value>Visit marketplace</value></data>
+  <data name="اطلب تصنيعاً مخصصاً" xml:space="preserve"><value>Request custom manufacturing</value></data>
+  <data name="تحتاج قطعة خاصة؟ اطلب تصنيعاً من ورشة محترفة." xml:space="preserve"><value>Need a custom part? Request manufacturing from a professional workshop.</value></data>
+  <data name="أنشئ طلب تصنيع" xml:space="preserve"><value>Create a request</value></data>
+  <data name="اعثر على ورشة" xml:space="preserve"><value>Find a workshop</value></data>
+  <data name="استكشف دليل الورش أو الخريطة التفاعلية." xml:space="preserve"><value>Explore the workshop directory or the interactive map.</value></data>
 </root>

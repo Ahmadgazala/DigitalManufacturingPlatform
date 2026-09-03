@@ -84,6 +84,7 @@
             <li><a asp-controller="Products" asp-action="Index">@T["السوق"]</a></li>
             @if (User.Identity?.IsAuthenticated == true)
             {
+                <li><a asp-controller="Dashboard" asp-action="Index">@T["لوحتي"]</a></li>
                 <li><a asp-controller="Requests" asp-action="Index">@T["Nav_Requests"]</a></li>
                 <li><a asp-controller="Orders" asp-action="Index">@T["طلباتي"]</a></li>
                 <li><a asp-controller="Messages" asp-action="Inbox">@T["Nav_Messages"]</a></li>
@@ -227,6 +228,7 @@
                 <div class="footer-col-links">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
+                        <a asp-controller="Dashboard" asp-action="Index">@T["لوحتي"]</a>
                         <a asp-controller="Requests" asp-action="Index">@T["طلبات التصنيع"]</a>
                         <a asp-controller="Messages" asp-action="Inbox">@T["الرسائل"]</a>
                         <a asp-controller="Notifications" asp-action="Index">@T["الإشعارات"]</a>

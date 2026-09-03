@@ -1,0 +1,166 @@
+@model dynamic
+@{
+    ViewData["Title"] = T["لوحتي"];
+}
+
+<div class="dash-header">
+    <div class="container" style="position:relative;z-index:1">
+        <h1>@T["مرحباً"]، @ViewBag.FullName 👋</h1>
+        <p>@T["نظرة عامة على طلباتك وتقييماتك وإشعاراتك"]</p>
+    </div>
+</div>
+
+<div class="container section" style="padding-top:24px">
+
+    <div class="kpi-row">
+        <div class="kpi-card kpi-blue">
+            <span class="kpi-icon">📦</span>
+            <span class="kpi-num">@ViewBag.TotalOrders</span>
+            <span class="kpi-label">@T["إجمالي الطلبات"]</span>
+        </div>
+        <div class="kpi-card kpi-amber">
+            <span class="kpi-icon">⏳</span>
+            <span class="kpi-num">@ViewBag.ActiveOrders</span>
+            <span class="kpi-label">@T["طلبات قيد التنفيذ"]</span>
+        </div>
+        <div class="kpi-card kpi-green">
+            <span class="kpi-icon">💰</span>
+            <span class="kpi-value">@($"{ViewBag.TotalSpent:N2}")</span>
+            <span class="kpi-label">@T["إجمالي المشتريات (د.أ)"]</span>
+        </div>
+        <div class="kpi-card kpi-purple">
+            <span class="kpi-icon">⭐</span>
+            <span class="kpi-num">@ViewBag.ReviewCount</span>
+            <span class="kpi-label">@T["تقييمات كتبتها"]</span>
+        </div>
+    </div>
+
+    <div class="dash-grid" style="grid-template-columns:2fr 1fr">
+
+        <div class="dash-card">
+            <div class="dash-body">
+                <div class="dc-head">
+                    <div class="dc-title">
+                        <span class="dc-icon">🛒</span>
+                        @T["أحدث الطلبات"]
+                        <span class="dc-count">@ViewBag.Orders.Count</span>
+                    </div>
+                    <a asp-controller="Orders" asp-action="Index" class="btn btn-outline btn-sm">@T["عرض الكل"]</a>
+                </div>
+
+                @if (!((List<Order>)ViewBag.Orders).Any())
+                {
+                    <div class="dc-empty">
+                        <span>🛒</span>
+                        <p>@T["لا توجد طلبات بعد. ابدأ بزيارة السوق!"]</p>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-sm">@T["تصفح السوق"]</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="req-list">
+                        @foreach (var order in (List<Order>)ViewBag.Orders)
+                        {
+                            <a asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" class="req-row" style="text-decoration:none;color:inherit">
+                                <div class="req-info">
+                                    <div class="req-top">
+                                        <span class="req-title">#@order.OrderNumber</span>
+                                        @switch (order.Status)
+                                        {
+                                            case OrderStatus.Pending:
+                                            case OrderStatus.UnderReview:
+                                            case OrderStatus.Processing:
+                                                <span class="badge-pending">@order.Status.ToDisplay()</span>
+                                                break;
+                                            case OrderStatus.Paid:
+                                                <span class="badge-approved">@order.Status.ToDisplay()</span>
+                                                break;
+                                            case OrderStatus.Cancelled:
+                                                <span class="badge-rejected">@order.Status.ToDisplay()</span>
+                                                break;
+                                        }
+                                    </div>
+                                    <div class="req-meta">
+                                        <span>@T["{0} منتج — {1}", order.Items.Sum(i => i.Quantity), $"{order.TotalAmount:N2} د.أ"]</span>
+                                        <span class="req-date">@order.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                    </div>
+                                </div>
+                                <span class="quot-status qs-pending">@T["التفاصيل"]</span>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="dash-card">
+            <div class="dash-body">
+                <div class="dc-head">
+                    <div class="dc-title">
+                        <span class="dc-icon">🔔</span>
+                        @T["آخر الإشعارات"]
+                        <span class="dc-count @(((List<Notification>)ViewBag.Notifications).Any(n => !n.IsRead) ? "dc-count-alert" : "")">@(((List<Notification>)ViewBag.Notifications).Count(n => !n.IsRead))</span>
+                    </div>
+                    <a asp-controller="Notifications" asp-action="Index" class="btn btn-outline btn-sm">@T["الكل"]</a>
+                </div>
+
+                @if (!((List<Notification>)ViewBag.Notifications).Any())
+                {
+                    <div class="dc-empty">
+                        <span>🔔</span>
+                        <p>@T["لا توجد إشعارات."]</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="req-list">
+                        @foreach (var n in (List<Notification>)ViewBag.Notifications)
+                        {
+                            <form asp-controller="Notifications" asp-action="MarkRead" asp-route-id="@n.Id" method="post" style="margin:0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="req-row" style="text-decoration:none;color:inherit;align-items:flex-start;background:none;border:none;width:100%;text-align:start;cursor:pointer;padding:14px 0" onmouseover="this.style.opacity=.8" onmouseout="this.style.opacity=1">
+                                    <div class="req-info">
+                                        <div class="req-meta" style="margin-bottom:4px;color:var(--text-1);font-weight:600">
+                                            @n.Message
+                                        </div>
+                                        <div class="req-date" style="font-size:.72rem">@n.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                                    </div>
+                                    @if (!n.IsRead)
+                                    {
+                                        <span style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;margin-top:8px"></span>
+                                    }
+                                </button>
+                            </form>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class="dash-grid" style="grid-template-columns:repeat(3,1fr);margin-top:20px">
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>🛒 @T["تسوّق المنتجات"]</h3>
+                <p>@T["اكتشف منتجات من ورش التصنيع المحلية."]</p>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-sm">@T["زر السوق"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>🏭 @T["اطلب تصنيعاً مخصصاً"]</h3>
+                <p>@T["تحتاج قطعة خاصة؟ اطلب تصنيعاً من ورشة محترفة."]</p>
+                <a asp-controller="Requests" asp-action="Create" class="btn btn-primary btn-sm">@T["أنشئ طلب تصنيع"]</a>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-body">
+                <h3>🗺️ @T["اعثر على ورشة"]</h3>
+                <p>@T["استكشف دليل الورش أو الخريطة التفاعلية."]</p>
+                <a asp-controller="Manufacturers" asp-action="Index" class="btn btn-primary btn-sm">@T["دليل الورش"]</a>
+            </div>
+        </div>
+    </div>
+
+</div>
