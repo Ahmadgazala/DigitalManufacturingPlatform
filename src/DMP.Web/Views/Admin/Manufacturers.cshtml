@@ -75,6 +75,10 @@
                             {
                                 <span class="chip chip-red">@T["Pending"]</span>
                             }
+                            @if (!mfr.IsActive)
+                            {
+                                <span class="chip chip-amber">@T["Deactivated"]</span>
+                            }
                         </td>
                         <td>@mfr.CreatedAt.ToString("dd/MM/yyyy")</td>
                         <td>
@@ -94,6 +98,21 @@
                                 </form>
                             }
                             <a asp-controller="Manufacturers" asp-action="Details" asp-route-id="@mfr.Id" class="btn btn-outline btn-sm">@T["View"]</a>
+                            @if (mfr.IsActive)
+                            {
+                                <form asp-controller="Admin" asp-action="Deactivate" asp-route-id="@mfr.Id" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-dark btn-sm"
+                                            onclick="return confirm('@T["ConfirmDeactivate"]')">@T["Deactivate"]</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Admin" asp-action="Reactivate" asp-route-id="@mfr.Id" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-primary btn-sm">@T["Reactivate"]</button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }

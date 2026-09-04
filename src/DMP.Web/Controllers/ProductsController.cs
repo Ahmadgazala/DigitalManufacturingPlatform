@@ -30,6 +30,7 @@ public class ProductsController : Controller
             .Include(p => p.Reviews)
             .Include(p => p.Images)
             .Where(p => p.IsActive)
+            .Where(p => p.Manufacturer == null || p.Manufacturer!.IsActive)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))

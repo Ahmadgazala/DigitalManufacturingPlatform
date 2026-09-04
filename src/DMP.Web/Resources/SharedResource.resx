@@ -55,6 +55,10 @@
   <data name="Reject" xml:space="preserve"><value>رفض</value></data>
   <data name="Approve" xml:space="preserve"><value>اعتماد</value></data>
   <data name="ConfirmReject" xml:space="preserve"><value>هل أنت متأكد من الرفض؟</value></data>
+  <data name="Deactivate" xml:space="preserve"><value>إيقاف</value></data>
+  <data name="Reactivate" xml:space="preserve"><value>إعادة تفعيل</value></data>
+  <data name="Deactivated" xml:space="preserve"><value>موقوف</value></data>
+  <data name="ConfirmDeactivate" xml:space="preserve"><value>هل أنت متأكد من إيقاف هذه الورشة؟ سيتم إخفاؤها من المنصة ويمكن إعادة تفعيلها لاحقاً.</value></data>
   <data name="Owner" xml:space="preserve"><value>المالك</value></data>
   <data name="RegisteredAt" xml:space="preserve"><value>تاريخ التسجيل</value></data>
   <data name="User" xml:space="preserve"><value>مستخدم</value></data>

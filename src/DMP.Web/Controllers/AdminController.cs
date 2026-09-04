@@ -127,6 +127,58 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Manufacturers));
     }
 
+    // POST: /Admin/Deactivate/5 — إخفاء الورشة من المنصة (بياناتها محفوظة، يمكن إعادة تفعيلها)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Deactivate(int id)
+    {
+        var manufacturer = await _db.Manufacturers.FindAsync(id);
+        if (manufacturer == null)
+            return NotFound();
+
+        manufacturer.IsActive = false;
+        await _db.SaveChangesAsync();
+
+        // إشعار للمصنّع
+        _db.Notifications.Add(new Notification
+        {
+            UserId = manufacturer.UserId,
+            Message = _T["تم إيقاف ورشتك مؤقتاً من المنصة. يرجى التواصل مع الدعم."].Value,
+            Link = "/Manufacturers/Dashboard",
+            IsRead = false
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم إيقاف الورشة. لن تظهر للعملاء حتى يتم إعادة تفعيلها."].Value;
+        return RedirectToAction(nameof(Manufacturers));
+    }
+
+    // POST: /Admin/Reactivate/5 — إعادة إظهار الورشة على المنصة
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Reactivate(int id)
+    {
+        var manufacturer = await _db.Manufacturers.FindAsync(id);
+        if (manufacturer == null)
+            return NotFound();
+
+        manufacturer.IsActive = true;
+        await _db.SaveChangesAsync();
+
+        // إشعار للمصنّع
+        _db.Notifications.Add(new Notification
+        {
+            UserId = manufacturer.UserId,
+            Message = _T["تم إعادة تفعيل ورشتك. أصبحت متاحة للعملاء مرة أخرى."].Value,
+            Link = "/Manufacturers/Dashboard",
+            IsRead = false
+        });
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = _T["تم إعادة تفعيل الورشة."].Value;
+        return RedirectToAction(nameof(Manufacturers));
+    }
+
     // GET: /Admin/Payments — مراجعة إيصالات الدفع
     public async Task<IActionResult> Payments()
     {

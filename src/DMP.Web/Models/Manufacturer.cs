@@ -47,6 +47,7 @@ public class Manufacturer
     public string? CoverPhotoPath   { get; set; }
 
     public bool IsApproved { get; set; } = false;
+    public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public List<Machine>        Machines        { get; set; } = new();

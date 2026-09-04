@@ -224,6 +224,8 @@ _ = Task.Run(async () =>
                     CONSTRAINT ""FK_ProductImages_Products_ProductId"" FOREIGN KEY (""ProductId"") REFERENCES ""Products""(""Id"") ON DELETE CASCADE
                 );
                 CREATE INDEX IF NOT EXISTS ""IX_ProductImages_ProductId"" ON ""ProductImages"" (""ProductId"");
+
+                ALTER TABLE ""Manufacturers"" ADD COLUMN IF NOT EXISTS ""IsActive"" BOOLEAN NOT NULL DEFAULT TRUE;
             ";
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();

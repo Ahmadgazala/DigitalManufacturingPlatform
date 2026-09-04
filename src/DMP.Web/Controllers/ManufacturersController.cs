@@ -38,7 +38,7 @@ public class ManufacturersController : Controller
         var query = _db.Manufacturers
             .Include(m => m.Machines)
             .Include(m => m.Reviews)
-            .Where(m => m.IsApproved)
+            .Where(m => m.IsApproved && m.IsActive)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -58,7 +58,7 @@ public class ManufacturersController : Controller
         var manufacturers = await PaginatedList<Manufacturer>.CreateAsync(query, page, pageSize);
 
         var cities = await _db.Manufacturers
-            .Where(m => m.IsApproved)
+            .Where(m => m.IsApproved && m.IsActive)
             .Select(m => m.City)
             .Distinct()
             .OrderBy(c => c)
@@ -140,7 +140,7 @@ public class ManufacturersController : Controller
         var query = _db.Manufacturers
             .Include(m => m.Machines)
             .Include(m => m.Reviews)
-            .Where(m => m.IsApproved && m.Latitude.HasValue && m.Longitude.HasValue)
+            .Where(m => m.IsApproved && m.IsActive && m.Latitude.HasValue && m.Longitude.HasValue)
             .AsQueryable();
 
         if (category.HasValue)
@@ -152,7 +152,7 @@ public class ManufacturersController : Controller
         var manufacturers = await query.ToListAsync();
 
         var cities = await _db.Manufacturers
-            .Where(m => m.IsApproved && !string.IsNullOrEmpty(m.City))
+            .Where(m => m.IsApproved && m.IsActive && !string.IsNullOrEmpty(m.City))
             .Select(m => m.City)
             .Distinct()
             .OrderBy(c => c)
@@ -161,7 +161,7 @@ public class ManufacturersController : Controller
         ViewBag.Cities    = cities;
         ViewBag.Category  = category;
         ViewBag.City      = city;
-        ViewBag.AllCount  = await _db.Manufacturers.CountAsync(m => m.IsApproved);
+        ViewBag.AllCount  = await _db.Manufacturers.CountAsync(m => m.IsApproved && m.IsActive);
 
         return View(manufacturers);
     }
@@ -181,8 +181,8 @@ public class ManufacturersController : Controller
         if (manufacturer == null)
             return NotFound();
 
-        // غير معتمدة — يسمح فقط للـ Admin بالمشاهدة
-        if (!manufacturer.IsApproved && !User.IsInRole("Admin"))
+        // غير معتمدة أو معطّلة — يسمح فقط للـ Admin بالمشاهدة
+        if ((!manufacturer.IsApproved || !manufacturer.IsActive) && !User.IsInRole("Admin"))
             return NotFound();
 
         return View(manufacturer);
